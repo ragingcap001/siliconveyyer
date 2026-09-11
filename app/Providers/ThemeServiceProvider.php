@@ -24,8 +24,20 @@ class ThemeServiceProvider extends ServiceProvider
     public function boot()
     {
         if(App::dbConnectionCheck()){
-            $views = __DIR__ . '/../../resources/views/frontend/' . site_theme();
-            $this->loadViewsFrom($views, 'frontend');
+            $themePath = realpath(__DIR__ . '/../../resources/views/frontend/');
+            $theme = site_theme();
+
+            // The active theme is checked first; the bundled "default" theme is
+            // registered as a fallback so a theme only has to override the views
+            // it actually customises. Without this, any page missing from an
+            // active theme (task pages, for example) would fail to render.
+            $paths = [$themePath . DIRECTORY_SEPARATOR . $theme];
+
+            if ($theme !== 'default') {
+                $paths[] = $themePath . DIRECTORY_SEPARATOR . 'default';
+            }
+
+            $this->loadViewsFrom($paths, 'frontend');
         }
     }
 }

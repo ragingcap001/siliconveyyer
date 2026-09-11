@@ -8,9 +8,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
             <div class="site-card">
                 <div class="site-card-header">
-                    <h4 class="title">{{ __('Earnings') }}</h4>
+                    <h4 class="title">{{ __('Task Earnings') }}</h4>
                     <div
-                        class="card-header-info">{{ __('Total Earnings:') }} {{ $user->totalProfit() }} {{ $currency }}</div>
+                        class="card-header-info">{{ __('Total Task Earnings:') }} {{ $user->totalProfit() }} {{ $currency }}</div>
                 </div>
                 <div class="site-card-body table-responsive">
                     <div class="site-datatable">
@@ -20,7 +20,7 @@
                                 <th>{{ __('Date') }}</th>
                                 <th>{{ __('Amount') }}</th>
                                 <th>{{ __('Type') }}</th>
-                                <th>{{ __('Profit From') }}</th>
+                                <th>{{ __('Source') }}</th>
                                 <th>{{ __('Description') }}</th>
                             </tr>
                             </thead>
@@ -43,12 +43,12 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('admin.all-profits',$user->id) }}",
+                ajax: "{{ route('admin.task-earnings',$user->id) }}",
                 columns: [
                     {data: 'created_at', name: 'created_at'},
                     {data: 'final_amount', name: 'final_amount'},
                     {data: 'type', name: 'type'},
-                    {data: 'profit_from', name: 'profit_from'},
+                    {data: 'method', name: 'method'},
                     {data: 'description', name: 'description'},
 
                 ]

@@ -99,6 +99,24 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $user = auth()->user();
 
+        // platform-wide cap on how many tasks one worker may claim per day
+        $dailyLimit = (int) setting('task_submission_daily_limit', null, 0);
+
+        if ($dailyLimit > 0) {
+            $claimedToday = TaskSubmission::where('user_id', $user->id)
+                ->whereDate('created_at', today())
+                ->count();
+
+            if ($claimedToday >= $dailyLimit) {
+                notify()->error(
+                    __('You have reached the daily limit of :limit tasks. Please come back tomorrow.', ['limit' => $dailyLimit]),
+                    'Error'
+                );
+
+                return redirect()->back();
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'payout_method_id' => 'required|exists:withdraw_methods,id',
             'withdraw_account_id' => 'required|exists:withdraw_accounts,id',
