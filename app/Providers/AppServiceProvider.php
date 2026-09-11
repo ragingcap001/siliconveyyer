@@ -10,7 +10,6 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
-use Remotelywork\Installer\Repository\App;
 use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,33 +33,31 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        if(App::dbConnectionCheck()){
-            $timezone = setting('site_timezone', 'global');
-            config()->set([
-                'app.timezone' => $timezone,
-                'app.debug' => setting('debug_mode', 'permission'),
-                'app.locale' => Language::where('is_default', '=', true)->first('locale')->locale ?? 'en',
-            ]);
-            date_default_timezone_set($timezone);
+        $timezone = setting('site_timezone', 'global');
+        config()->set([
+            'app.timezone' => $timezone,
+            'app.debug' => setting('debug_mode', 'permission'),
+            'app.locale' => Language::where('is_default', '=', true)->first('locale')->locale ?? 'en',
+        ]);
+        date_default_timezone_set($timezone);
 
-            Blade::directive('lasset', function ($expression) {
-                $customLandingTheme = Theme::where('type', 'landing')->where('status', true)->first();
-                if ($customLandingTheme) {
-                    return asset("landing_theme/$customLandingTheme->name/$expression");
-                }
-                return false;
-            });
+        Blade::directive('lasset', function ($expression) {
+            $customLandingTheme = Theme::where('type', 'landing')->where('status', true)->first();
+            if ($customLandingTheme) {
+                return asset("landing_theme/$customLandingTheme->name/$expression");
+            }
+            return false;
+        });
 
 
-            Blade::directive('removeimg', function ($expression) {
-                list($isHidden, $img_field) = explode(',', $expression);
-                $isHidden = trim($isHidden);
-                $img_field = trim($img_field);
+        Blade::directive('removeimg', function ($expression) {
+            list($isHidden, $img_field) = explode(',', $expression);
+            $isHidden = trim($isHidden);
+            $img_field = trim($img_field);
 
-                return "<?php \$isHidden = $isHidden; \$img_field = '$img_field'; ?>
-                <div data-des=\"<?php echo \$img_field; ?>\" <?php if(!\$isHidden) echo 'hidden'; ?> class=\"close remove-img <?php echo \$img_field; ?>\"><i icon-name=\"x\"></i></div>";
-            });
-        }
+            return "<?php \$isHidden = $isHidden; \$img_field = '$img_field'; ?>
+            <div data-des=\"<?php echo \$img_field; ?>\" <?php if(!\$isHidden) echo 'hidden'; ?> class=\"close remove-img <?php echo \$img_field; ?>\"><i icon-name=\"x\"></i></div>";
+        });
 
 
     }

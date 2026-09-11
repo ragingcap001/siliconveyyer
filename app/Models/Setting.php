@@ -6,7 +6,6 @@ use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Remotelywork\Installer\Repository\App;
 
 class Setting extends Model
 {
@@ -51,10 +50,6 @@ class Setting extends Model
      */
     public static function getAllSettings()
     {
-        if(!App::dbConnectionCheck()){
-            return collect([]);
-        }
-
         return Cache::rememberForever('settings.all', function () {
             return self::all();
         });

@@ -32,13 +32,13 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
-            Route::middleware(['web', 'XSS','trans', 'translate','install_check'])
+            Route::middleware(['web', 'XSS', 'trans', 'translate'])
                 ->group(base_path('routes/web.php'));
 
-            Route::middleware(['web', 'XSS', 'trans', 'translate','install_check'])
+            Route::middleware(['web', 'XSS', 'trans', 'translate'])
                 ->group(base_path('routes/auth.php'));
 
-            Route::middleware(['web', 'auth:admin', 'XSS','trans', 'isDemo', 'translate','install_check'])->prefix(setting('site_admin_prefix', 'global'))->name('admin.')
+            Route::middleware(['web', 'auth:admin', 'XSS', 'trans', 'isDemo', 'translate'])->prefix(setting('site_admin_prefix', 'global'))->name('admin.')
                 ->group(base_path('routes/admin.php'));
         });
     }
