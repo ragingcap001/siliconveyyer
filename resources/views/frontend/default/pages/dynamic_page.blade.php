@@ -31,7 +31,7 @@
             $section = \App\Models\LandingPage::where('short',$data->section_id)->where('locale',app()->getLocale())->firstOrFail();
         @endphp
 
-        @include('frontend::home.include.__'.$section->code,['data' => json_decode($section->data, true) ])
+        @includeIf('frontend::home.include.__'.$section->code,['data' => json_decode($section->data, true) ])
 
     @endif
     <!-- section end-->

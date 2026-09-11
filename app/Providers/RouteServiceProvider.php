@@ -38,9 +38,26 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware(['web', 'XSS', 'trans', 'translate'])
                 ->group(base_path('routes/auth.php'));
 
-            Route::middleware(['web', 'auth:admin', 'XSS', 'trans', 'isDemo', 'translate'])->prefix(setting('site_admin_prefix', 'global'))->name('admin.')
+            Route::middleware(['web', 'auth:admin', 'XSS', 'trans', 'isDemo', 'translate'])->prefix($this->adminPrefix())->name('admin.')
                 ->group(base_path('routes/admin.php'));
         });
+    }
+
+    /**
+     * The admin prefix lives in the database, but route registration runs during
+     * boot. If the settings table is missing or unreachable, throwing here would
+     * abort route registration entirely — no routes get names, so every later
+     * route() call fails and the real error is buried. Fall back instead.
+     *
+     * @return string
+     */
+    protected function adminPrefix(): string
+    {
+        try {
+            return setting('site_admin_prefix', 'global') ?: 'admin';
+        } catch (\Throwable $e) {
+            return 'admin';
+        }
     }
 
     /**

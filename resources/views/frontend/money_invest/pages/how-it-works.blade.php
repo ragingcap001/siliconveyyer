@@ -20,7 +20,7 @@
             $section = \App\Models\LandingPage::find($data['section_id'])
         @endphp
 
-        @include('frontend::home.include.__'.$section->code,['data' => json_decode($section->data, true) ])
+        @includeIf('frontend::home.include.__'.$section->code,['data' => json_decode($section->data, true) ])
 
     @endif
     <!-- section end-->
