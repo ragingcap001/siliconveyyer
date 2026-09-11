@@ -1,5 +1,5 @@
 @php
-$investors = \App\Models\Invest::with('schema')->latest()->take(6)->get();
+    $investors = \App\Models\Transaction::where('type', \App\Enums\TxnType::TaskReward)->with('user')->take(6)->latest()->get();
 $withdraws = \App\Models\Transaction::where('type',\App\Enums\TxnType::Withdraw)->take(6)->latest()->get();
 @endphp
 
@@ -20,13 +20,11 @@ $withdraws = \App\Models\Transaction::where('type',\App\Enums\TxnType::Withdraw)
             <div class="col-xxl-12">
                 <div class="rock-investors-grid">
                     <div class="rock-investors-wrapper">
-                        <h3 class="title">{{ __('Recent Investors') }}</h3>
+                        <h3 class="title">{{ __('Recent Earners') }}</h3>
                         @foreach($investors as $investor)
 
                         @php
-                        $calculateInterest = ($investor->interest*$investor->invest_amount)/100;
-                        $interest = $investor->interest_type != 'percentage' ? $investor->interest :
-                        $calculateInterest;
+                        $earned = $investor->amount;
                         @endphp
 
                         <div class="rock-investors-item">
@@ -52,8 +50,8 @@ $withdraws = \App\Models\Transaction::where('type',\App\Enums\TxnType::Withdraw)
                                 <span class="site-bade">{{ $investor->user->status ? __('Active') : __('DeActive') }}</span>
                             </div>
                             <div class="rock-currency">
-                                <span class="small-dolar">+{{ $investor->already_return_profit*$interest }} {{ $currency }}</span>
-                                <h4 class="dolar">{{ $investor->invest_amount }} {{ $currency }}</h4>
+                                <span class="small-dolar">+{{ $earned }} {{ $currency }}</span>
+                                <h4 class="dolar">{{ __('Task Reward') }}</h4>
                             </div>
                         </div>
                         @endforeach

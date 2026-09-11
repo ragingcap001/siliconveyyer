@@ -94,29 +94,29 @@
                 <div class="col-xl-4 col-md-12">
                     <div class="site-card">
                         <div class="site-card-header">
-                            <h3 class="title">{{ __('Investment Bounty') }}</h3>
+                            <h3 class="title">{{ __('Task Bounty') }}</h3>
                             <div class="col-sm-6">
                                 <form action="{{ route('admin.referral.level-status') }}" method="post"
-                                      id="investment-status">
+                                      id="task-status">
                                     @csrf
-                                    <input type="hidden" name="type" value="investment_level">
+                                    <input type="hidden" name="type" value="task_level">
                                     <div class="switch-field m-0">
                                         <input
                                             type="radio"
-                                            id="investment-1"
+                                            id="task-1"
                                             name="status"
-                                            @checked(setting('investment_level'))
+                                            @checked(setting('task_level'))
                                         />
-                                        <label for="investment-1"
-                                               class="investment-status toggle-switch">{{ __('Active') }}</label>
+                                        <label for="task-1"
+                                               class="task-status toggle-switch">{{ __('Active') }}</label>
                                         <input
                                             type="radio"
-                                            id="investment-0"
+                                            id="task-0"
                                             name="status"
-                                            @checked(!setting('investment_level'))
+                                            @checked(!setting('task_level'))
                                         />
-                                        <label for="investment-0"
-                                               class="investment-status toggle-switch">{{ __('DeActive') }}</label>
+                                        <label for="task-0"
+                                               class="task-status toggle-switch">{{ __('DeActive') }}</label>
                                     </div>
                                 </form>
                             </div>
@@ -125,9 +125,9 @@
                         <div class="site-card-body">
                             <p class="paragraph">{{ __('You can') }}
                                 <strong>{{ __('Add').','. __('Edit').' '. __('or').' '. __('Delete') }}</strong> {{ __('any of the') }}
-                                <strong>{{ __('Level Referred User Investment Bounty') }}</strong></p>
+                                <strong>{{ __('Level Referred User Task Bounty') }}</strong></p>
 
-                            @foreach($investments as $raw)
+                            @foreach($tasks as $raw)
                                 <div class="single-gateway">
                                     <div class="gateway-name">
                                         <div class="gateway-title">
@@ -160,74 +160,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-md-12">
-                    <div class="site-card">
-                        <div class="site-card-header">
-                            <h3 class="title">{{ __('Profit Bounty') }}</h3>
-                            <div class="col-sm-6">
-                                <form action="{{ route('admin.referral.level-status') }}" method="post"
-                                      id="profit-status">
-                                    @csrf
-                                    <input type="hidden" name="type" value="profit_level">
-                                    <div class="switch-field m-0">
-                                        <input
-                                            type="radio"
-                                            id="profit-1"
-                                            name="status"
-                                            @checked(setting('profit_level'))
-                                        />
-                                        <label for="profit-1"
-                                               class="profit-status toggle-switch">{{ __('Active') }}</label>
-                                        <input
-                                            type="radio"
-                                            id="profit-0"
-                                            name="status"
-                                            @checked(!setting('profit_level'))
-                                        />
-                                        <label for="profit-0"
-                                               class="profit-status toggle-switch">{{ __('DeActive') }}</label>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
-                        <div class="site-card-body">
-                            <p class="paragraph">{{ __('You can') }}
-                                <strong>{{ __('Add').','. __('Edit').' '. __('or').' '. __('Delete') }}</strong> {{ __('any of the') }}
-                                <strong>{{ __('Level Referred User Profit Bounty') }}</strong></p>
-
-                            @foreach($profits as $raw)
-                                <div class="single-gateway">
-                                    <div class="gateway-name">
-                                        <div class="gateway-title">
-                                            <h4>{{  __('Level '). $raw->the_order }}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="gateway-right">
-                                        <div class="gateway-status">
-                                            <div class="site-badge success">{{ $raw->bounty }}%</div>
-                                        </div>
-                                        <div class="gateway-edit">
-                                            @can('referral-edit')
-                                                <a href="" type="button" class="edit-referral"
-                                                   data-id="{{$raw->id}}"
-                                                   data-editfor="{{ 'Update ' . $raw->type . ' level '. $raw->the_order }}"
-                                                   data-bounty="{{ $raw->bounty }}"
-                                                ><i icon-name="edit-3"></i></a>
-                                            @endcan
-                                            @can('referral-delete')
-                                                <a href="" class="red-bg ms-2 delete-referral" type="button"
-                                                   data-id="{{$raw->id}}"
-                                                   data-type="{{$raw->type}}"
-                                                   data-target="{{  $raw->type . ' level '. $raw->the_order }}"
-                                                ><i icon-name="trash-2"></i></a>
-                                            @endcan
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
                 </div>
 
             </div>

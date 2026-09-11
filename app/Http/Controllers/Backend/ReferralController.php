@@ -36,10 +36,10 @@ class ReferralController extends Controller
     public function index()
     {
         $targets = ReferralTarget::all();
-        $investments = Referral::type(ReferralType::Investment);
+        $tasks = Referral::type(ReferralType::Task);
         $deposits = Referral::type(ReferralType::Deposit);
 
-        return view('backend.referral.index', compact('targets', 'investments', 'deposits'));
+        return view('backend.referral.index', compact('targets', 'tasks', 'deposits'));
     }
 
     /**

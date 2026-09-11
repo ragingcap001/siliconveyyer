@@ -132,7 +132,7 @@
                                     ><i icon-name="user"></i>{{ __('Informations') }}</a>
                                 </li>
                             @endcanany
-                            @can('investment-list')
+                            @can('task-submission-list')
                                 <li class="nav-item" role="presentation">
                                     <a
                                         href=""
@@ -144,11 +144,11 @@
                                         role="tab"
                                         aria-controls="pills-transfer"
                                         aria-selected="true"
-                                    ><i icon-name="anchor"></i>{{ __('Investments') }}</a>
+                                    ><i icon-name="check-square"></i>{{ __('Tasks') }}</a>
                                 </li>
                             @endcan
 
-                            @can('profit-list')
+                            @can('task-earning-list')
                                 <li class="nav-item" role="presentation">
                                     <a
                                         href=""
@@ -222,13 +222,13 @@
                         @endcanany
 
 
-                        <!-- investments -->
-                        @can('investment-list')
-                            @include('backend.user.include.__investments')
+                        <!-- tasks -->
+                        @can('task-submission-list')
+                            @include('backend.user.include.__tasks')
                         @endcan
 
                         <!-- earnings -->
-                        @can('profit-list')
+                        @can('task-earning-list')
                             @include('backend.user.include.__earnings')
                         @endcan
 

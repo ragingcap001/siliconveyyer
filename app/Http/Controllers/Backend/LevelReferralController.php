@@ -26,16 +26,14 @@ class LevelReferralController extends Controller
 
         $referralType = [
             ReferralType::Deposit,
-            ReferralType::Investment,
-            ReferralType::Profit,
+            ReferralType::Task,
         ];
 
         $levelReferral = new LevelReferral();
         $deposits = $levelReferral->where('type', ReferralType::Deposit->value)->get();
-        $investments = $levelReferral->where('type', ReferralType::Investment->value)->get();
-        $profits = $levelReferral->where('type', ReferralType::Profit->value)->get();
+        $tasks = $levelReferral->where('type', ReferralType::Task->value)->get();
 
-        return view('backend.referral.level.index', compact('referralType', 'investments', 'deposits', 'profits'));
+        return view('backend.referral.level.index', compact('referralType', 'tasks', 'deposits'));
     }
 
     /**

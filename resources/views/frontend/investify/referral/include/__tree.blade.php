@@ -16,11 +16,8 @@
                         @if(setting('deposit_level'))
                         {{ __('Deposit') }} {{ $currencySymbol.$levelUser->totalDeposit() }}, <br>
                         @endif
-                        @if(setting('investment_level'))
-                        {{ __('Invest') }} {{ $currencySymbol.$levelUser->totalTaskEarning() }}, <br>
-                        @endif
-                        @if(setting('profit_level'))
-                        {{ __('ROI Profit') }} {{ $currencySymbol.$levelUser->totalTaskEarning() }} <br>
+                        @if(setting('task_level'))
+                            {{ __('Tasks') }} {{ $currencySymbol.$levelUser->totalTaskEarning() }}
                         @endif
                     </p>
                     @endif

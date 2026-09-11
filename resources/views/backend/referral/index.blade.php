@@ -42,7 +42,7 @@
                                 <strong>{{ __('Referred User Investment Bounty') }}</strong></p>
 
 
-                            @foreach($investments as $investment)
+                            @foreach($tasks as $investment)
                                 <div class="single-gateway">
                                     <div class="gateway-name">
                                         <div class="gateway-title">

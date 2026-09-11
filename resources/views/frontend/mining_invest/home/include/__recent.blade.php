@@ -1,5 +1,5 @@
 @php
-    $investors = \App\Models\Invest::with('schema')->latest()->take(6)->get();
+    $investors = \App\Models\Transaction::where('type', \App\Enums\TxnType::TaskReward)->with('user')->take(6)->latest()->get();
     $withdraws = \App\Models\Transaction::where('type',\App\Enums\TxnType::Withdraw)->take(6)->latest()->get();
 @endphp
 
@@ -26,8 +26,7 @@
                             @foreach($investors as $investor)
 
                                 @php
-                                    $calculateInterest = ($investor->interest*$investor->invest_amount)/100;
-                                    $interest = $investor->interest_type != 'percentage' ? $investor->interest : $calculateInterest;
+                                    $earned = $investor->amount;
                                 @endphp
 
                                 <div class="single">
@@ -50,8 +49,8 @@
                                     <div class="right">
                                         <div class="amount">
                                             <div class="net in">
-                                                +{{ $investor->already_return_profit*$interest }} {{ $currency }}</div>
-                                            <div class="total">{{ $investor->invest_amount }} {{ $currency }}</div>
+                                                +{{ $earned }} {{ $currency }}</div>
+                                            <div class="total">{{ __('Task Reward') }}</div>
                                         </div>
                                     </div>
                                 </div>
