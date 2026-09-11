@@ -153,17 +153,34 @@ class TaskController extends Controller
      */
     public function statusUpdate(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:tasks,id',
+            'status' => ['required', new Enum(TaskStatus::class)],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
         $task = Task::findOrFail($request->id);
         $task->update(['status' => $request->status]);
 
         return response()->json(['message' => __('Task status updated successfully')]);
     }
 
+    /**
+     * Deleting a live task soft-deletes it so that submissions (and the payout
+     * history tied to them) survive; deleting an already-trashed task purges it.
+     */
     public function destroy($id): RedirectResponse
     {
         $task = Task::withTrashed()->findOrFail($id);
-        $task->submissions()->delete();
-        $task->forceDelete();
+
+        if ($task->trashed()) {
+            $task->forceDelete();
+        } else {
+            $task->delete();
+        }
 
         notify()->success(__('Task deleted successfully'));
 

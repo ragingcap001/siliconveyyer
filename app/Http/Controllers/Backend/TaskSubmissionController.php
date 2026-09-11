@@ -134,10 +134,9 @@ class TaskSubmissionController extends Controller
                 'paid_at' => now(),
             ]);
 
-            // keep the denormalised slot counter in step
-            if ($task && $task->total_slots > 0) {
-                $task->increment('filled_slots');
-            }
+            // NOTE: filled_slots is reserved when the worker claims the task
+            // (see Frontend\TaskController::take), so it must not be incremented
+            // again here or every approval would consume two slots.
 
             // level based referral commission on task earnings
             if (setting('site_referral', 'global') == 'level' && setting('task_level')) {
