@@ -10,20 +10,28 @@ Last reviewed against commit `76844de` on branch `arena/01a08764-siliconveyyer`.
 
 ## 1. What this codebase is
 
-This is **HyipRio**, a commercial Laravel application for running a
-**High-Yield Investment Program (HYIP) / crypto-investment platform**. It is a
+This is **HyipRio**, a commercial Laravel application that has been **converted
+from a High-Yield Investment Program (HYIP) into a task / micro-work platform**. It is a
 multi-sided financial web app with three surfaces:
 
 | Surface | Namespace | Entry point |
 | --- | --- | --- |
 | Public marketing site + static pages | `frontend::*` | `/` |
-| Customer dashboard (investor portal) | `Frontend\*` controllers, `/user/*` | `/user/dashboard` |
+| Customer dashboard (worker portal) | `Frontend\*` controllers, `/user/*` | `/user/dashboard` |
 | Admin / staff control panel | `Backend\*` controllers | `/{site_admin_prefix}` (default `admin`) |
 
-Out of the box it lets an operator sell "investment plans", take deposits in fiat and
-crypto through ~25 payment gateways, pay scheduled returns (ROI) to investors, pay
-multi-level referral commissions, run a user ranking/badge system, and pay withdrawals
-back out — with a full KYC, ticketing, notification, and CMS layer around it.
+Out of the box it lets an operator **publish paid tasks**, let eligible workers claim
+them and hand in proof, review those submissions and release payment; take deposits in
+fiat and crypto through ~25 payment gateways so the task board can be funded; pay
+multi-level referral commissions; run a user ranking/badge system that doubles as the
+worker level ladder; and pay withdrawals back out — with a full KYC, ticketing,
+notification, and CMS layer around it.
+
+> **Conversion note:** the original ROI engine has been **removed**. The `invests`,
+> `schemas` and `schedules` tables are dropped by migration
+> `2026_09_11_000004_drop_investment_tables`, along with the `Invest`, `Schema` and
+> `Schedule` models and the `InvestStatus` enum. The wallet, deposit and withdraw
+> machinery is deliberately **kept** — it is how task earnings are paid out.
 
 **Stack:** PHP ≥ 8.1, Laravel 9, MySQL, Blade, jQuery/Bootstrap (admin), Alpine +
 Tailwind + Vite (frontend assets), Pusher (broadcasting), Laravel Scout (transaction
@@ -36,7 +44,7 @@ search), Spatie Laravel-Permission (RBAC), Yajra DataTables (admin tables).
 ```
 app/
 ├─ Console/Kernel.php            Artisan scheduler (currently empty)
-├─ Enums/                        7 typed enums (TxnType, TxnStatus, InvestStatus,
+├─ Enums/                        9 typed enums (TxnType, TxnStatus, TaskStatus,
 │                                KYCStatus, GatewayType, ReferralType, NavigationType)
 ├─ Events/                       UserReferred; 3 broadcast events
 ├─ Facades/Txn/                  Txn facade — the single ledger writer
@@ -158,12 +166,13 @@ mutable user balance columns.
 
 | Wallet | Column | Funded by |
 | --- | --- | --- |
-| Main | `users.balance` | deposits, transfers received, refunds, capital-back, admin adjustments |
-| Profit | `users.profit_balance` | ROI interest, referral commissions, signup/ranking bonuses, wallet exchange |
+| Main | `users.balance` | deposits, transfers received, refunds, **task rewards**, admin adjustments |
+| Profit | `users.profit_balance` | referral commissions, signup/ranking bonuses, wallet exchange |
 
-**Transaction types** (`TxnType` enum, 14 values): `deposit`, `subtract`, `manual_deposit`,
+**Transaction types** (`TxnType` enum, 13 values): `deposit`, `subtract`, `manual_deposit`,
 `send_money`, `exchange`, `referral`, `signup_bonus`, `bonus`, `withdraw`, `withdraw_auto`,
-`receive_money`, `investment`, `interest`, `refund`.
+`receive_money`, `task_reward`, `refund`. (`investment` and `interest` were removed with
+the ROI engine; `task_reward` was added to replace them.)
 
 **Transaction statuses** (`TxnStatus`): `success`, `pending`, `failed`.
 
@@ -171,48 +180,55 @@ Supporting behaviour:
 - `Txn::update($tnx, $status)` credits `balance` when a deposit flips to `success`.
 - `Transaction` is **Laravel Scout searchable** on amount/tnx/type/method/description/status —
   powering the search box on every user log page.
-- Aggregations live on both models: `totalDeposit()`, `totalInvestment()`,
-  `totalProfit($days)`, `totalWithdraw()`, `totalTransfer()`, `totalReferralProfit()`,
-  `totalDepositBonus()`, `totalInvestBonus()`, `totalRoiProfit()`.
+- Aggregations live on both models: `totalDeposit()`, `totalTaskEarning()`,
+  `totalTaskBonus()`, `totalProfit($days)`, `totalWithdraw()`, `totalTransfer()`,
+  `totalReferralProfit()`, `totalDepositBonus()`.
 
-### 4.4 Investment plans ("Schemes") engine
+### 4.4 Task engine (admin)
 
-`SchemaController` (admin) + `InvestController` (user).
+`Backend\TaskController` — admin CRUD at `admin.task.*`.
 
-A **Schema** (plan) defines:
-- `type`: `range` (min/max) or `fixed` (exact amount)
-- `return_interest` + `interest_type`: `percentage` or `fixed`
-- `return_type`: `period` (N payouts) or `lifetime` (never ends)
-- `number_of_period`, and a `schedules` lookup (`return_period`) that supplies the
-  **payout interval in hours**
-- `capital_back` flag — return the principal at maturity
-- `off_days` (JSON) — weekdays on which no profit is paid
-- `featured` + `badge`, `is_trending`, `icon`, `status`
-- `schema_cancel` + `expiry_minute` — lets a user cancel an investment for a full
-  refund within a window after purchase (also capped by a daily cancellation limit)
+A **Task** defines:
+- `title`, `category`, `description` (long-form), `instructions`
+- `pay_amount` — credited to the worker when the submission is approved
+- `proof_type` — `text | link | screenshot | file` (`TaskProofType`), plus `proof_required`
+- `total_slots` (`0` = unlimited) with `filled_slots` reserved at claim time, and
+  `per_user_limit` (how many times one worker may attempt it)
+- Eligibility: `min_level` (the worker's rank level), `require_kyc`, `min_balance`
+- `payout_method_ids` — JSON allow-list; empty/null means "every payout method the
+  admin has enabled"
+- `status` — `draft | active | closed` (`TaskStatus`), plus optional `expires_at`
 
-**Investing:** wallet selection `main`, `profit`, or `gateway`. The gateway path creates a
-pending `investment` transaction and routes to the payment driver; the investment only
-becomes `ongoing` in `Payment::paymentSuccess()`.
+`Task::eligibilityErrorFor(User)` is the **single source of truth**. It returns `null`
+when the user may claim the task, otherwise a human-readable reason. The browse page,
+the claim endpoint and the admin preview all call it, so a worker can never be shown a
+task as available and then be refused at claim time.
 
-**Investment lifecycle** (`InvestStatus`): `pending → ongoing → completed`, or `canceled`.
-`Invest` exposes a computed `is_cancel` attribute used by the cancel endpoint.
+`Task::open()` narrows further to active, unexpired tasks that still have a free slot.
 
-### 4.5 The ROI / profit engine (the heart of the system)
+### 4.5 Claim → proof → review → payout
 
-`CronJobController@investmentCronJob`, hit at `GET /cron-job/investment`.
+A worker's participation is a `TaskSubmission`
+(`TaskSubmissionStatus`: `pending | approved | rejected`).
 
-For each `ongoing` investment whose `next_profit_time <= now`:
-1. Skip if today is in the plan's `off_days`.
-2. Compute interest: percentage → `(interest × invest_amount) / 100`, else flat.
-3. Advance `next_profit_time += period_hours`, decrement `number_of_period`,
-   increment `already_return_profit` and `total_profit_amount`.
-4. Credit `profit_balance` and write an `interest` transaction.
-5. **Lifetime plans** repeat forever; **period plans** complete on the last payout and,
-   if `capital_back`, refund the principal with a `refund` transaction.
-6. If `site_referral == 'level'` and `profit_level` is on, walk the upline paying
-   `creditReferralBonus(..., 'profit', ...)`.
-7. Fire `invest_roi` / `investment_end` mail + SMS + push notifications.
+1. **Claim** — `Frontend\TaskController@take`. Enforces the platform-wide
+   `task_submission_daily_limit`, validates that the chosen payout method is offered by
+   the task and that the withdraw account belongs to the worker, then re-reads the task
+   under `lockForUpdate()` and re-runs `eligibilityErrorFor()` so two workers cannot take
+   the last slot. Creates the submission with a per-user `attempt` number, snapshots
+   `pay_amount`, and reserves a slot by incrementing `filled_slots`.
+2. **Submit proof** — `@submitProof`. Validation depends on `proof_type`; uploads go
+   through `fileUploadTrait()`. Pushes `task_submitted` to the admin.
+3. **Review** — `Backend\TaskSubmissionController` (pending queue, `show`, `approve`,
+   `reject`).
+   - **Approve** (one DB transaction): credit `users.balance`, write a `task_reward`
+     transaction, stamp `reviewed_by` / `reviewed_at` / `paid_at`, then pay the level
+     referral bonus on `'task'` when `task_level` is on. Notifies `task_approved`.
+   - **Reject**: records an `admin_note` reason. A rejection does **not** consume an
+     attempt, so the worker may correct the work and resubmit. Notifies `task_rejected`.
+
+Slots are reserved at claim time and are **not** released by a rejection — one claim
+always consumes exactly one slot, which stops workers from cycling through slots.
 
 ### 4.6 Deposits
 
@@ -264,16 +280,16 @@ Selected by `setting('site_referral', 'global')`.
 
 **A. Multi-level mode (`level`)** — `LevelReferral` table with per-depth `bounty`
 (percentage) and `activation` (require an active referral) for each of
-`deposit | investment | profit`. `creditReferralBonus()` in `helpers.php` walks up the
+`deposit | task`. `creditReferralBonus()` in `helpers.php` walks up the
 `ref_id` chain depth-by-depth, writing a `referral` transaction per level and crediting
-each ancestor's `profit_balance`. Triggered from: signup, deposit success, investment
-success, and every ROI payout.
+each ancestor's `profit_balance`. Triggered from: deposit success and task approval
+(`TaskSubmissionController@approve`, gated on the `task_level` setting).
 
 **B. Target/milestone mode** — `referral_programs`, `referral_links`,
 `referral_relationships`, `referral_targets`, `referrals` tables. Admin sets milestones
 ("when a referred user has deposited ≥ X, pay their referrer Y%"). `referralCronJob()`
-evaluates every relationship against each user's lifetime deposit/invest totals, skipping
-milestones already paid, and credits the bounty.
+evaluates every relationship against each user's lifetime deposit total **and their
+completed task count**, skipping milestones already paid, and credits the bounty.
 
 Both modes pay into `profit_balance` and are deduplicated via `target_id` / `is_level`
 columns on the transaction.
@@ -281,8 +297,10 @@ columns on the transaction.
 ### 4.11 Ranking / badge system
 
 `Ranking` records define thresholds (`minimum_earnings`, `minimum_deposit`,
-`minimum_invest`, `minimum_referral`, `minimum_referral_deposit`,
-`minimum_referral_invest`) plus an icon, name, and one-time `bonus`.
+`minimum_tasks`, `minimum_task_earning`, `minimum_referral`,
+`minimum_referral_deposit`) plus an icon, name, and one-time `bonus`.
+Each rank also carries a `level`, which **is** the worker level that task eligibility
+compares against (`Task.min_level`), so the rank ladder doubles as the task tier list.
 `userRanking()` cron evaluates every active user, grants any newly-qualified ranks,
 credits the bonus to `profit_balance`, and promotes the user's `ranking_id` to the
 highest rank achieved. `users.rankings` is a JSON array of all ranks ever earned; the
@@ -306,11 +324,15 @@ messages.
 | Push / in-app | `push_notification_templates` | Pusher broadcast `NotificationEvent` **and** a persisted `notifications` row | Pusher credentials from plugin |
 | Admin broadcast | — | `PushNotificationEvent`, `UserNotificationEvent` channels | Pusher |
 
-**Template codes seeded:** `new_user`, `user_investment`, `user_account_disabled`,
-`manual_deposit_request`, `kyc_request`, `kyc_action`, `invest_roi`, `investment_end`,
-`withdraw_request_user`, `user_manual_deposit_request`, `email_verification`,
-`user_password_change`, `admin_forget_password`, `contact_mail`, `user_support_ticket`,
+**Template codes seeded:** `new_user`, `user_account_disabled`,
+`manual_deposit_request`, `kyc_request`, `kyc_action`, `withdraw_request_user`,
+`user_manual_deposit_request`, `email_verification`, `user_password_change`,
+`admin_forget_password`, `contact_mail`, `user_support_ticket`,
 `admin_support_ticket`, `user_mail`, `subscriber_mail`.
+
+Task-specific templates are seeded by `TaskTemplateSeeder`: **`task_approved`** and
+**`task_rejected`** (email + SMS + push to the worker) and **`task_submitted`**
+(push to the admin when proof is handed in).
 
 Users additionally get a notification centre (`allNotification`, `latestNotification`,
 `readNotification`) and an admin-side equivalent, plus selectable **notification sound
@@ -360,8 +382,8 @@ Instead, everything runs over **HTTP cron endpoints** (documented in `README.txt
 
 | Endpoint | Action |
 | --- | --- |
-| `GET /cron-job/investment` | Pay all due ROI, complete matured plans, refund capital |
-| `GET /cron-job/referral` | Evaluate target-based referral milestones |
+| `GET /cron-job/task` | Close active tasks whose `expires_at` has passed |
+| `GET /cron-job/referral` | Evaluate target-based referral milestones (deposit + tasks) |
 | `GET /cron-job/user-ranking` | Re-evaluate and grant user ranks + bonuses |
 | `GET /cron-job/queue` | Runs `artisan queue:work` (for the two async jobs) |
 
@@ -380,11 +402,11 @@ Loaded from `routes/admin.php` under a configurable prefix. Every controller dec
 `permission:` middleware, and `Gate::before` grants the `Super-Admin` role everything.
 
 ### 7.1 Dashboard & analytics
-Counters for deposits / withdrawals / investments / transfers / referrals / tickets /
+Counters for deposits / withdrawals / task earnings / transfers / referrals / tickets /
 staff / gateways / pending KYC / pending manual deposits / pending withdrawals;
-5 latest users and 5 latest investments; **date-range-filtered time series** for
-deposit, investment, withdraw, and profit (AJAX endpoint returns JSON);
-scheme distribution chart (investments grouped by plan); browser, platform, and
+5 latest users and a **pending task submissions** queue; **date-range-filtered time
+series** for deposit, task earnings, and withdraw (AJAX endpoint returns JSON);
+task submission chart (submissions grouped by task); browser, platform, and
 top-5 country breakdowns from login activity.
 
 ### 7.2 People
@@ -396,27 +418,31 @@ top-5 country breakdowns from login activity.
 - **Roles & permissions** — Spatie role CRUD with permission assignment.
 
 ### 7.3 Money operations
-- **Schemas** (investment plans) — full CRUD, see §4.4.
-- **Schedules** — payout intervals (hours) referenced by schemas.
+- **Tasks** — full CRUD (see §4.4): pay, long description, proof type, slots, per-user
+  limit, minimum level / KYC / balance, allowed payout methods, expiry.
+- **Task submissions** — review queue (pending / all / by task), approve with payout or
+  reject with a reason (see §4.5).
+- **Task earnings** — every `task_reward` transaction, optionally filtered by user.
 - **Transactions** — all transactions, optionally filtered by user.
-- **Investments** — all investments, optionally filtered by user.
-- **Profits** — all `interest` transactions.
 - **Deposits** — gateway method CRUD per type (auto/manual), pending manual queue,
   full history, approve/reject.
 - **Withdrawals** — method CRUD, off-day schedule, pending queue, history, approve/reject.
 - **Gateways** — enable/disable automatic gateways, edit credentials per gateway,
   list supported currencies.
 - **Referrals** — referral program CRUD, referral targets, and the multi-level
-  commission ladder (deposit / investment / profit).
-- **Rankings** — rank CRUD with thresholds, icon, and bonus.
+  commission ladder (deposit / task).
+- **Rankings** — rank CRUD with thresholds (now including completed tasks and task
+  earnings), the worker **level**, icon, and bonus.
 
 ### 7.4 Content management
 - **Pages** — create/edit/delete dynamic pages; each page is stored per-locale.
 - **Landing sections** — the homepage is assembled from `landing_pages` +
   `landing_contents` records, one per block: `hero`, `about`, `howitworks`,
-  `calculation`, `schema`, `gateway`, `counter`, `recent`, `whychooseus`, `faq`, `cta`,
+  `gateway`, `counter`, `recent`, `whychooseus`, `faq`, `cta`,
   `blog`, `newsletter`, and a separately-managed `footer`. Each is orderable via `short`
-  and has per-locale content CRUD.
+  and has per-locale content CRUD. (The old `schema` and `calculation` sections were
+  investment-only and are removed by migration
+  `2026_09_11_000005_remove_investment_landing_sections`.)
 - **Page settings** — JSON-driven toggles (e.g. whether registration asks for
   username / country / phone).
 - **Blog** — full CRUD (categories + posts), public blog index and detail pages.
@@ -443,8 +469,8 @@ data type, validation rule, and default per field. Six sections:
 | Section | Controls |
 | --- | --- |
 | `global` | logo, favicon, admin-login cover, **admin URL prefix**, currency type/currency/symbol, timezone, **referral mode**, referral code length, home redirect, site title, site + support email |
-| `permission` | email verification, KYC verification, 2FA, account creation, user deposit, user withdraw, send money, sign-up referral, referral-signup bonus, deposit/investment referral bounty, debug mode, site animation, back-to-top |
-| `fee` | signup bonus, referral bonus, send-money charge + min/max, wallet-exchange charge, **daily limits** for send money, wallet exchange, withdraw, and investment cancellation |
+| `permission` | email verification, KYC verification, 2FA, account creation, user deposit, user withdraw, send money, sign-up referral, referral-signup bonus, deposit/task referral bounty, debug mode, site animation, back-to-top |
+| `fee` | signup bonus, referral bonus, send-money charge + min/max, wallet-exchange charge, **daily limits** for send money, wallet exchange, withdraw, and task submission |
 | `mail` | from name/address, driver, SMTP host/port/encryption/username/password, with a live **SMTP connection test** |
 | `site_maintenance` | maintenance mode toggle, secret key bypass, title, and message |
 | `gdpr` | consent banner status, text, button label and URL |
@@ -479,11 +505,11 @@ subscriber broadcast, and logout (exempt from demo lock).
 
 - Homepage: either the **section builder** output, an **uploaded landing theme**, or a
   **redirect** to another URL (`home_redirect` setting).
-- Section partials include an **investment profit calculator**, live counters,
-  schema/plan showcase, supported-gateway strip, recent transactions, why-choose-us,
+- Section partials include live counters, a **recent task earners** strip,
+  supported-gateway strip, recent transactions, why-choose-us,
   FAQ, CTA, blog teaser, and newsletter signup.
 - Static pages served by a single invokable controller with a route whitelist:
-  `schema`, `how-it-works`, `about-us`, `faq`, `rankings`, `blog`, `contact`,
+  `how-it-works`, `about-us`, `faq`, `rankings`, `blog`, `contact`,
   `privacy-policy`, `terms-and-conditions`.
 - Dynamic pages at `/page/{section}`; blog detail at `/blog/{id}`.
 - Contact form → `contact_mail` template.
@@ -499,7 +525,7 @@ subscriber broadcast, and logout (exempt from demo lock).
 `model_has_permissions`, `role_has_permissions`, `password_resets`,
 `personal_access_tokens`, `login_activities`
 
-**Money:** `transactions`, `invests`, `schemas`, `schedules`, `deposit_methods`,
+**Money:** `transactions`, `deposit_methods`,
 `withdraw_methods`, `withdraw_accounts`, `withdrawal_schedules`
 
 **Referral & rewards:** `referrals`, `referral_programs`, `referral_links`,
@@ -565,7 +591,7 @@ tunes, login activities, deposit methods, themes, jobs, and scheduled tasks.
 From `README.txt`, a production deployment requires:
 
 ```
-GET /cron-job/investment     # pay ROI, mature plans, refund capital
+GET /cron-job/task           # close tasks past their expiry
 GET /cron-job/referral       # milestone referral payouts
 GET /cron-job/user-ranking   # rank evaluation + bonuses
 artisan queue:work --daemon  # async BlockIo + PayPal payout confirmations
@@ -593,9 +619,10 @@ These are notes on the current state of the code, not part of the intended featu
    though a migration exists for it.
 4. **All scheduling is HTTP-based**, so the cron endpoints are unauthenticated GET
    routes — worth rate-limiting or token-protecting in production.
-5. **`InvestController@investCancel` reads the send-money day limit**
-   (`setting('send_money_day_limit', 'fee')`) instead of the dedicated
-   `investment_cancellation_daily_limit` setting that exists in config.
+5. **Task slots are reserved at claim time and never released.** A worker who claims a
+   task and is later rejected still occupies the slot. This is deliberate (it stops
+   workers cycling through slots), but it means `total_slots` behaves as "total claims"
+   rather than "total approvals".
 6. **The withdraw daily-limit query is not scoped to the user.** In
    `WithdrawController@withdrawNow` the chain is
    `->where('user_id', ...)->where('type', Withdraw)->orWhere('type', WithdrawAuto)->whereDate(...)`,
@@ -627,13 +654,19 @@ profile edit · dashboard with 13 metrics · notifications centre · ranking bad
 login activity
 
 **User money:** deposit (auto + manual) · withdraw (auto + manual + saved accounts +
-off-days) · invest (3 funding sources) · investment logs · investment cancellation ·
+off-days) · **available tasks board · claim task · submit proof · task history** ·
 send money P2P · wallet exchange · full transaction history with search
 
+**User tasks:** browse/available tasks with eligibility reasons · task detail with
+payout-method and saved-account picker · one claim per task at a time · proof
+submission (text / link / screenshot / file) · attempt tracking · daily claim limit
+(`task_submission_daily_limit`) · task history with review status and admin notes
+
 **Admin:** analytics dashboard · customer management (incl. login-as and balance
-adjust) · staff & roles/permissions · KYC forms + review queue · investment plans +
-schedules · transactions / investments / profits · deposit & withdraw methods + queues
-+ schedules · gateway credentials · referral programs, targets, level ladder · rankings
+adjust) · staff & roles/permissions · KYC forms + review queue · **task CRUD +
+submission review queue + task earnings** · transactions · deposit & withdraw methods +
+queues + schedules · gateway credentials · referral programs, targets, level ladder
+(deposit / task) · rankings (levels)
 · pages, landing sections, blog, navigation (+translation), socials, footer · site &
 landing themes (ZIP upload) · custom CSS · 6 setting sections · plugin management ·
 language + keyword translation · email/SMS/push template editors · notification tunes ·
