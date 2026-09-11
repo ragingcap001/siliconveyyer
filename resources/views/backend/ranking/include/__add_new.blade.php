@@ -31,7 +31,7 @@
 
 
                         <div class="site-input-groups row mb-0">
-                            <div class="col-xl-6">
+                            <div class="col-xl-4">
                                 <div class="site-input-groups">
                                     <label for="" class="box-input-label">{{ __('Ranking:') }}</label>
                                     <input type="text" name="ranking" value="{{ old('ranking') }}"
@@ -39,11 +39,19 @@
                                            placeholder="Eg: 1, 2, 3..." required=""/>
                                 </div>
                             </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-4">
                                 <div class="site-input-groups">
                                     <label for="" class="box-input-label">{{ __('Ranking Name:') }}</label>
                                     <input type="text" name="ranking_name" value="{{ old('ranking_name') }}"
                                            class="box-input mb-0" placeholder="Ranking Name" required=""/>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="site-input-groups">
+                                    <label for="" class="box-input-label">{{ __('Level:') }}</label>
+                                    <input type="number" name="level" value="{{ old('level') }}" min="1"
+                                           class="box-input mb-0" placeholder="Eg: 1, 2, 3..." required=""/>
+                                    <small class="text-muted">{{ __('Worker level used for task eligibility.') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -61,11 +69,11 @@
                             </div>
                             <div class="col-xl-6">
                                 <div class="site-input-groups">
-                                    <label for="" class="box-input-label">{{ __('Minimum Invest:') }}</label>
+                                    <label for="" class="box-input-label">{{ __('Completed Tasks:') }}</label>
                                     <div class="input-group joint-input">
-                                        <input type="text" class="form-control" name="minimum_invest"
-                                               oninput="this.value = validateDouble(this.value)">
-                                        <span class="input-group-text">{{ setting('site_currency','global') }}</span>
+                                        <input type="number" class="form-control" name="minimum_tasks" min="0"
+                                               value="{{ old('minimum_tasks', 0) }}">
+                                        <span class="input-group-text">{{ __('tasks') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -95,9 +103,9 @@
                         <div class="site-input-groups row mb-0">
                             <div class="col-xl-6">
                                 <div class="site-input-groups">
-                                    <label for="" class="box-input-label">{{ __('Minimum Referral Invest:') }}</label>
+                                    <label for="" class="box-input-label">{{ __('Minimum Task Earning:') }}</label>
                                     <div class="input-group joint-input">
-                                        <input type="text" class="form-control" name="minimum_referral_invest"
+                                        <input type="text" class="form-control" name="minimum_task_earning"
                                                oninput="this.value = validateDouble(this.value)">
                                         <span class="input-group-text">{{ setting('site_currency','global') }}</span>
                                     </div>

@@ -111,11 +111,12 @@
             $('#rankingEditForm').attr('action', url)
             $('.ranking').val(ranking.ranking);
             $('.ranking-name').val(ranking.ranking_name);
+            $('.level').val(ranking.level);
             $('.minimum-deposit').val(ranking.minimum_deposit);
-            $('.minimum-invest').val(ranking.minimum_invest);
+            $('.minimum-tasks').val(ranking.minimum_tasks);
             $('.minimum-referral').val(ranking.minimum_referral);
             $('.minimum-referral-deposit').val(ranking.minimum_referral_deposit);
-            $('.minimum-referral-invest').val(ranking.minimum_referral_invest);
+            $('.minimum-task-earning').val(ranking.minimum_task_earning);
             $('.minimum-earnings').val(ranking.minimum_earnings);
             $('.bonus').val(ranking.bonus);
             $('.description').val(ranking.description);
