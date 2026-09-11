@@ -45,20 +45,28 @@ class TaskController extends Controller
 
         $tasks = $query->paginate(15)->withQueryString();
 
-        return view('backend.task.index', compact('tasks'));
+        return view('backend.task.index', array_merge(compact('tasks'), $this->formData()));
     }
 
     /**
-     * Create form (rendered into a modal).
+     * Create form, rendered into a modal on the listing.
      */
     public function create(): View
     {
-        return view('backend.task.include.__add_new', [
+        return view('backend.task.include.__add_new', $this->formData());
+    }
+
+    /**
+     * Shared data for the create / edit forms.
+     */
+    private function formData(): array
+    {
+        return [
             'proofTypes' => TaskProofType::cases(),
             'statuses' => TaskStatus::cases(),
             'levels' => Ranking::orderBy('level')->get(),
             'payoutMethods' => WithdrawMethod::where('status', true)->get(),
-        ]);
+        ];
     }
 
     public function store(Request $request): RedirectResponse
@@ -103,13 +111,7 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        return view('backend.task.include.__edit', [
-            'task' => $task,
-            'proofTypes' => TaskProofType::cases(),
-            'statuses' => TaskStatus::cases(),
-            'levels' => Ranking::orderBy('level')->get(),
-            'payoutMethods' => WithdrawMethod::where('status', true)->get(),
-        ]);
+        return view('backend.task.include.__edit', array_merge(['task' => $task], $this->formData()));
     }
 
     public function update(Request $request, $id): RedirectResponse

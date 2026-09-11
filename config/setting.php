@@ -198,8 +198,8 @@ return [
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'boolean', // data type, string, int, boolean
-                'name' => 'investment_referral_bounty', // unique name for field
-                'label' => 'Investment Referral Bounty', // you know what label it is
+                'name' => 'task_referral_bounty', // unique name for field
+                'label' => 'Task Referral Bounty', // you know what label it is
                 'rules' => 'required', // validation rule of laravel
                 'value' => 1, // default value if you want
             ],
@@ -333,10 +333,10 @@ return [
             [
                 'type' => 'text', // input fields type
                 'data' => 'int', // data type, string, int, boolean
-                'name' => 'investment_cancellation_daily_limit', // unique name for field
-                'label' => 'Investment Cancellation Daily Limit', // you know what label it is
+                'name' => 'task_submission_daily_limit', // unique name for field
+                'label' => 'Task Submission Daily Limit', // you know what label it is
                 'rules' => 'required|regex:/^\d+(\.\d{1,2})?$/', // validation rule of laravel
-                'value' => 6, // default value if you want
+                'value' => 20, // default value if you want
             ],
         ],
     ],

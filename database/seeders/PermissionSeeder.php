@@ -37,14 +37,15 @@ class PermissionSeeder extends Seeder
             ['category' => 'Staff Management', 'name' => 'staff-create'],
             ['category' => 'Staff Management', 'name' => 'staff-edit'],
 
-            ['category' => 'Plan Management', 'name' => 'schedule-manage'],
-            ['category' => 'Plan Management', 'name' => 'schema-list'],
-            ['category' => 'Plan Management', 'name' => 'schema-create'],
-            ['category' => 'Plan Management', 'name' => 'schema-edit'],
+            ['category' => 'Task Management', 'name' => 'task-list'],
+            ['category' => 'Task Management', 'name' => 'task-create'],
+            ['category' => 'Task Management', 'name' => 'task-edit'],
+            ['category' => 'Task Management', 'name' => 'task-delete'],
+            ['category' => 'Task Management', 'name' => 'task-submission-list'],
+            ['category' => 'Task Management', 'name' => 'task-submission-action'],
 
             ['category' => 'Transaction Management', 'name' => 'transaction-list'],
-            ['category' => 'Transaction Management', 'name' => 'investment-list'],
-            ['category' => 'Transaction Management', 'name' => 'profit-list'],
+            ['category' => 'Transaction Management', 'name' => 'task-earning-list'],
 
             ['category' => 'Deposit Management', 'name' => 'automatic-gateway-manage'],
             ['category' => 'Deposit Management', 'name' => 'manual-gateway-manage'],
