@@ -3,7 +3,7 @@
     <div class="contents row">
         <div class="col-4">
             <div class="single">
-                <a href="{{ route('user.schema') }}">
+                <a href="{{ route('user.task.index') }}">
                     <div class="icon"><img src="{{ asset('frontend/materials/schema.png') }}" alt="">
                     </div>
                     <div class="name">{{ __('Schemas') }}</div>
@@ -12,7 +12,7 @@
         </div>
         <div class="col-4">
             <div class="single">
-                <a href="{{ route('user.invest-logs') }}">
+                <a href="{{ route('user.task.history') }}">
                     <div class="icon"><img src="{{ asset('frontend/materials/schema-log.png') }}" alt="">
                     </div>
                     <div class="name">{{ __('Investment') }}</div>

@@ -17,7 +17,7 @@
         <div class="actions">
             <a href="{{ route('user.deposit.amount') }}" class="user-sidebar-btn"><i
                     class="anticon anticon-file-add"></i>{{ __('Deposit') }}</a>
-            <a href="{{ route('user.schema') }}" class="user-sidebar-btn red-btn"><i
+            <a href="{{ route('user.task.index') }}" class="user-sidebar-btn red-btn"><i
                     class="anticon anticon-export"></i>{{ __('Invest Now') }}</a>
         </div>
     </div>
@@ -28,12 +28,12 @@
                         class="anticon anticon-appstore"></i><span>{{ __('Dashboard') }}</span></a>
             </li>
 
-            <li class="side-nav-item {{ isActive('user.schema*') }}">
-                <a href="{{route('user.schema')}}"><i
+            <li class="side-nav-item {{ isActive('user.task.index') }}">
+                <a href="{{route('user.task.index')}}"><i
                         class="anticon anticon-check-square"></i><span>{{ __('All Schema') }}</span></a>
             </li>
-            <li class="side-nav-item {{ isActive('user.invest*') }}">
-                <a href="{{ route('user.invest-logs') }}"><i
+            <li class="side-nav-item {{ isActive('user.task.history') }}">
+                <a href="{{ route('user.task.history') }}"><i
                         class="anticon anticon-copy"></i><span>{{ __('Schema Logs') }}</span></a>
             </li>
 

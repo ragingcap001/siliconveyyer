@@ -27,8 +27,8 @@
                                 <span>{{ __('Dashboard') }}</span>
                             </a>
                         </li>
-                        <li class="{{ isActive('user.schema*') }}">
-                            <a href="{{ route('user.schema') }}">
+                        <li class="{{ isActive('user.task.index') }}">
+                            <a href="{{ route('user.task.index') }}">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4"
@@ -44,8 +44,8 @@
                                 <span>{{ __('All Schemas') }}</span>
                             </a>
                         </li>
-                        <li class="{{ isActive('user.invest*') }}">
-                            <a href="{{ route('user.invest-logs') }}">
+                        <li class="{{ isActive('user.task.history') }}">
+                            <a href="{{ route('user.task.history') }}">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path

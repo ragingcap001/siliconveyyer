@@ -5,7 +5,7 @@
     <a href="{{ route('user.deposit.amount') }}" class="{{ isActive('user.deposit*') }}">
         <i icon-name="download"></i>
     </a>
-    <a href="{{ route('user.schema') }}" class="{{ isActive('user.schema*') }}">
+    <a href="{{ route('user.task.index') }}" class="{{ isActive('user.task.index') }}">
         <i icon-name="box"></i>
     </a>
     <a href="{{ route('user.referral') }}" class="{{ isActive('user.referral*') }}">

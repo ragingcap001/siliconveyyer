@@ -29,7 +29,7 @@
                             <div class="icon"><i icon-name="box"></i></div>
                             <div class="content">
                                 <div class="amount">{{ $currencySymbol }}<span
-                                        class="count">{{ $dataCount['total_investment'] }}</span>
+                                        class="count">{{ $dataCount['total_task_earning'] }}</span>
                                 </div>
                                 <div class="name">{{ __('Total Investment') }}</div>
                             </div>
@@ -97,7 +97,7 @@
                                 <div class="icon"><i icon-name="archive"></i></div>
                                 <div class="content">
                                     <div class="amount">{{ $currencySymbol }}<span
-                                            class="count">{{ $dataCount['investment_bonus'] }}</span>
+                                            class="count">{{ $dataCount['task_bonus'] }}</span>
                                     </div>
                                     <div class="name"> {{ __('Investment Bonus') }}</div>
                                 </div>

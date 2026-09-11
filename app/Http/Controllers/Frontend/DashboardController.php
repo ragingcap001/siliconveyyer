@@ -21,7 +21,9 @@ class DashboardController extends Controller
         $dataCount = [
             'total_transaction' => $transactions->count(),
             'total_deposit' => $user->totalDeposit(),
-            'total_investment' => $user->totalInvestment(),
+            'total_task_earning' => $user->totalTaskEarning(),
+            'completed_task' => $user->taskSubmissions()->count(),
+            'pending_task' => $user->pendingSubmissions()->count(),
             'total_profit' => $user->totalProfit(),
             'profit_last_7_days' => $user->totalProfit(7),
             'total_withdraw' => $user->totalWithdraw(),
@@ -30,7 +32,7 @@ class DashboardController extends Controller
             'total_referral' => $referral->relationships()->count(),
 
             'deposit_bonus' => $user->totalDepositBonus(),
-            'investment_bonus' => $user->totalInvestBonus(),
+            'task_bonus' => $user->totalTaskEarning(),
             'rank_achieved' => $user->rankAchieved(),
             'total_ticket' => $user->ticket->count(),
         ];

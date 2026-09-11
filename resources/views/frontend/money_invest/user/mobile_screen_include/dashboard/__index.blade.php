@@ -37,7 +37,7 @@
     <div class="col-12">
         <div class="mob-shortcut-btn">
             <a href="{{ route('user.deposit.amount') }}"><i icon-name="download"></i> {{ __('Deposit') }}</a>
-            <a href="{{ route('user.schema') }}"><i icon-name="box"></i> {{ __('Investment') }}</a>
+            <a href="{{ route('user.task.index') }}"><i icon-name="box"></i> {{ __('Investment') }}</a>
             <a href="{{ route('user.withdraw.view') }}"><i icon-name="send"></i> {{ __('Withdraw') }}</a>
         </div>
     </div>

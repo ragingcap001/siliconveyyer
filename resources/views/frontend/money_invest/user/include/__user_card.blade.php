@@ -21,7 +21,7 @@
         <div class="single">
             <div class="icon"><i class="anticon anticon-check-square"></i></div>
             <div class="content">
-                <h4><b>{{ $currencySymbol }}</b><span class="count">{{ $dataCount['total_investment'] }}</span></h4>
+                <h4><b>{{ $currencySymbol }}</b><span class="count">{{ $dataCount['total_task_earning'] }}</span></h4>
                 <p>{{ __('Total Investment') }}</p>
             </div>
         </div>
@@ -76,7 +76,7 @@
         <div class="single">
             <div class="icon"><i class="anticon anticon-gold"></i></div>
             <div class="content">
-                <h4><b>{{ $currencySymbol }}</b><span class="count">{{ $dataCount['investment_bonus'] }}</span></h4>
+                <h4><b>{{ $currencySymbol }}</b><span class="count">{{ $dataCount['task_bonus'] }}</span></h4>
                 <p>{{ __('Investment Bonus') }}</p>
             </div>
         </div>

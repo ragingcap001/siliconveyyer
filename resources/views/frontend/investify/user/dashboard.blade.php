@@ -128,7 +128,7 @@
                         </span>
                         <span class="text">{{ __('Deposit') }}</span>
                     </a>
-                    <a class="rock-shortcut-btn" href="{{ route('user.schema') }}">
+                    <a class="rock-shortcut-btn" href="{{ route('user.task.index') }}">
                         <span class="icon"><svg width="21" height="16" viewBox="0 0 21 16" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path opacity="0.4"
@@ -219,7 +219,7 @@
                                     </span>
                                     {{ __('Deposit') }}
                                 </a>
-                                <a class="site-btn outline-opcity-btn" href="{{ route('user.schema') }}"> <span><svg width="24"
+                                <a class="site-btn outline-opcity-btn" href="{{ route('user.task.index') }}"> <span><svg width="24"
                                             height="25" viewBox="0 0 24 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path opacity="0.4"
@@ -296,7 +296,7 @@
                                 </span>
                             </div>
                             <div class="content">
-                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['total_investment'] }}
+                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['total_task_earning'] }}
                                 </h3>
                                 <p class="description">{{ __('Total Investment') }}</p>
                             </div>
@@ -438,7 +438,7 @@
                                 </span>
                             </div>
                             <div class="content">
-                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['investment_bonus'] }}
+                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['task_bonus'] }}
                                 </h3>
                                 <p class="description">{{ __('Investment Bonus') }}</p>
                             </div>
@@ -527,7 +527,7 @@
                     <div class="all-navigation-inner">
                         <div class="all-navigation-grid">
                             <div class="single-navigation-item">
-                                <a href="{{ route('user.schema') }}">
+                                <a href="{{ route('user.task.index') }}">
                                     <span class="icon">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -546,7 +546,7 @@
                                 </a>
                             </div>
                             <div class="single-navigation-item">
-                                <a href="{{ route('user.invest-logs') }}">
+                                <a href="{{ route('user.task.history') }}">
                                     <span class="icon">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -889,7 +889,7 @@
                                 </span>
                             </div>
                             <div class="content">
-                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['total_investment'] }}
+                                <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['total_task_earning'] }}
                                 </h3>
                                 <p class="description">{{ __('Total Investment') }}</p>
                             </div>
@@ -1032,7 +1032,7 @@
                                     </span>
                                 </div>
                                 <div class="content">
-                                    <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['investment_bonus'] }}
+                                    <h3 class="title"><span>{{ $currencySymbol }}</span>{{ $dataCount['task_bonus'] }}
                                     </h3>
                                     <p class="description">{{ __('Investment Bonus') }}</p>
                                 </div>

@@ -17,10 +17,10 @@
                         {{ __('Deposit') }} {{ $currencySymbol.$levelUser->totalDeposit() }}, <br>
                         @endif
                         @if(setting('investment_level'))
-                        {{ __('Invest') }} {{ $currencySymbol.$levelUser->totalInvestment() }}, <br>
+                        {{ __('Invest') }} {{ $currencySymbol.$levelUser->totalTaskEarning() }}, <br>
                         @endif
                         @if(setting('profit_level'))
-                        {{ __('ROI Profit') }} {{ $currencySymbol.$levelUser->totalRoiProfit() }} <br>
+                        {{ __('ROI Profit') }} {{ $currencySymbol.$levelUser->totalTaskEarning() }} <br>
                         @endif
                     </p>
                     @endif
