@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskSubmissionStatus;
 use App\Enums\TxnStatus;
 use App\Enums\TxnType;
 use Carbon\Carbon;
@@ -54,7 +55,7 @@ class User extends Authenticatable implements CanUseTickets, MustVerifyEmail
     ];
 
     protected $appends = [
-        'full_name', 'kyc_time', 'kyc_type', 'total_profit', 'total_deposit', 'total_invest',
+        'full_name', 'kyc_time', 'kyc_type', 'total_profit', 'total_deposit', 'total_task_earning',
     ];
 
     protected $dates = ['kyc_time'];
@@ -116,7 +117,7 @@ class User extends Authenticatable implements CanUseTickets, MustVerifyEmail
         $sum = $this->transaction()->where('status', TxnStatus::Success)->where(function ($query) {
             $query->where('type', TxnType::Referral)
                 ->orWhere('type', TxnType::SignupBonus)
-                ->orWhere('type', TxnType::Interest)
+                ->orWhere('type', TxnType::TaskReward)
                 ->orWhere('type', TxnType::Bonus);
 
         });
@@ -149,27 +150,30 @@ class User extends Authenticatable implements CanUseTickets, MustVerifyEmail
         return round($sum, 2);
     }
 
-    public function getTotalInvestAttribute(): string
+    public function getTotalTaskEarningAttribute(): string
     {
-        return $this->totalInvestment();
+        return $this->totalTaskEarning();
     }
 
-    public function totalInvestment()
+    /**
+     * Lifetime earnings from approved task submissions.
+     */
+    public function totalTaskEarning()
     {
         $sum = $this->transaction()->where('status', TxnStatus::Success)->where(function ($query) {
-            $query->where('type', TxnType::Investment);
+            $query->where('type', TxnType::TaskReward);
         })->sum('amount');
 
         return round($sum, 2);
     }
 
-    public function totalRoiProfit()
+    /**
+     * Number of submissions the user has made for a given task.
+     * Used to enforce a task's per-user attempt limit.
+     */
+    public function attemptsForTask(int $taskId): int
     {
-        $sum = $this->transaction()->where('status', TxnStatus::Success)->where(function ($query) {
-            $query->where('type', TxnType::Interest);
-        })->sum('amount');
-
-        return round($sum, 2);
+        return $this->taskSubmissions()->where('task_id', $taskId)->count();
     }
 
     public function getReferrals()
@@ -196,15 +200,17 @@ class User extends Authenticatable implements CanUseTickets, MustVerifyEmail
 
     }
 
-    public function totalInvestBonus()
+    public function taskSubmissions()
     {
-        $sum = $this->transaction()->where('status', TxnStatus::Success)->where(function ($query) {
-            $query->where('target_id', '!=', null)
-                ->where('target_type', 'investment')
-                ->where('type', TxnType::Referral);
-        })->sum('amount');
+        return $this->hasMany(TaskSubmission::class, 'user_id');
+    }
 
-        return round($sum, 2);
+    /**
+     * Submissions awaiting admin review.
+     */
+    public function pendingSubmissions()
+    {
+        return $this->taskSubmissions()->where('status', TaskSubmissionStatus::Pending);
     }
 
     public function totalWithdraw()

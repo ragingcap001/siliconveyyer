@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\GatewayType;
-use App\Enums\InvestStatus;
 use App\Enums\TxnStatus;
 use App\Enums\TxnType;
 use App\Http\Controllers\Controller;
 use App\Models\DepositMethod;
 use App\Models\Gateway;
-use App\Models\Invest;
 use App\Models\LevelReferral;
 use App\Models\Transaction;
 use App\Traits\ImageUpload;
 use App\Traits\NotifyTrait;
-use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -192,10 +189,9 @@ class DepositController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = Transaction::where('status', 'pending')->where(function ($query) {
-                return $query->where('type', TxnType::ManualDeposit)
-                    ->orWhere('type', TxnType::Investment);
-            })->latest();
+            $data = Transaction::where('status', 'pending')
+                ->where('type', TxnType::ManualDeposit)
+                ->latest();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -255,30 +251,12 @@ class DepositController extends Controller
         $transaction = Transaction::find($id);
 
         if (isset($input['approve'])) {
+            $transaction->user->increment('balance', $transaction->amount);
 
-            if ($transaction->type == TxnType::Investment) {
-                $invest = Invest::where('transaction_id', $id)->first();
-                $periodHours = $invest->period_hours;
-                $nextProfitTime = Carbon::now()->addHour($periodHours);
-                $invest->update([
-                    'next_profit_time' => $nextProfitTime,
-                    'status' => InvestStatus::Ongoing,
-                ]);
-
-                //level referral
-                if (setting('site_referral', 'global') == 'level' && setting('investment_level')) {
-                    $level = LevelReferral::where('type', 'investment')->max('the_order') + 1;
-                    creditReferralBonus($transaction->user, 'investment', $transaction->amount, $level);
-                }
-
-            } else {
-                $transaction->user->increment('balance', $transaction->amount);
-
-                //level referral
-                if (setting('site_referral', 'global') == 'level' && setting('deposit_level')) {
-                    $level = LevelReferral::where('type', 'deposit')->max('the_order') + 1;
-                    creditReferralBonus($transaction->user, 'deposit', $transaction->amount, $level);
-                }
+            //level referral
+            if (setting('site_referral', 'global') == 'level' && setting('deposit_level')) {
+                $level = LevelReferral::where('type', 'deposit')->max('the_order') + 1;
+                creditReferralBonus($transaction->user, 'deposit', $transaction->amount, $level);
             }
 
             Txn::update($transaction->tnx, TxnStatus::Success, $transaction->user_id, $approvalCause);
@@ -286,11 +264,6 @@ class DepositController extends Controller
             notify()->success('Approve successfully');
 
         } elseif (isset($input['reject'])) {
-            $invest = Invest::where('transaction_id', $id)->first();
-
-            if ($invest) {
-                $invest->delete();
-            }
             Txn::update($transaction->tnx, TxnStatus::Failed, $transaction->user_id, $approvalCause);
             notify()->success('Reject successfully');
         }

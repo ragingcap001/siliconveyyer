@@ -8,7 +8,6 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DepositController;
 use App\Http\Controllers\Backend\EmailTemplateController;
 use App\Http\Controllers\Backend\GatewayController;
-use App\Http\Controllers\Backend\InvestmentController;
 use App\Http\Controllers\Backend\KycController;
 use App\Http\Controllers\Backend\LanguageController;
 use App\Http\Controllers\Backend\LevelReferralController;
@@ -16,12 +15,11 @@ use App\Http\Controllers\Backend\NavigationController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\PluginController;
-use App\Http\Controllers\Backend\ProfitController;
 use App\Http\Controllers\Backend\RankingController;
 use App\Http\Controllers\Backend\ReferralController;
 use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\Backend\ScheduleController;
-use App\Http\Controllers\Backend\SchemaController;
+use App\Http\Controllers\Backend\TaskController;
+use App\Http\Controllers\Backend\TaskSubmissionController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\SmsController;
 use App\Http\Controllers\Backend\SocialController;
@@ -75,14 +73,29 @@ Route::group(['prefix' => 'kyc', 'as' => 'kyc.', 'controller' => KycController::
 Route::resource('roles', RoleController::class)->except('show', 'destroy');
 Route::resource('staff', StaffController::class)->except('show', 'destroy', 'create');
 
-//===============================  Plans Management ==================================
-Route::resource('schedule', ScheduleController::class)->except('show', 'destroy', 'create');
-Route::resource('schema', SchemaController::class)->except('show', 'destroy');
+//===============================  Task Management ==================================
+Route::group(['prefix' => 'task', 'as' => 'task.', 'controller' => TaskController::class], function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store', 'store')->name('store');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('update/{id}', 'update')->name('update');
+    Route::post('status-update', 'statusUpdate')->name('status-update');
+    Route::delete('delete/{id}', 'destroy')->name('delete');
+});
+
+//===============================  Task Submissions ==================================
+Route::group(['prefix' => 'task/submission', 'as' => 'task.submission.', 'controller' => TaskSubmissionController::class], function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('pending', 'pending')->name('pending');
+    Route::get('show/{id}', 'show')->name('show');
+    Route::post('approve/{id}', 'approve')->name('approve');
+    Route::post('reject/{id}', 'reject')->name('reject');
+});
 
 //===============================  Transactions ==================================
 Route::get('transactions/{id?}', [TransactionController::class, 'transactions'])->name('transactions');
-Route::get('investments/{id?}', [InvestmentController::class, 'investments'])->name('investments');
-Route::get('all-profits/{id?}', [ProfitController::class, 'allProfits'])->name('all-profits');
+Route::get('task-earnings/{id?}', [TransactionController::class, 'taskEarnings'])->name('task-earnings');
 
 //===============================  Essentials ==================================
 

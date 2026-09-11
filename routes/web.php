@@ -8,8 +8,7 @@ use App\Http\Controllers\Frontend\KycController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\UserController;
-use App\Http\Controllers\Frontend\InvestController;
-use App\Http\Controllers\Frontend\SchemaController;
+use App\Http\Controllers\Frontend\TaskController;
 use App\Http\Controllers\Frontend\StatusController;
 use App\Http\Controllers\Frontend\TicketController;
 use App\Http\Controllers\Frontend\DepositController;
@@ -35,7 +34,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::post('subscriber', [HomeController::class, 'subscribeNow'])->name('subscriber');
 
 //Static Page
-Route::get('/{page}', PageController::class)->name('page')->where('page', 'schema|how-it-works|about-us|faq|rankings|blog|contact|privacy-policy|terms-and-conditions');
+Route::get('/{page}', PageController::class)->name('page')->where('page', 'how-it-works|about-us|faq|rankings|blog|contact|privacy-policy|terms-and-conditions');
 
 //Dynamic Page
 Route::get('page/{section}', [PageController::class, 'getPage'])->name('dynamic.page');
@@ -63,12 +62,15 @@ Route::group(['middleware' => ['auth', '2fa', 'isActive', setting('email_verific
     Route::get('kyc/{id}', [KycController::class, 'kycData'])->name('kyc.data');
     Route::post('kyc-submit', [KycController::class, 'submit'])->name('kyc.submit');
 
-    Route::get('schemas', [SchemaController::class, 'index'])->name('schema');
-    Route::get('schema-preview/{id}', [SchemaController::class, 'schemaPreview'])->name('schema.preview');
+    //tasks
+    Route::group(['prefix' => 'task', 'as' => 'task.', 'controller' => TaskController::class], function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('history', 'history')->name('history');
+        Route::get('show/{id}', 'show')->name('show');
+        Route::post('take/{id}', 'take')->name('take');
+        Route::post('proof/{id}', 'submitProof')->name('proof');
+    });
 
-    Route::post('invest-now', [InvestController::class, 'investNow'])->name('invest-now');
-    Route::get('invest-logs', [InvestController::class, 'investLogs'])->name('invest-logs');
-    Route::get('invest-cancel/{id}', [InvestController::class, 'investCancel'])->name('invest-cancel');
     Route::get('transactions', [TransactionController::class, 'transactions'])->name('transactions');
 
     // Deposit
@@ -170,11 +172,10 @@ Route::group(['prefix' => 'ipn', 'as' => 'ipn.', 'controller' => IpnController::
 Route::get('theme-mode', [HomeController::class, 'themeMode'])->name('mode-theme');
 
 //without auth
-Route::get('schema-select/{id}', [SchemaController::class, 'schemaSelect'])->name('user.schema.select');
 Route::get('notification-tune', [AppController::class, 'notificationTune'])->name('notification-tune');
 
 //site cron job
-Route::get('cron-job/investment', [CronJobController::class, 'investmentCronJob'])->name('cron-job.investment');
+Route::get('cron-job/task', [CronJobController::class, 'taskCronJob'])->name('cron-job.task');
 Route::get('cron-job/referral', [CronJobController::class, 'referralCronJob'])->name('cron-job.referral');
 Route::get('cron-job/user-ranking', [CronJobController::class, 'userRanking'])->name('cron-job.user-ranking');
 Route::get('cron-job/queue', [CronJobController::class, 'queueWork']);

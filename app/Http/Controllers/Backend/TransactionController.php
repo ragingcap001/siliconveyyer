@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\TxnType;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use DataTables;
@@ -54,5 +55,37 @@ class TransactionController extends Controller
         }
 
         return view('backend.transaction.index');
+    }
+
+    /**
+     * Earnings paid out for completed tasks.
+     *
+     * @return Application|Factory|View|JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function taskEarnings(Request $request, $id = null)
+    {
+        if ($request->ajax()) {
+            $query = Transaction::where('type', TxnType::TaskReward);
+
+            if ($id) {
+                $query->where('user_id', $id);
+            }
+
+            return Datatables::of($query->latest())
+                ->addIndexColumn()
+                ->editColumn('status', 'backend.transaction.include.__txn_status')
+                ->editColumn('type', 'backend.transaction.include.__txn_type')
+                ->editColumn('final_amount', 'backend.transaction.include.__txn_amount')
+                ->editColumn('charge', function ($request) {
+                    return $request->charge . ' ' . setting('site_currency', 'global');
+                })
+                ->addColumn('username', 'backend.transaction.include.__user')
+                ->rawColumns(['status', 'type', 'final_amount', 'username'])
+                ->make(true);
+        }
+
+        return view('backend.transaction.task_earning');
     }
 }

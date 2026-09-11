@@ -309,7 +309,7 @@ if (!function_exists('txn_type')) {
 
         $result = [];
         switch ($type) {
-            case TxnType::Interest->value:
+            case TxnType::TaskReward->value:
             case TxnType::ReceiveMoney->value:
             case TxnType::Deposit->value:
             case TxnType::ManualDeposit->value:
@@ -321,7 +321,6 @@ if (!function_exists('txn_type')) {
                 $result = $theme == 'hardrock' ? ['success-text','+'] : ['green-color', '+'];
                 break;
             case TxnType::SendMoney->value:
-            case TxnType::Investment->value:
             case TxnType::Withdraw->value:
             case TxnType::Subtract->value:
                 $result = $theme == 'hardrock' ? ['danger-text','-'] : ['red-color', '-'];
@@ -340,7 +339,7 @@ if (!function_exists('getClassName')) {
         $class = '';
 
         switch ($type) {
-            case TxnType::Interest:
+            case TxnType::TaskReward:
             case TxnType::ReceiveMoney:
             case TxnType::Deposit:
             case TxnType::ManualDeposit:
@@ -352,7 +351,6 @@ if (!function_exists('getClassName')) {
                 $class = 'green-text';
                 break;
             case TxnType::SendMoney:
-            case TxnType::Investment:
             case TxnType::Withdraw:
             case TxnType::WithdrawAuto:
             case TxnType::Subtract:
@@ -378,13 +376,12 @@ if(!function_exists('getIcon')){
                                   <circle cx="18" cy="8" r="4" fill="#80ED99"></circle>
                                 </svg>';
                 break;
-            case TxnType::Interest:
+            case TxnType::TaskReward:
                 $icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path opacity="0.4" d="M4 8H2V17L6.31083 19.1554C7.42168 19.7108 8.64658 20 9.88854 20H18C19.1046 20 20 19.1046 20 18C20 16.8954 19.1046 16 18 16H16.4164C15.4849 16 14.5663 15.7831 13.7331 15.3666L10.792 13.896C10.9843 13.7189 11.1432 13.4993 11.2528 13.2434C11.6664 12.2784 11.2241 11.1605 10.2622 10.7397L4 8Z" fill="#E9D8A6"></path>
                                   <circle cx="18" cy="8" r="4" fill="#E9D8A6"></circle>
                                 </svg>';
                 break;
-            case TxnType::Investment:
             case TxnType::ReceiveMoney:
                     $icon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path opacity="0.4" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" fill="#FFD6FF"></path>

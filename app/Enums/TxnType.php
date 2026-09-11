@@ -15,7 +15,6 @@ enum TxnType: string
     case Withdraw = 'withdraw';
     case WithdrawAuto = 'withdraw_auto';
     case ReceiveMoney = 'receive_money';
-    case Investment = 'investment';
-    case Interest = 'interest';
+    case TaskReward = 'task_reward';
     case Refund = 'refund';
 }

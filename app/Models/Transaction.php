@@ -87,11 +87,6 @@ class Transaction extends Model
         return $this->belongsTo(User::class)->withDefault();
     }
 
-    public function invest()
-    {
-        return $this->hasOne(Invest::class, 'transaction_id');
-    }
-
     public function totalDeposit()
     {
         return $this->where('status', TxnStatus::Success)->where(function ($query) {
@@ -108,17 +103,17 @@ class Transaction extends Model
         });
     }
 
-    public function totalInvestment()
+    public function totalTaskReward()
     {
         return $this->where('status', TxnStatus::Success)->where(function ($query) {
-            $query->where('type', TxnType::Investment);
+            $query->where('type', TxnType::TaskReward);
         });
     }
 
     public function totalProfit()
     {
         return $this->where('status', TxnStatus::Success)->where(function ($query) {
-            $query->where('type', TxnType::Interest)
+            $query->where('type', TxnType::TaskReward)
                 ->orWhere('type', TxnType::Bonus)
                 ->orWhere('type', TxnType::SignupBonus);
         });
@@ -133,11 +128,11 @@ class Transaction extends Model
         })->sum('amount');
     }
 
-    public function totalInvestBonus()
+    public function totalTaskBonus()
     {
         return $this->where('status', TxnStatus::Success)->where(function ($query) {
             $query->where('target_id', '!=', null)
-                ->where('target_type', 'investment')
+                ->where('target_type', 'task')
                 ->where('type', TxnType::Referral);
         })->sum('amount');
     }
