@@ -98,35 +98,27 @@
                 @endcanany
             @endcanany
 
-            {{-- *************************************************************  Plan Management *********************************************************--}}
-            @canany(['schedule-manage','schema-list','schema-create','schema-edit'])
+            {{-- *************************************************************  Task Management *********************************************************--}}
+            @canany(['task-list','task-create','task-edit','task-delete','task-submission-list','task-submission-action'])
                 <li class="side-nav-item category-title">
-                    <span>{{ __('Plans') }}</span>
+                    <span>{{ __('Tasks') }}</span>
                 </li>
-                <li class="side-nav-item side-nav-dropdown {{ isActive(['admin.schedule*','admin.schema*']) }}">
-                    <a href="javascript:void(0);" class="dropdown-link"><i
-                            icon-name="album"></i><span>{{ __('Manage Schema') }}</span>
-                        <span class="right-arrow"><i icon-name="chevron-down"></i></span></a>
-                    <ul class="dropdown-items">
-                        @canany(['schema-list','schema-create','schema-edit'])
-                            <li class="side-nav-item {{ isActive('admin.schedule*') }}">
-                                <a href="{{route('admin.schedule.index')}}"><i
-                                        icon-name="alarm-check"></i><span>{{ __('Schedule') }}</span></a>
-                            </li>
-                        @endcanany
-                        @can('schema-edit')
-                            <li class="side-nav-item {{ isActive('admin.schema*') }}">
-                                <a href="{{route('admin.schema.index')}}"><i
-                                        icon-name="airplay"></i><span>{{ __('Manage Schema') }}</span></a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
+                @can('task-list')
+                    <li class="side-nav-item {{ isActive('admin.task.index') }}">
+                        <a href="{{ route('admin.task.index') }}"><i
+                                icon-name="check-square"></i><span>{{ __('All Tasks') }}</span></a>
+                    </li>
+                @endcan
+                @can('task-submission-list')
+                    <li class="side-nav-item {{ isActive('admin.task.submission.*') }}">
+                        <a href="{{ route('admin.task.submission.index') }}"><i
+                                icon-name="inbox"></i><span>{{ __('Submissions') }}</span></a>
+                    </li>
+                @endcan
             @endcanany
 
             {{-- *************************************************************  Transactions *********************************************************--}}
-            @canany(['transaction-list','investment-list','profit-list'])
+            @canany(['transaction-list','task-earning-list'])
                 <li class="side-nav-item category-title">
                     <span>{{ __('Transactions') }}</span>
                 </li>
@@ -136,16 +128,10 @@
                                 icon-name="cast"></i><span>{{ __('Transactions') }}</span></a>
                     </li>
                 @endcan
-                @can('investment-list')
-                    <li class="side-nav-item {{ isActive('admin.investments') }}">
-                        <a href="{{route('admin.investments')}}"><i
-                                icon-name="anchor"></i><span>{{ __('Investments') }}</span></a>
-                    </li>
-                @endcan
-                @can('profit-list')
-                    <li class="side-nav-item {{ isActive('admin.all-profits') }}">
-                        <a href="{{route('admin.all-profits')}}"><i
-                                icon-name="credit-card"></i><span>{{ __('User Profits') }}</span></a>
+                @can('task-earning-list')
+                    <li class="side-nav-item {{ isActive('admin.task-earnings') }}">
+                        <a href="{{route('admin.task-earnings')}}"><i
+                                icon-name="credit-card"></i><span>{{ __('Task Earnings') }}</span></a>
                     </li>
                 @endcan
             @endcanany

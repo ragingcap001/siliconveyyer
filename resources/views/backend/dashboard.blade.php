@@ -1,4 +1,3 @@
-@php use App\Enums\InvestStatus; @endphp
 @extends('backend.layouts.app')
 @section('title')
     {{ __('Dashboard') }}
@@ -129,7 +128,7 @@
                 </div>
             </div>
 
-            @include('backend.include.__latest_user_invest')
+            @include('backend.include.__pending_submissions')
 
         </div>
     </div>

@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\KYCStatus;
+use App\Enums\TaskSubmissionStatus;
 use App\Enums\TxnStatus;
 use App\Enums\TxnType;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Gateway;
-use App\Models\Invest;
 use App\Models\LoginActivities;
 use App\Models\ReferralRelationship;
+use App\Models\Task;
+use App\Models\TaskSubmission;
 use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\User;
@@ -21,7 +23,6 @@ class DashboardController extends Controller
     //admin dashboard
     public function dashboard()
     {
-
         $transaction = new Transaction();
         $user = new User();
         $admin = new Admin();
@@ -38,7 +39,11 @@ class DashboardController extends Controller
 
         $latestUser = $user->latest()->take(5)->get();
 
-        $latestInvest = Invest::with('schema')->take(5)->latest()->get();
+        $pendingSubmissions = TaskSubmission::with(['task', 'user'])
+            ->where('status', TaskSubmissionStatus::Pending)
+            ->latest()
+            ->take(5)
+            ->get();
 
         $totalGateway = Gateway::where('status', true)->count();
 
@@ -56,11 +61,15 @@ class DashboardController extends Controller
 
         $totalReferral = ReferralRelationship::count();
 
+        $totalTask = Task::count();
+        $openTask = Task::open()->count();
+
         // ============================= Start dashboard statistics =============================================
 
-        $schemeStatistics = Invest::whereNot('status', 'canceled')->get()->groupBy('schema.name')->map(function ($group) {
-            return $group->count();
-        })->toArray();
+        $taskStatistics = TaskSubmission::with('task')->get()
+            ->groupBy(fn ($submission) => $submission->task->title)
+            ->map(fn ($group) => $group->count())
+            ->toArray();
 
         $startDate = request()->start_date ? Carbon::createFromDate(request()->start_date) : Carbon::now()->subDays(7);
         $endDate = request()->end_date ? Carbon::createFromDate(request()->end_date) : Carbon::now();
@@ -74,12 +83,11 @@ class DashboardController extends Controller
 
         $depositStatistics = array_replace($dateArray, $depositStatistics);
 
-
-        $investStatistics = $transaction->totalInvestment()->whereBetween('created_at', $dateFilter)->get()->groupBy('day')->map(function ($group) {
+        $taskEarningStatistics = $transaction->totalTaskReward()->whereBetween('created_at', $dateFilter)->get()->groupBy('day')->map(function ($group) {
             return $group->sum('amount');
         })->toArray();
 
-        $investStatistics = array_replace($dateArray, $investStatistics);
+        $taskEarningStatistics = array_replace($dateArray, $taskEarningStatistics);
 
         $withdrawStatistics = $transaction->totalWithdraw()->whereBetween('created_at', $dateFilter)->get()->groupBy('day')->map(function ($group) {
             return $group->sum('amount');
@@ -112,32 +120,35 @@ class DashboardController extends Controller
             'withdraw_count' => $withdrawCount,
             'kyc_count' => $kycCount,
             'deposit_count' => $depositCount,
+            'submission_count' => TaskSubmission::where('status', TaskSubmissionStatus::Pending)->count(),
 
             'register_user' => $user->count(),
             'active_user' => $activeUser,
             'latest_user' => $latestUser,
-            'latest_invest' => $latestInvest,
+            'pending_submissions' => $pendingSubmissions,
 
             'total_staff' => $totalStaff,
 
             'total_deposit' => $transaction->totalDeposit()->sum('amount'),
             'total_send' => $totalSend,
-            'total_investment' => $transaction->totalInvestment()->sum('amount'),
+            'total_task' => $totalTask,
+            'open_task' => $openTask,
+            'total_task_earning' => $transaction->totalTaskReward()->sum('amount'),
             'total_withdraw' => $transaction->totalWithdraw()->sum('amount'),
             'total_referral' => $totalReferral,
 
             'date_label' => $dateArray,
             'deposit_statistics' => $depositStatistics,
-            'invest_statistics' => $investStatistics,
+            'task_earning_statistics' => $taskEarningStatistics,
             'withdraw_statistics' => $withdrawStatistics,
             'profit_statistics' => $profitStatistics,
 
             'start_date' => isset(request()->start_date) ? $startDate : $startDate->addDays(1)->format('m/d/Y'),
             'end_date' => isset(request()->end_date) ? $endDate : $endDate->subDays(1)->format('m/d/Y'),
 
-            'scheme_statistics' => $schemeStatistics,
+            'task_statistics' => $taskStatistics,
             'deposit_bonus' => $transaction->totalDepositBonus(),
-            'investment_bonus' => $transaction->totalInvestBonus(),
+            'task_bonus' => $transaction->totalTaskBonus(),
             'total_gateway' => $totalGateway,
             'total_ticket' => Ticket::count(),
 
@@ -147,16 +158,16 @@ class DashboardController extends Controller
             'symbol' => $symbol,
         ];
 
-
         if (request()->ajax()) {
             $date = [
                 'date_label' => $dateArray,
                 'deposit_statistics' => $depositStatistics,
-                'invest_statistics' => $investStatistics,
+                'task_earning_statistics' => $taskEarningStatistics,
                 'withdraw_statistics' => $withdrawStatistics,
                 'profit_statistics' => $profitStatistics,
                 'symbol' => $symbol,
             ];
+
             return response()->json($date);
         }
 

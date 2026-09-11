@@ -88,10 +88,10 @@
                 <i icon-name="droplet"></i>
             </div>
             <div class="content">
-                <h4>{{ $currencySymbol }}<span class="count">{{ round($data['total_investment'],2) }}</span></h4>
-                <p>{{ __('Total Investment') }}</p>
+                <h4>{{ $currencySymbol }}<span class="count">{{ round($data['total_task_earning'],2) }}</span></h4>
+                <p>{{ __('Total Task Earnings') }}</p>
             </div>
-            <a class="link" href="{{ route('admin.investments') }}"><i icon-name="external-link"></i></a>
+            <a class="link" href="{{ route('admin.task-earnings') }}"><i icon-name="external-link"></i></a>
         </div>
     </div>
 
@@ -114,8 +114,8 @@
                 <i icon-name="sprout"></i>
             </div>
             <div class="content">
-                <h4>  {{ $currencySymbol }}<span class="count">{{ round($data['investment_bonus'],2) }}</span></h4>
-                <p>{{ __('Investment Bonus') }}</p>
+                <h4>  {{ $currencySymbol }}<span class="count">{{ round($data['task_bonus'],2) }}</span></h4>
+                <p>{{ __('Task Referral Bonus') }}</p>
             </div>
         </div>
     </div>

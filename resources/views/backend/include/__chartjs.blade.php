@@ -22,7 +22,7 @@
         function chart_show(chartData) {
             var date_label = Object.keys(chartData['date_label']);
             var deposit_data = Object.values(chartData['deposit_statistics']);
-            var invest_data = Object.values(chartData['invest_statistics']);
+            var invest_data = Object.values(chartData['task_earning_statistics']);
             var withdraw_data = Object.values(chartData['withdraw_statistics']);
             var profit_data = Object.values(chartData['profit_statistics']);
             var symbol = chartData['symbol'];
@@ -41,7 +41,7 @@
                     tension: 0.1
                 },
                     {
-                        label: 'Total Investment ' + symbol + sumArrayValues(invest_data),
+                        label: 'Task Earnings ' + symbol + sumArrayValues(invest_data),
                         data: invest_data,
                         backgroundColor: '#5e3fc9',
                         borderColor: '#ffffff',
@@ -105,7 +105,7 @@
         var chartData = {
             'date_label': @json($data['date_label']),
             'deposit_statistics': @json($data['deposit_statistics']),
-            'invest_statistics': @json($data['invest_statistics']),
+            'task_earning_statistics': @json($data['task_earning_statistics']),
             'withdraw_statistics': @json($data['withdraw_statistics']),
             'profit_statistics': @json($data['profit_statistics']),
             'symbol': @json($data['symbol']),
@@ -114,14 +114,14 @@
 
 
         //Plan chart
-        var schema = @json($data['scheme_statistics']);
+        var schema = @json($data['task_statistics']);
         var invest_data = Object.values(schema);
         var invest_label = Object.keys(schema);
         // Bar Chart
         var data = {
             labels: invest_label,
             datasets: [{
-                label: 'Total Investment',
+                label: 'Submissions Per Task',
                 data: invest_data,
                 backgroundColor: [
                     '#5e3fc9',
