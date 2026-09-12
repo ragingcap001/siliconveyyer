@@ -107,7 +107,7 @@ return [
                 'name' => 'site_email', // unique name for field
                 'label' => 'Site Email', // you know what label it is
                 'rules' => 'required', // validation rule of laravel
-                'value' => 'admin@tdevs.co', // default value if you want
+                'value' => 'admin@' . parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST), // default value if you want
             ],
             [
                 'type' => 'email', // input fields type
@@ -115,7 +115,7 @@ return [
                 'name' => 'support_email', // unique name for field
                 'label' => 'Support Email', // you know what label it is
                 'rules' => 'required', // validation rule of laravel
-                'value' => 'support@tdevs.co', // default value if you want
+                'value' => 'support@' . parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST), // default value if you want
             ],
         ],
     ],
@@ -350,7 +350,7 @@ return [
                 'name' => 'email_from_name', // unique name for field
                 'label' => 'Email From Name', // you know what label it is
                 'rules' => 'required|min:5|max:50', // validation rule of laravel
-                'value' => 'Tdevs', // default value if you want
+                'value' => env('APP_NAME', 'Hyiprio'), // default value if you want
             ],
             [
                 'type' => 'email', // input fields type
@@ -392,7 +392,7 @@ return [
                 'name' => 'mail_host', // unique name for field
                 'label' => 'Mail Host', // you know what label it is
                 'rules' => 'required', // validation rule of laravel
-                'value' => 'mail.tdevs.co', // default value if you want
+                'value' => 'mail.' . parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST), // default value if you want
             ],
             [
                 'type' => 'text', // input fields type
