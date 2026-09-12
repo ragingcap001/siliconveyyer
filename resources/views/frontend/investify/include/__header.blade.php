@@ -1,161 +1,125 @@
-@if(setting('back_to_top','permission'))
-<!-- Backtotop start -->
-<div class="backtotop-wrap rock cursor-pointer">
-<svg class="backtotop-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-    <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-</svg>
-</div>
-<!-- Backtotop end -->
-@endif
+@php
+    $currentUrl = Request::url();
+    $languages = \App\Models\Language::where('status', true)->get();
+@endphp
 
-<!-- Offcanvas area start -->
-<div class="fix">
-    <div class="offcanvas-area">
-       <div class="offcanva-wrapper">
-          <div class="offcanvas-content">
-             <div class="offcanvas-top d-flex justify-content-between align-items-center">
-                <div class="offcanvas-logo">
-                   <a href="{{ route('home') }}">
-                    <img src="{{ asset(setting('site_logo','global')) }}" alt="logo not found">
-                   </a>
-                </div>
-                <div class="offcanvas-close">
-                   <button class="offcanvas-close-icon animation--flip">
-                   <span class="offcanvas-m-lines">
-                   <span class="offcanvas-m-line line--1"></span><span
-                      class="offcanvas-m-line line--2"></span><span
-                      class="offcanvas-m-line line--3"></span>
-                   </span>
-                   </button>
-                </div>
-             </div>
-             <div class="mobile-menu fix"></div>
-             <div class="offcanvas-content">
-                @if($socials->count() > 0)
-                <div class="social-share mb-20">
-                   <a class="quick-share-btn" href="#">
-                      <span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <g opacity="0.4">
-                         <path d="M2.41375 8.99722L15.2376 3.45504C15.8407 3.19441 16.4941 3.70157 16.3913 4.35043L14.6379 15.4138C14.5296 16.0971 13.6839 16.3585 13.2089 15.8554L10.3315 12.8074C9.76719 12.2097 9.72297 11.2898 10.2273 10.6407L12.259 8.02594C12.3751 7.87646 12.1917 7.67982 12.0345 7.78527L7.99509 10.4951C7.30961 10.955 6.47788 11.1441 5.66095 11.026L2.62506 10.5869C1.79341 10.4666 1.6424 9.33058 2.41375 8.99722Z" fill="white"/>
-                         </g>
-                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1759 3.64939L12.2076 7.77699C12.1581 7.74877 12.0944 7.74509 12.0345 7.78527L7.99509 10.4951C7.30961 10.955 6.47788 11.1441 5.66095 11.026L2.62506 10.5869C1.79341 10.4666 1.6424 9.33058 2.41375 8.99722L15.2376 3.45504C15.5851 3.30488 15.9492 3.40958 16.1759 3.64939Z" fill="white"/>
-                         </svg>
-                      </span>
-                      <span class="text">{{ $socials->last()->icon_name }}</span>
-                   </a>
-                </div>
-                @endif
-                <div class="offcanvas-btn mb-3">
-                   @auth('web')
-                   <a class="site-btn secondary-btn btn-xxs" href="{{ route('user.dashboard') }}">{{ __('Dashboard') }}</a>
-                   @else
-                   <a class="site-btn secondary-btn outline-btn btn-xxs" href="{{ route('login') }}">{{ __('Login') }}</a>
-                   <a class="site-btn secondary-btn btn-xxs" href="{{ route('register') }}">{{ __('Register') }}</a>
-                   @endauth
-                </div>
-             </div>
-          </div>
-       </div>
-    </div>
- </div>
- <div class="offcanvas-overlay"></div>
- <div class="offcanvas-overlay-white"></div>
- <!-- Offcanvas area start -->
+<header x-data="{ open: false, scrolled: false, langOpen: false }"
+        x-init="scrolled = window.scrollY > 12"
+        @scroll.window="scrolled = window.scrollY > 12"
+        class="fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-spring"
+        :class="scrolled ? 'py-2' : 'py-4'">
 
-<!-- Header area start -->
-<header>
-    <!-- header section start -->
-    <div class="header-area header-transparent header-style-four" id="header-sticky">
-        <div class="header-inner">
-            <div class="header-logo">
-                <a href="{{ route('home') }}">
-                    <img src="{{ asset(setting('site_logo','global')) }}" alt="Logo not found">
-                </a>
-            </div>
-            <div class="header-menu d-none d-lg-inline-flex justify-content-center">
-                <nav class="td-main-menu" id="mobile-menu">
-                <ul>
-                    @foreach($navigations as $navigation)
-                        @if($navigation->page->status|| $navigation->page_id == null)
-                            <li class="@if(url($navigation->url) == Request::url() ) active @endif">
-                                <a href="{{ url($navigation->url) }}">{{ $navigation->tname }}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-                </nav>
-            </div>
-            <div class="header-right">
-                <div class="header-action">
-                <div class="header-action-inner">
-                    @if($socials->count() > 0)
-                    <div class="social-share d-none d-sm-inline-flex">
-                        <a class="quick-share-btn" href="{{ url($socials->first()->url) }}">
-                            <span>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g opacity="0.4">
-                                        <path
-                                            d="M2.41375 8.99722L15.2376 3.45504C15.8407 3.19441 16.4941 3.70157 16.3913 4.35043L14.6379 15.4138C14.5296 16.0971 13.6839 16.3585 13.2089 15.8554L10.3315 12.8074C9.76719 12.2097 9.72297 11.2898 10.2273 10.6407L12.259 8.02594C12.3751 7.87646 12.1917 7.67982 12.0345 7.78527L7.99509 10.4951C7.30961 10.955 6.47788 11.1441 5.66095 11.026L2.62506 10.5869C1.79341 10.4666 1.6424 9.33058 2.41375 8.99722Z"
-                                            fill="white" />
-                                    </g>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16.1759 3.64939L12.2076 7.77699C12.1581 7.74877 12.0944 7.74509 12.0345 7.78527L7.99509 10.4951C7.30961 10.955 6.47788 11.1441 5.66095 11.026L2.62506 10.5869C1.79341 10.4666 1.6424 9.33058 2.41375 8.99722L15.2376 3.45504C15.5851 3.30488 15.9492 3.40958 16.1759 3.64939Z"
-                                        fill="white" />
-                                </svg>
-                            </span>
-                            <span class="text">{{ $socials->last()->icon_name }}</span>
-                        </a>
-                    </div>
+    <div class="shell">
+        <nav class="relative flex items-center justify-between gap-6 rounded-2xl px-4 py-3 transition-all duration-500 ease-spring sm:px-5"
+             :class="scrolled
+                ? 'glass border border-[rgb(var(--line)/0.1)] shadow-card'
+                : 'border border-transparent'">
+
+            {{-- Brand --}}
+            <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2.5">
+                <img src="{{ asset(setting('site_logo','global')) }}" alt="{{ setting('site_title','global') }}"
+                     class="h-9 w-auto max-w-[150px] object-contain"/>
+            </a>
+
+            {{-- Desktop nav --}}
+            <ul class="hidden items-center gap-1 lg:flex">
+                @foreach($navigations as $navigation)
+                    @if($navigation->page->status || $navigation->page_id == null)
+                        <li>
+                            <a href="{{ url($navigation->url) }}"
+                               class="relative rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-300
+                                      {{ url($navigation->url) == $currentUrl
+                                          ? 'text-brand-600 dark:text-brand-300'
+                                          : 'text-[rgb(var(--text-body))] hover:text-[rgb(var(--text-strong))]' }}">
+                                {{ $navigation->tname }}
+                                @if(url($navigation->url) == $currentUrl)
+                                    <span class="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand-500"></span>
+                                @endif
+                            </a>
+                        </li>
                     @endif
+                @endforeach
+            </ul>
 
-                    <div class="header-lang-item header-lang">
-                        <span class="header-lang-toggle" id="header-lang-toggle">
+            {{-- Actions --}}
+            <div class="flex items-center gap-2">
+
+                {{-- language --}}
+                @if($languages->count() > 1)
+                    <div class="relative hidden sm:block" @click.outside="langOpen = false">
+                        <button @click="langOpen = !langOpen" type="button"
+                                class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-[rgb(var(--text-body))] transition-colors hover:text-[rgb(var(--text-strong))]">
                             {{ localeName() }}
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.25 7.5L9 10.5L12.75 7.5" stroke="white" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
+                            <svg class="h-4 w-4 transition-transform duration-200" :class="langOpen && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
                             </svg>
-                        </span>
-                        <ul id="language-list">
-                            @foreach(\App\Models\Language::where('status',true)->get() as $lang)
-                            <li>
-                                <a href="{{ route('language-update',['name'=> $lang->locale]) }}"
-                                    data-lang="{{ $lang->name }}"
-                                    class="{{ App::currentLocale() == $lang->locale ? 'active' : '' }}">{{ $lang->name }}
-                                    <span class="icon">
-                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M2.91797 7.58398L4.97505 9.22965C5.45765 9.61573 6.1576 9.55847 6.57104 9.09909L11.0846 4.08398"
-                                                stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
+                        </button>
+                        <div x-show="langOpen" x-cloak x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-[rgb(var(--line)/0.1)] bg-[rgb(var(--surface-raised))] shadow-lift">
+                            @foreach($languages as $lang)
+                                <a href="{{ route('language-update',['name' => $lang->locale]) }}"
+                                   class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-[rgb(var(--line)/0.05)] {{ App::currentLocale() == $lang->locale ? 'text-brand-600 dark:text-brand-300 font-semibold' : 'text-[rgb(var(--text-body))]' }}">
+                                    {{ $lang->name }}
                                 </a>
-                            </li>
                             @endforeach
-                        </ul>
+                        </div>
                     </div>
-                    <div class="header-btn-wrap d-none d-md-inline-flex">
-                        @auth('web')
-                        <a class="site-btn secondary-btn btn-xxs" href="{{ route('user.dashboard') }}">{{ __('Dashboard') }}</a>
-                        @else
-                        <a class="site-btn secondary-btn outline-btn btn-xxs" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        <a class="site-btn secondary-btn btn-xxs" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        @endauth
-                    </div>
+                @endif
+
+                {{-- auth buttons --}}
+                <div class="hidden items-center gap-2 md:flex">
+                    @auth('web')
+                        <a class="btn-primary btn-sm" href="{{ route('user.dashboard') }}">{{ __('Dashboard') }}</a>
+                    @else
+                        <a class="btn-outline btn-sm" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="btn-primary btn-sm" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    @endauth
                 </div>
-                <div class="header-hamburger d-lg-none">
-                    <a class="sidebar-toggle" href="javascript:void(0)">
-                        <span class="menu-icon"><span></span></span>
-                    </a>
-                </div>
-                </div>
+
+                {{-- mobile hamburger --}}
+                <button @click="open = !open" type="button" class="flex lg:hidden">
+                    <svg x-show="!open" class="h-6 w-6 text-[rgb(var(--text-strong))]" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5"/>
+                    </svg>
+                    <svg x-show="open" x-cloak class="h-6 w-6 text-[rgb(var(--text-strong))]" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        {{-- Mobile menu --}}
+        <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4"
+             class="mt-2 overflow-hidden rounded-2xl border border-[rgb(var(--line)/0.1)] bg-[rgb(var(--surface-raised))] p-4 shadow-lift lg:hidden">
+            <ul class="space-y-1">
+                @foreach($navigations as $navigation)
+                    @if($navigation->page->status || $navigation->page_id == null)
+                        <li>
+                            <a href="{{ url($navigation->url) }}"
+                               class="block rounded-xl px-4 py-3 text-sm font-medium transition-colors
+                                      {{ url($navigation->url) == $currentUrl
+                                          ? 'bg-brand-500/10 text-brand-600 dark:text-brand-300'
+                                          : 'text-[rgb(var(--text-body))] hover:bg-[rgb(var(--line)/0.05)] hover:text-[rgb(var(--text-strong))]'}}">
+                                {{ $navigation->tname }}
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+            <div class="mt-4 flex flex-col gap-2 border-t border-[rgb(var(--line)/0.08)] pt-4">
+                @auth('web')
+                    <a class="btn-primary btn-sm btn-block" href="{{ route('user.dashboard') }}">{{ __('Dashboard') }}</a>
+                @else
+                    <a class="btn-outline btn-sm btn-block" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="btn-primary btn-sm btn-block" href="{{ route('register') }}">{{ __('Register') }}</a>
+                @endauth
             </div>
         </div>
     </div>
-    <!-- header section end -->
 </header>
-<!-- Header area end -->

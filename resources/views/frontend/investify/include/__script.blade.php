@@ -1,14 +1,3 @@
-<script src="{{ asset('global/js/jquery.min.js') }}"></script>
-<script src="{{ asset('global/js/jquery-migrate.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/sidebar.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/datepicker-full.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/swiper.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/meanmenu.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/jquery.appear.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/odometer.min.js') }}"></script>
-<script src="{{ asset('frontend/theme_base/hardrock/js/main.js') }}"></script>
 <script src="{{ asset('global/js/simple-notify.min.js') }}"></script>
 
 <script src="{{ asset('frontend/js/cookie.js') }}"></script>
@@ -20,6 +9,28 @@
 @endif
 
 @notifyJs
+
+@if(isset($homeContent))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                var delay = entry.target.getAttribute('data-reveal-delay') || 0;
+                setTimeout(function () {
+                    entry.target.classList.add('is-visible');
+                }, parseInt(delay));
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('[data-reveal]').forEach(function (el) {
+        observer.observe(el);
+    });
+});
+</script>
+@endif
 
 @yield('script')
 @stack('script')
@@ -39,6 +50,3 @@
 @if($fb)
     @include('frontend::plugin.fb',['data' => json_decode($fb->data, true)])
 @endif
-
-
-

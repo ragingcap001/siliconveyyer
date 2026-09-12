@@ -1,43 +1,35 @@
-<!-- Newsletter section start -->
-<section class="rock-newsletter-section o-x-clip">
-<div class="container p-relative">
-    <div class="rock-newsletter-wrapper" data-background="{{ asset('frontend/theme_base/hardrock/images/bg/news-latter-bg.png') }}">
-        <div class="rock-newsletter-content">
-            <div class="rock-newsletter-content">
-            <div class="newsletter-form">
-                <form action="{{ route('subscriber') }}" method="POST">
-                @csrf
-                    <div class="single-input">
-                        <div class="input-field">
-                        <input type="email" name="email" placeholder="Email Address" required>
-                        </div>
-                    </div>
-                    <button class="site-btn secondary-btn btn-xxs" type="submit">
-                        <span><svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9 0.25C9.41421 0.25 9.75 0.585786 9.75 1V3H8.25V1C8.25 0.585786 8.58579 0.25 9 0.25ZM13 0.25C13.4142 0.25 13.75 0.585786 13.75 1V3H12.25V1C12.25 0.585786 12.5858 0.25 13 0.25ZM0.25 9C0.25 8.58579 0.585786 8.25 1 8.25H3V9.75H1C0.585786 9.75 0.25 9.41421 0.25 9ZM19 8.25H21C21.4142 8.25 21.75 8.58579 21.75 9C21.75 9.41421 21.4142 9.75 21 9.75H19V8.25ZM0.25 13C0.25 12.5858 0.585786 12.25 1 12.25H3V13.75H1C0.585786 13.75 0.25 13.4142 0.25 13ZM19 12.25H21C21.4142 12.25 21.75 12.5858 21.75 13C21.75 13.4142 21.4142 13.75 21 13.75H19V12.25ZM9.75 19V21C9.75 21.4142 9.41421 21.75 9 21.75C8.58579 21.75 8.25 21.4142 8.25 21V19H9.75ZM13.75 19V21C13.75 21.4142 13.4142 21.75 13 21.75C12.5858 21.75 12.25 21.4142 12.25 21V19H13.75Z"
-                                fill="white" />
-                            <path opacity="0.4"
-                                d="M3 7C3 4.79086 4.79086 3 7 3H15C17.2091 3 19 4.79086 19 7V15C19 17.2091 17.2091 19 15 19H7C4.79086 19 3 17.2091 3 15V7Z"
-                                fill="white" />
-                            <rect x="8" y="8" width="6" height="6" rx="2" fill="white" />
+<section class="section-tight relative overflow-hidden">
+    <div class="shell">
+        <div class="relative overflow-hidden rounded-[2rem] border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-muted))] px-6 py-14 sm:px-12">
+
+            <div class="dot-field pointer-events-none absolute -right-6 -top-6 h-44 w-44 rounded-3xl opacity-60"></div>
+            <div class="glow-blob -left-24 -bottom-32 h-72 w-72 opacity-60"></div>
+
+            <div class="relative mx-auto max-w-2xl text-center" data-reveal>
+                <span class="eyebrow">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+                    </svg>
+                    {{ __('Newsletter') }}
+                </span>
+
+                <h2 class="section-title">{{ __('Never miss an update') }}</h2>
+                <p class="section-lede mx-auto">
+                    {{ __('One short email when new features go live. No spam, unsubscribe any time.') }}
+                </p>
+
+                <form action="{{ route('subscriber') }}" method="post"
+                      class="mx-auto mt-8 flex max-w-lg flex-col gap-2 sm:flex-row">
+                    @csrf
+                    <input type="email" name="email" required placeholder="{{ __('you@example.com') }}" class="field flex-1"/>
+                    <button type="submit" class="btn-primary shrink-0">
+                        {{ __('Subscribe') }}
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
                         </svg>
-                        </span> {{ __('Subscribe') }}
                     </button>
                 </form>
             </div>
-            </div>
         </div>
     </div>
-    <div class="rock-newsletter-shapes">
-        <div class="shape-one">
-            <img src="{{ asset('frontend/theme_base/hardrock/images/rock-shapes/newsletter-shape-01.png') }}" alt="newsletter-shape">
-        </div>
-        <div class="shape-two">
-            <img src="{{ asset('frontend/theme_base/hardrock/images/rock-shapes/newsletter-shape-02.png') }}" alt="newsletter-shape">
-        </div>
-    </div>
-</div>
 </section>
-<!-- Newsletter section end -->

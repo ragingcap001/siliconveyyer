@@ -1,71 +1,57 @@
-<!-- Blog area start -->
-<div class="rock-blog-area position-relative fix section-space">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xxl-8 ciol-xl-6 col-lg-6">
-                <div class="section-title-wrapper-four text-center mb-80">
-                    <span class="subtitle-four">{{ $data['blog_title_small'] }}</span>
-                    <h2 class="section-title-four mb-30">
-                        {{ $data['blog_title_big'] }}
-                    </h2>
-                </div>
+@php
+    $blogs = \App\Models\Blog::where('locale', app()->getLocale())->latest()->take(3)->get();
+@endphp
+
+<section class="section relative overflow-hidden bg-[rgb(var(--surface-muted))]">
+    <div class="pointer-events-none absolute inset-0 grid-flat opacity-40"></div>
+
+    <div class="shell relative">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-reveal>
+            <div class="max-w-2xl">
+                @if(!empty($data['blog_title_small']))
+                    <span class="eyebrow">{{ $data['blog_title_small'] }}</span>
+                @endif
+                <h2 class="section-title">{{ $data['blog_title_big'] ?? '' }}</h2>
             </div>
+            <a href="{{ route('page', 'blog') }}" class="link-arrow shrink-0">
+                {{ __('All posts') }}
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                </svg>
+            </a>
         </div>
-        <div class="blog-main-wrapper p-relative">
-            <div class="swiper rock-blog-active">
-                <div class="swiper-wrapper">
-                    @foreach(\App\Models\Blog::where('locale',app()->getLocale())->latest()->take(3)->get() as $blog)
-                    <div class="swiper-slide">
-                        <article class="rock-blog-grid-item">
-                            <div class="blog-thumb">
-                                <a href="{{ route('blog-details',$blog->id) }}">
-                                    <img src="{{ asset($blog->cover) }}" alt="blog img not found">
-                                </a>
-                            </div>
-                            <div class="blog-content">
-                                <div class="blog-date">
-                                    <span>{{ $blog->created_at }}</span>
-                                </div>
-                                <h3 class="blog-title">
-                                    <a href="{{ route('blog-details',$blog->id) }}">
-                                        {{ $blog->title }}
-                                    </a>
-                                </h3>
-                                <p class="description">
-                                    {!! Str::limit($blog->details,100) !!}
-                                </p>
-                                <div class="blog-link">
-                                    <a class="text-btn" href="{{ route('blog-details',$blog->id) }}">
-                                        {{ __('Continue Reading') }}
-                                        <span>
-                                            <svg width="21" height="16"
-                                                viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4"
-                                                    d="M21 8C21 12.4183 17.4183 16 13 16C8.58172 16 5 12.4183 5 8C5 3.58172 8.58172 0 13 0C17.4183 0 21 3.58172 21 8Z"
-                                                    fill="white" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M10.4697 3.46967C10.7626 3.17678 11.2374 3.17678 11.5303 3.46967L15.5303 7.46963C15.671 7.61028 15.75 7.80105 15.75 7.99996C15.75 8.19887 15.671 8.38964 15.5303 8.53029L11.5303 12.5303C11.2374 12.8232 10.7626 12.8232 10.4697 12.5303C10.1768 12.2374 10.1768 11.7626 10.4697 11.4697L13.1894 8.74996H1C0.585786 8.74996 0.25 8.41418 0.25 7.99996C0.25 7.58575 0.585786 7.24996 1 7.24996H13.1893L10.4697 4.53033C10.1768 4.23744 10.1768 3.76257 10.4697 3.46967Z"
-                                                    fill="white" />
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
+
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($blogs as $blog)
+                <article data-reveal data-reveal-delay="{{ $loop->index * 100 }}"
+                         class="group flex flex-col overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] shadow-soft transition-all duration-500 ease-spring hover:-translate-y-1.5 hover:shadow-lift">
+
+                    <div class="relative aspect-[16/10] overflow-hidden bg-[rgb(var(--surface-muted))]">
+                        <img src="{{ asset($blog->cover) }}" alt="{{ $blog->title }}"
+                             class="h-full w-full object-cover transition-transform duration-700 ease-spring group-hover:scale-105"/>
+                        <span class="absolute left-4 top-4 rounded-lg bg-[rgb(var(--surface-raised)/0.9)] px-2.5 py-1.5 text-[0.68rem] font-semibold text-[rgb(var(--text-muted))] backdrop-blur">
+                            {{ $blog->created_at }}
+                        </span>
                     </div>
-                    @endforeach
-                </div>
-            </div>
-            <!-- If we need navigation buttons -->
-            <div class="blog-slider-navigation">
-                <button class="blog-slider-btn blog-slider-prev">
-                    <img src="{{ asset('frontend/theme_base/hardrock//images/icons/arrow-right.svg') }}" alt="arrow">
-                </button>
-                <button class="blog-slider-btn blog-slider-next">
-                    <img src="{{ asset('frontend/theme_base/hardrock//images/icons/arrow-left.svg') }}" alt="arrow">
-                </button>
-            </div>
+
+                    <div class="flex flex-1 flex-col p-6">
+                        <h3 class="line-clamp-2 text-base font-semibold leading-snug text-[rgb(var(--text-strong))]">
+                            <a href="{{ route('blog-details', $blog->id) }}" class="transition-colors hover:text-brand-600 dark:hover:text-brand-300">
+                                {{ $blog->title }}
+                            </a>
+                        </h3>
+                        <p class="mt-3 flex-1 text-sm leading-relaxed text-[rgb(var(--text-muted))]">
+                            {{ Str::limit(strip_tags($blog->details), 110) }}
+                        </p>
+                        <a href="{{ route('blog-details', $blog->id) }}" class="link-arrow mt-5">
+                            {{ __('Continue Reading') }}
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </article>
+            @endforeach
         </div>
     </div>
-</div>
-<!-- Blog area start -->
+</section>
