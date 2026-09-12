@@ -1,4 +1,4 @@
-@extends('frontend::layouts.app')
+@extends('frontend::layouts.modern')
 @section('title')
     {{ __('Home') }}
 @endsection

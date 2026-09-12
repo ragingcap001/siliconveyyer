@@ -16,6 +16,7 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
+        "@alpinejs/collapse": "^3.17.2",
         "dotenv": "^16.0.3",
         "laravel-echo": "^1.15.1",
         "pusher-js": "^8.0.2"
