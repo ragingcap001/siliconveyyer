@@ -21,6 +21,15 @@ return new class extends Migration
             $table->unsignedInteger('level')->default(1)->after('id');
             $table->unsignedInteger('minimum_tasks')->default(0);
             $table->double('minimum_task_earning', 16, 8)->default(0);
+
+            // the investment thresholds the task ladder replaced
+            if (Schema::hasColumn('rankings', 'minimum_invest')) {
+                $table->dropColumn('minimum_invest');
+            }
+
+            if (Schema::hasColumn('rankings', 'minimum_referral_invest')) {
+                $table->dropColumn('minimum_referral_invest');
+            }
         });
 
         DB::statement('UPDATE `rankings` SET `level` = `id` WHERE `level` IS NULL OR `level` = 1');
@@ -35,6 +44,8 @@ return new class extends Migration
     {
         Schema::table('rankings', function (Blueprint $table) {
             $table->dropColumn(['level', 'minimum_tasks', 'minimum_task_earning']);
+            $table->integer('minimum_invest')->default(0);
+            $table->integer('minimum_referral_invest')->default(0);
         });
     }
 };

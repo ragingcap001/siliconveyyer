@@ -223,7 +223,9 @@ INSERT INTO `email_templates` (`id`, `name`, `code`, `for`, `banner`, `title`, `
 (15, 'Withdraw Request Action', 'withdraw_request_user', 'User', 'global/images/3Z7UnXe62WeZkJdpSQic.jpg', 'Withdraw Request', 'Got a Withdraw Request', 'Hi [[full_name]],', 'Withdraw Request details:<br />\r\n[[message]]<br />\r\n[[txn]]<br />\r\n[[method_name]]<br />\r\n[[withdraw_amount]]<br />\r\n[[status]]', 'Withdraw Request', '[[site_url]]', 1, 'Regards,<br />\r\n[[site_title]]', 0, 'Withdraw Request', '[[full_name]]', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[method_name]]\",\"[[withdraw_amount]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 0, NULL, '2023-01-30 05:11:57'),
 (16, 'Manual Deposit request Action', 'user_manual_deposit_request', 'User', 'global/images/3Z7UnXe62WeZkJdpSQic.jpg', 'Manual Deposit request', 'Got a request for Manual Deposit', 'Hi [[full_name]],', 'The manual deposit request details:<br />\r\n[[message]]\r\n[[txn]]<br />\r\n[[gateway_name]]<br />\r\n[[deposit_amount]]\r\n[[status]]\r\n', 'Review The requests', '[[site_url]]', 1, 'Regards,<br />\r\n[[site_title]]', 0, 'Manual Deposit request', '[[full_name]]', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[gateway_name]]\",\"[[deposit_amount]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 0, NULL, '2023-01-30 05:11:57'),
 (17, 'Support Ticket', 'user_support_ticket', 'User', 'global/images/3Z7UnXe62WeZkJdpSQic.jpg', 'Support Ticket', 'Support Ticket', 'Hi [[full_name]],', 'Support Ticket:<br />\r\n[[title]]<br />\r\n[[message]]<br />\r\n[[status]]', '..', '[[site_url]]', 1, 'Regards,<br />\r\n[[site_title]]', 0, 'Support Ticket', '[[full_name]]', '[\"[[full_name]]\",\"[[title]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, '2023-04-26 14:44:42'),
-(18, 'Support Ticket', 'admin_support_ticket', 'Admin', 'global/images/3Z7UnXe62WeZkJdpSQic.jpg', 'Support Ticket', 'Support Ticket', 'Hi [[full_name]],', 'Support Ticket:<br />\r\n[[title]]<br />\r\n[[message]]<br />\r\n[[status]]', '..', '[[site_url]]', 1, 'Regards,<br />\r\n[[site_title]]', 0, 'Support Ticket', '[[full_name]]', '[\"[[full_name]]\",\"[[title]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, '2023-04-26 14:44:51');
+(18, 'Support Ticket', 'admin_support_ticket', 'Admin', 'global/images/3Z7UnXe62WeZkJdpSQic.jpg', 'Support Ticket', 'Support Ticket', 'Hi [[full_name]],', 'Support Ticket:<br />\r\n[[title]]<br />\r\n[[message]]<br />\r\n[[status]]', '..', '[[site_url]]', 1, 'Regards,<br />\r\n[[site_title]]', 0, 'Support Ticket', '[[full_name]]', '[\"[[full_name]]\",\"[[title]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, '2023-04-26 14:44:51'),
+(19, 'Task Approved', 'task_approved', 'User', NULL, 'Task Approved', 'Your task submission was approved', 'Hi [[full_name]],', 'Great news! Your submission for <b>[[task_name]]</b> was approved and <b>[[pay_amount]]</b> has been credited to your wallet.<br />\r\n<br />\r\n<b>Note from the reviewer:</b> [[message]]', 'View My Tasks', '[[site_url]]/user/task/history', 1, 'Regards,<br />\r\n[[site_title]]', 0, NULL, NULL, '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00'),
+(20, 'Task Rejected', 'task_rejected', 'User', NULL, 'Task Rejected', 'Your task submission needs another look', 'Hi [[full_name]],', 'Unfortunately your submission for <b>[[task_name]]</b> was not accepted, so <b>[[pay_amount]]</b> has not been credited.<br />\r\n<br />\r\n<b>Reason:</b> [[message]]<br />\r\n<br />\r\nA rejection does not use up one of your attempts, so you can correct the work and submit again while slots remain.', 'View My Tasks', '[[site_url]]/user/task/history', 1, 'Regards,<br />\r\n[[site_title]]', 0, NULL, NULL, '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00');
 
 -- --------------------------------------------------------
 
@@ -290,34 +292,6 @@ INSERT INTO `gateways` (`id`, `logo`, `name`, `gateway_code`, `supported_currenc
 (23, 'global/gateway/paytm.png', 'Paytm', 'paytm', '[\"AUD\", \"ARS\", \"BDT\", \"BRL\", \"BGN\", \"CAD\", \"CLP\", \"CNY\", \"COP\",\r\n    \"HRK\", \"CZK\", \"DKK\", \"EGP\", \"EUR\", \"GEL\", \"GHS\", \"HKD\", \"HUF\",\r\n    \"INR\", \"IDR\", \"ILS\", \"JPY\", \"KES\", \"MYR\", \"MXN\", \"MAD\", \"NPR\",\r\n    \"NZD\", \"NGN\", \"NOK\", \"PKR\", \"PEN\", \"PHP\", \"PLN\", \"RON\", \"RUB\",\r\n    \"SGD\", \"ZAR\", \"KRW\", \"LKR\", \"SEK\", \"CHF\", \"THB\", \"TRY\", \"UGX\",\r\n    \"UAH\", \"AED\", \"GBP\", \"USD\", \"VND\", \"XOF\"]', '{\"merchant_id\":\"DIY12386817555501617\",\"merchant_key\":\"\",\"merchant_website\":\"DIYtestingweb\",\"channel\":\"WEB\",\"industry_type\":\"Retail\"}', '0', 1, NULL, '2023-08-30 07:47:57'),
 (24, 'global/gateway/razorpay.png', 'Razorpay', 'razorpay', '[\"INR\"]', '{\"razorpay_key\":\"\",\"razorpay_secret\":\"\"}', '0', 1, NULL, '2023-08-30 14:13:27'),
 (25, 'global/gateway/twocheckout.png', '2Checkout', 'twocheckout', '[\"AFN\", \"ALL\", \"DZD\", \"ARS\", \"AUD\", \"AZN\", \"BSD\", \"BDT\", \"BBD\", \"BZD\", \r\n    \"BMD\", \"BOB\", \"BWP\", \"BRL\", \"GBP\", \"BND\", \"BGN\", \"CAD\", \"CLP\", \"CNY\", \r\n    \"COP\", \"CRC\", \"HRK\", \"CZK\", \"DKK\", \"DOP\", \"XCD\", \"EGP\", \"EUR\", \"FJD\", \r\n    \"GTQ\", \"HKD\", \"HNL\", \"HUF\", \"INR\", \"IDR\", \"ILS\", \"JMD\", \"JPY\", \"KZT\", \r\n    \"KES\", \"LAK\", \"MMK\", \"LBP\", \"LRD\", \"MOP\", \"MYR\", \"MVR\", \"MRO\", \"MUR\", \r\n    \"MXN\", \"MAD\", \"NPR\", \"TWD\", \"NZD\", \"NIO\", \"NOK\", \"PKR\", \"PGK\", \"PEN\", \r\n    \"PHP\", \"PLN\", \"QAR\", \"RON\", \"RUB\", \"WST\", \"SAR\", \"SCR\", \"SGD\", \"SBD\", \r\n    \"ZAR\", \"KRW\", \"LKR\", \"SEK\", \"CHF\", \"SYP\", \"THB\", \"TOP\", \"TTD\", \"TRY\", \r\n    \"UAH\", \"AED\", \"USD\", \"VUV\", \"VND\", \"XOF\", \"YER\"]', '{\"seller_id\":\"250507228545\",\"secret_word\":\"\"}', '0', 1, NULL, '2023-08-30 14:13:27');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `invests`
---
-
-CREATE TABLE `invests` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint UNSIGNED NOT NULL,
-  `schema_id` bigint NOT NULL,
-  `transaction_id` bigint DEFAULT NULL,
-  `invest_amount` double NOT NULL,
-  `already_return_profit` int NOT NULL DEFAULT '0',
-  `total_profit_amount` double NOT NULL DEFAULT '0',
-  `last_profit_time` datetime DEFAULT NULL,
-  `next_profit_time` datetime DEFAULT NULL,
-  `capital_back` int DEFAULT NULL,
-  `interest` double DEFAULT NULL,
-  `interest_type` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `return_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `number_of_period` int NOT NULL,
-  `period_hours` int DEFAULT NULL,
-  `wallet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -474,11 +448,11 @@ CREATE TABLE `landing_pages` (
 --
 
 INSERT INTO `landing_pages` (`id`, `name`, `code`, `data`, `status`, `created_at`, `updated_at`, `short`, `locale`) VALUES
-(1, 'Hero Section', 'hero', '{\"hero_title\":\"Hyip Investment Platform to make money online\",\"hero_content\":\"We have considered our solutions to support every stage of your growth and get the potential service.\",\"hero_button1_icon\":\"anticon anticon-user-add\",\"hero_button1_level\":\"Make Investment\",\"hero_button1_url\":\"https:\\/\\/hyiprio.tdevs.co\\/register\",\"hero_button1_target\":\"_self\",\"hero_button2_icon\":\"anticon anticon-fire\",\"hero_button2_lavel\":\"How it works\",\"hero_button2_url\":\"https:\\/\\/hyiprio.tdevs.co\\/how-it-works\",\"hero_button2_target\":\"_self\",\"hero_right_img\":\"global\\/images\\/6o9uYYN51THTuXUAEh17.png\",\"hero_right_top_img\":\"global\\/images\\/lLJT3xQhVp4mkOyxtRC3.png\",\"company_slogan\":\"\"}', 1, '2022-10-22 13:54:01', '2023-07-31 15:32:00', 1, 'en'),
-(2, 'Schema Section', 'schema', '{\"title_small\":\"Our Investment Plans\",\"title_big\":\"The plans we offer is specifically made for you.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2022-10-22 13:54:48', '2023-07-18 16:58:45', 2, 'en'),
-(3, 'Calculation Section', 'calculation', '{\"calculation_title_small\":\"Investment Calculator\",\"calculation_title_big\":\"Plan Profit Calculation.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2022-10-22 13:54:48', '2022-11-16 16:26:19', 3, 'en'),
-(4, 'How it works Section\n', 'howitworks', '{\"title_small\":\"How It Works\",\"title_big\":\"It is a very simple process to start with us and earn money randomly\"}', 1, '2022-10-22 13:54:48', '2023-07-31 13:05:27', 4, 'en'),
-(5, 'Recent Section\n', 'recent', '{\"title_small\":\"Latest Investors and Withdraws\",\"title_big\":\"You can explore the live investments and withdraws\"}', 1, '2022-10-22 13:54:48', '2022-11-16 22:11:48', 5, 'en'),
+(1, 'Hero Section', 'hero', '{\"hero_title\":\"Complete simple tasks and get paid\",\"hero_content\":\"Browse the task board, claim a task that suits you, submit your proof and get paid once it is approved.\",\"hero_button1_icon\":\"anticon anticon-user-add\",\"hero_button1_level\":\"Start Earning\",\"hero_button1_url\":\"https:\\/\\/hyiprio.tdevs.co\\/register\",\"hero_button1_target\":\"_self\",\"hero_button2_icon\":\"anticon anticon-fire\",\"hero_button2_lavel\":\"How it works\",\"hero_button2_url\":\"https:\\/\\/hyiprio.tdevs.co\\/how-it-works\",\"hero_button2_target\":\"_self\",\"hero_right_img\":\"global\\/images\\/6o9uYYN51THTuXUAEh17.png\",\"hero_right_top_img\":\"global\\/images\\/lLJT3xQhVp4mkOyxtRC3.png\",\"company_slogan\":\"\"}', 1, '2022-10-22 13:54:01', '2023-07-31 15:32:00', 1, 'en'),
+(2, 'Featured Tasks Section', 'schema', '{\"title_small\":\"Available Tasks\",\"title_big\":\"Pick a task, complete it, and get paid.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2022-10-22 13:54:48', '2023-07-18 16:58:45', 2, 'en'),
+(3, 'Intro Section', 'calculation', '{\"calculation_title_small\":\"How It Works\",\"calculation_title_big\":\"See how easy it is to earn with us.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2022-10-22 13:54:48', '2022-11-16 16:26:19', 3, 'en'),
+(4, 'How it works Section\n', 'howitworks', '{\"title_small\":\"How It Works\",\"title_big\":\"It is a very simple process to start with us and earn money\"}', 1, '2022-10-22 13:54:48', '2023-07-31 13:05:27', 4, 'en'),
+(5, 'Recent Section\n', 'recent', '{\"title_small\":\"Latest Task Earnings and Withdraws\",\"title_big\":\"You can explore the live task earnings and withdraws\"}', 1, '2022-10-22 13:54:48', '2022-11-16 22:11:48', 5, 'en'),
 (6, 'Why Choose Us Section\n', 'whychooseus', '{\"title_small\":\"Why Choose Us\",\"title_big\":\"Explore Why You Will Choose Us.\",\"left_img\":\"global\\/images\\/w6wAm8zEpqqk4GzxEWxw.png\",\"right_img\":\"global\\/images\\/XIeEtiyw8HzFLOK5lLch.png\"}', 1, '2022-10-22 13:54:48', '2023-07-31 14:11:01', 6, 'en'),
 (7, 'Counter Section\n', 'counter', '{\"counter_bg_img\":\"global\\/images\\/p7e2WARHpcYJbr7RlDDE.jpg\"}', 1, '2022-10-22 13:54:48', '2023-07-18 16:59:25', 7, 'en'),
 (8, 'FAQ Section\n', 'faq', '{\"faq_title_small\":\"Faq Questions\",\"faq_title_big\":\"Explore Your Questions.\",\"left_img\":\"global\\/images\\/sPRwlwtyJVvQ1DRqoACh.png\",\"title_small\":\"Faq Questions\",\"title_big\":\"Explore Your Questions.\"}', 1, '2022-10-22 13:54:48', '2023-07-16 19:23:19', 8, 'en'),
@@ -491,10 +465,10 @@ INSERT INTO `landing_pages` (`id`, `name`, `code`, `data`, `status`, `created_at
 (32, 'Hero Section', 'hero', '{\"hero_title\":\"Plateforme d\'investissement Hyip pour gagner de l\'argent en ligne\",\"hero_content\":\"Nous avons consid\\u00e9r\\u00e9 nos solutions pour soutenir chaque \\u00e9tape de votre croissance et obtenir le service potentiel.\",\"hero_button1_icon\":\"nfc\",\"hero_button1_level\":\"Faire des investissements\",\"hero_button1_url\":\"https:\\/\\/hyiprio.tdevs.co\\/register\",\"hero_button1_target\":\"_self\",\"hero_button2_icon\":\"move-right\",\"hero_button2_lavel\":\"Comment \\u00e7a fonctionne\",\"hero_button2_url\":\"https:\\/\\/hyiprio.tdevs.co\\/how-it-works\",\"hero_button2_target\":\"_self\",\"hero_right_img\":\"global\\/images\\/6o9uYYN51THTuXUAEh17.png\",\"hero_right_top_img\":\"global\\/images\\/lLJT3xQhVp4mkOyxtRC3.png\",\"company_slogan\":\"\"}', 1, '2023-07-18 16:53:17', '2023-07-31 15:32:00', 1, 'fr'),
 (33, 'Footer Section\r\n', 'footer', '{\"widget_left_title\":\"Sobre Hyiprio\",\"widget_left_description\":\"La plataforma de inversi\\u00f3n Hyip m\\u00e1s popular y de alto rendimiento en los tiempos modernos. Satisfaga por completo las necesidades de la mayor\\u00eda de los usuarios y distribuya las m\\u00e1ximas ganancias.\",\"widget_title_1\":\"Navegaci\\u00f3n b\\u00e1sica\",\"widget_title_2\":\"Links importantes\",\"widget_title_3\":\"Esenciales de la empresa\",\"copyright_text\":\"Copyright \\u00a9Hyiprio 2023. Todos los derechos reservados.\",\"right_img\":\"global\\/images\\/GAH1nccf5XhjretvfsYT.png\"}', 1, '2023-07-18 16:56:36', '2023-07-31 14:38:37', 13, 'es'),
 (34, 'Footer Section\r\n', 'footer', '{\"widget_left_title\":\"\\u00c0 propos de Hyiprio\",\"widget_left_description\":\"La plateforme d\'investissement Hyip la plus performante et la plus populaire des temps modernes. Remplissez pleinement les besoins des utilisateurs et distribuez un maximum de b\\u00e9n\\u00e9fices.\",\"widget_title_1\":\"Navigation de base\",\"widget_title_2\":\"Liens importants\",\"widget_title_3\":\"Essentiels de l\'entreprise\",\"copyright_text\":\"Copyright \\u00a9Hyprio 2023. Tous droits r\\u00e9serv\\u00e9s.\",\"right_img\":\"global\\/images\\/GAH1nccf5XhjretvfsYT.png\"}', 1, '2023-07-18 16:56:36', '2023-07-31 14:39:21', 13, 'fr'),
-(35, 'Schema Section', 'schema', '{\"title_small\":\"Nuestros planes de inversi\\u00f3n\",\"title_big\":\"Los planes que ofrecemos est\\u00e1n hechos espec\\u00edficamente para usted.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2023-07-18 16:58:44', '2023-07-31 13:01:54', 2, 'es'),
-(36, 'Schema Section', 'schema', '{\"title_small\":\"Nos plans d\'investissement\",\"title_big\":\"Les plans que nous proposons sont sp\\u00e9cialement con\\u00e7us pour vous.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2023-07-18 16:58:44', '2023-07-31 13:02:12', 2, 'fr'),
-(37, 'Calculation Section', 'calculation', '{\"calculation_title_small\":\"Calculadora de inversiones\",\"calculation_title_big\":\"C\\u00e1lculo de beneficios del plan.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2023-07-18 16:58:54', '2023-07-31 13:02:56', 3, 'es'),
-(38, 'Calculation Section', 'calculation', '{\"calculation_title_small\":\"Calculateur d\'investissement\",\"calculation_title_big\":\"Calcul des b\\u00e9n\\u00e9fices du plan.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2023-07-18 16:58:54', '2023-07-31 13:03:30', 3, 'fr'),
+(35, 'Featured Tasks Section', 'schema', '{\"title_small\":\"Nuestros planes de inversi\\u00f3n\",\"title_big\":\"Los planes que ofrecemos est\\u00e1n hechos espec\\u00edficamente para usted.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2023-07-18 16:58:44', '2023-07-31 13:01:54', 2, 'es'),
+(36, 'Featured Tasks Section', 'schema', '{\"title_small\":\"Nos plans d\'investissement\",\"title_big\":\"Les plans que nous proposons sont sp\\u00e9cialement con\\u00e7us pour vous.\",\"left_top_img\":\"global\\/images\\/UHm2cfbMPGZmbZNT2bVC.png\"}', 1, '2023-07-18 16:58:44', '2023-07-31 13:02:12', 2, 'fr'),
+(37, 'Intro Section', 'calculation', '{\"calculation_title_small\":\"Calculadora de inversiones\",\"calculation_title_big\":\"C\\u00e1lculo de beneficios del plan.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2023-07-18 16:58:54', '2023-07-31 13:02:56', 3, 'es'),
+(38, 'Intro Section', 'calculation', '{\"calculation_title_small\":\"Calculateur d\'investissement\",\"calculation_title_big\":\"Calcul des b\\u00e9n\\u00e9fices du plan.\",\"intro_video\":\"https:\\/\\/vimeo.com\\/394343710\",\"calculation_left_img\":\"global\\/images\\/kY1GNdg0EXic9TuMMp4X.jpg\"}', 1, '2023-07-18 16:58:54', '2023-07-31 13:03:30', 3, 'fr'),
 (39, 'How it works Section\n', 'howitworks', '{\"title_small\":\"C\\u00f3mo funciona\",\"title_big\":\"Es un proceso muy sencillo para empezar con nosotros y ganar dinero aleatoriamente\"}', 1, '2023-07-18 16:59:03', '2023-07-31 13:05:27', 4, 'es'),
 (40, 'How it works Section\n', 'howitworks', '{\"title_small\":\"Comment \\u00e7a fonctionne\",\"title_big\":\"C\'est un processus tr\\u00e8s simple pour commencer avec nous et gagner de l\'argent au hasard\"}', 1, '2023-07-18 16:59:03', '2023-07-31 13:05:41', 4, 'fr'),
 (41, 'Recent Section\n', 'recent', '{\"title_small\":\"\\u00daltimos inversores y retiros\",\"title_big\":\"Puede explorar las inversiones en vivo y los retiros\"}', 1, '2023-07-18 16:59:11', '2023-07-31 13:23:05', 5, 'es'),
@@ -564,12 +538,12 @@ INSERT INTO `level_referrals` (`id`, `type`, `the_order`, `bounty`, `created_at`
 (1, 'deposit', '1', 2, '2023-03-29 05:38:44', '2023-03-29 05:38:44', 0),
 (2, 'deposit', '2', 5, '2023-03-29 05:38:52', '2023-03-29 05:38:52', 0),
 (3, 'deposit', '3', 10, '2023-03-29 05:39:00', '2023-03-29 05:39:00', 0),
-(4, 'investment', '1', 3, '2023-03-29 05:39:12', '2023-03-29 05:39:12', 0),
-(5, 'investment', '2', 6, '2023-03-29 05:39:22', '2023-03-29 05:39:22', 0),
-(6, 'investment', '3', 10, '2023-03-29 05:39:28', '2023-03-29 05:39:28', 0),
-(7, 'profit', '1', 4, '2023-03-29 05:39:47', '2023-03-29 05:39:47', 0),
-(8, 'profit', '2', 8, '2023-03-29 05:39:56', '2023-03-29 05:39:56', 0),
-(9, 'profit', '3', 12, '2023-03-29 05:40:03', '2023-03-29 05:40:03', 0);
+(4, 'task', '1', 3, '2023-03-29 05:39:12', '2023-03-29 05:39:12', 0),
+(5, 'task', '2', 6, '2023-03-29 05:39:22', '2023-03-29 05:39:22', 0),
+(6, 'task', '3', 10, '2023-03-29 05:39:28', '2023-03-29 05:39:28', 0),
+(7, 'task', '4', 4, '2023-03-29 05:39:47', '2023-03-29 05:39:47', 0),
+(8, 'task', '5', 8, '2023-03-29 05:39:56', '2023-03-29 05:39:56', 0),
+(9, 'task', '6', 12, '2023-03-29 05:40:03', '2023-03-29 05:40:03', 0);
 
 -- --------------------------------------------------------
 
@@ -695,7 +669,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (131, '2023_06_24_005125_create_jobs_table', 35),
 (133, '2023_07_01_111232_create_themes_table', 36),
 (134, '2023_07_23_081311_create_scheduled_task', 37),
-(135, '2023_07_27_212636_add_fields_ranking_table', 38);
+(135, '2023_07_27_212636_add_fields_ranking_table', 38),
+(136, '2026_09_11_000001_create_tasks_table', 39),
+(137, '2026_09_11_000002_create_task_submissions_table', 39),
+(138, '2026_09_11_000003_add_level_to_rankings_table', 39),
+(139, '2026_09_11_000004_drop_investment_tables', 39),
+(140, '2026_09_11_000006_restore_landing_sections', 39);
 
 -- --------------------------------------------------------
 
@@ -930,13 +909,13 @@ INSERT INTO `permissions` (`id`, `category`, `name`, `guard_name`, `created_at`,
 (14, 'Staff Management', 'staff-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (15, 'Staff Management', 'staff-create', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (16, 'Staff Management', 'staff-edit', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(17, 'Plan Management', 'schedule-manage', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(18, 'Plan Management', 'schema-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(19, 'Plan Management', 'schema-create', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(20, 'Plan Management', 'schema-edit', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(17, 'Task Management', 'task-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(18, 'Task Management', 'task-create', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(19, 'Task Management', 'task-edit', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(20, 'Task Management', 'task-delete', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (21, 'Transaction Management', 'transaction-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(22, 'Transaction Management', 'investment-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
-(23, 'Transaction Management', 'profit-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(22, 'Task Management', 'task-submission-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
+(23, 'Task Management', 'task-submission-action', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (24, 'Deposit Management', 'automatic-gateway-manage', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (25, 'Deposit Management', 'manual-gateway-manage', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
 (26, 'Deposit Management', 'deposit-list', 'admin', '2023-02-19 07:32:02', '2023-02-19 07:32:02'),
@@ -967,7 +946,8 @@ INSERT INTO `permissions` (`id`, `category`, `name`, `guard_name`, `created_at`,
 (51, 'Setting Management', 'language-setting', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03'),
 (52, 'Setting Management', 'page-setting', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03'),
 (53, 'Setting Management', 'custom-css', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03'),
-(54, 'Setting Management', 'email-template', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03');
+(54, 'Setting Management', 'email-template', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03'),
+(55, 'Transaction Management', 'task-earning-list', 'admin', '2023-02-19 07:32:03', '2023-02-19 07:32:03');
 
 -- --------------------------------------------------------
 
@@ -1053,7 +1033,10 @@ INSERT INTO `push_notification_templates` (`id`, `icon`, `name`, `code`, `for`, 
 (8, 'gem', 'Invested on Profit', 'invest_roi', 'User', 'You Invested on [[plan_name]]', 'Hello!<br />\r\n[[txn]]. \'Successfully Investment<br />\r\n[[plan_name]]<br />\r\n[[invest_amount]]<br />\r\n[[roi]]', '[\"[[full_name]]\",\"[[txn]]\",\"[[plan_name]]\",\"[[invest_amount]]\",\"[[roi]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, NULL, NULL),
 (9, 'git-pull-request-closed', 'Investment End', 'investment_end', 'User', 'You Invested on [[plan_name]]', 'Hello!<br />\r\n[[txn]]. \'Successfully Investment End<br />\r\n[[plan_name]]<br />\r\n[[invest_amount]]', '[\"[[plan_name]]\",\"[[invest_amount]]\"]', 1, NULL, NULL),
 (10, 'wallet', 'Withdraw Request Action', 'withdraw_request_user', 'User', 'Withdraw Request', 'Withdraw Request details:<br />\r\n[[message]]<br />\r\n[[txn]]<br />\r\n[[method_name]]<br />\r\n[[withdraw_amount]]<br />\r\n[[status]]', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[method_name]]\",\"[[withdraw_amount]]\",\"[[status]]\"]', 1, NULL, NULL),
-(11, 'newspaper', 'Manual Deposit request Action', 'user_manual_deposit_request', 'User', 'Manual Deposit request', 'The manual deposit request details:<br />\r\n[[message]]\r\n[[txn]]<br />\r\n[[gateway_name]]<br />\r\n[[deposit_amount]]\r\n[[status]]\r\n', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[gateway_name]]\",\"[[deposit_amount]]\",\"[[status]]\"]', 1, NULL, NULL);
+(11, 'newspaper', 'Manual Deposit request Action', 'user_manual_deposit_request', 'User', 'Manual Deposit request', 'The manual deposit request details:<br />\r\n[[message]]\r\n[[txn]]<br />\r\n[[gateway_name]]<br />\r\n[[deposit_amount]]\r\n[[status]]\r\n', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[gateway_name]]\",\"[[deposit_amount]]\",\"[[status]]\"]', 1, NULL, NULL),
+(12, 'check-square', 'Task Approved', 'task_approved', 'User', 'Task approved', 'Your submission for [[task_name]] was approved. [[pay_amount]] is now in your wallet.', '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00'),
+(13, 'x-square', 'Task Rejected', 'task_rejected', 'User', 'Task rejected', 'Your submission for [[task_name]] was not accepted. Reason: [[message]]', '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00'),
+(14, 'inbox', 'New Task Proof', 'task_submitted', 'Admin', 'Proof awaiting review', '[[full_name]] submitted proof for [[task_name]] and is waiting for review.', '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00');
 
 -- --------------------------------------------------------
 
@@ -1063,15 +1046,16 @@ INSERT INTO `push_notification_templates` (`id`, `icon`, `name`, `code`, `for`, 
 
 CREATE TABLE `rankings` (
   `id` bigint UNSIGNED NOT NULL,
+  `level` int UNSIGNED NOT NULL DEFAULT '1',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ranking` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ranking_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `minimum_deposit` int DEFAULT '0',
-  `minimum_invest` int DEFAULT '0',
   `minimum_referral_deposit` int DEFAULT '0',
-  `minimum_referral_invest` int DEFAULT '0',
   `minimum_referral` int DEFAULT '0',
   `minimum_earnings` double NOT NULL,
+  `minimum_tasks` int UNSIGNED NOT NULL DEFAULT '0',
+  `minimum_task_earning` double(16,8) NOT NULL DEFAULT '0.00000000',
   `bonus` double NOT NULL DEFAULT '0',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
@@ -1083,11 +1067,11 @@ CREATE TABLE `rankings` (
 -- Dumping data for table `rankings`
 --
 
-INSERT INTO `rankings` (`id`, `icon`, `ranking`, `ranking_name`, `minimum_deposit`, `minimum_invest`, `minimum_referral_deposit`, `minimum_referral_invest`, `minimum_referral`, `minimum_earnings`, `bonus`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'global/images/sCQgIyl0OKzFiO73nmWF.svg', 'Level 1', 'Hyip Member', 0, 0, 0, 0, 0, 0, 0, 'By signing up to the account', 1, '2022-10-15 09:55:23', '2022-11-17 00:19:48'),
-(2, 'global/images/TQDUvbD48kmhmV9qifzh.svg', 'Level 2', 'Hyip Leader', 0, 0, 0, 0, 0, 0, 10, 'By earning $50 from the site', 1, '2022-10-15 10:14:53', '2023-02-20 15:21:47'),
-(3, 'global/images/hGHllGGCIYfpx5Z2VKrW.svg', 'Level 3', 'Hyip Captain', 0, 0, 0, 0, 0, 200, 20, 'By earning $200 from the site', 1, '2022-10-15 18:16:59', '2022-11-16 09:03:56'),
-(4, 'global/images/SaNfYL7WD2pzAAME8Sqb.svg', 'Level 4', 'Hyip Victor', 0, 0, 0, 0, 0, 2000, 50, 'By earning $500 from the site', 1, '2022-10-15 18:18:23', '2022-11-16 09:04:44');
+INSERT INTO `rankings` (`id`, `level`, `icon`, `ranking`, `ranking_name`, `minimum_deposit`, `minimum_referral_deposit`, `minimum_referral`, `minimum_earnings`, `minimum_tasks`, `minimum_task_earning`, `bonus`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'global/images/sCQgIyl0OKzFiO73nmWF.svg', 'Level 1', 'Starter', 0, 0, 0, 0, 0, 0.00000000, 0, 'Sign up to unlock your first tasks', 1, '2022-10-15 09:55:23', '2022-11-17 00:19:48'),
+(2, 2, 'global/images/TQDUvbD48kmhmV9qifzh.svg', 'Level 2', 'Task Taker', 0, 0, 0, 0, 5, 10.00000000, 10, 'Complete 5 tasks and earn $10', 1, '2022-10-15 10:14:53', '2023-02-20 15:21:47'),
+(3, 3, 'global/images/hGHllGGCIYfpx5Z2VKrW.svg', 'Level 3', 'Task Pro', 0, 0, 0, 0, 25, 100.00000000, 20, 'Complete 25 tasks and earn $100', 1, '2022-10-15 18:16:59', '2022-11-16 09:03:56'),
+(4, 4, 'global/images/SaNfYL7WD2pzAAME8Sqb.svg', 'Level 4', 'Task Elite', 0, 0, 0, 0, 100, 500.00000000, 50, 'Complete 100 tasks and earn $500', 1, '2022-10-15 18:18:23', '2022-11-16 09:04:44');
 
 -- --------------------------------------------------------
 
@@ -1098,7 +1082,7 @@ INSERT INTO `rankings` (`id`, `icon`, `ranking`, `ranking_name`, `minimum_deposi
 CREATE TABLE `referrals` (
   `id` bigint UNSIGNED NOT NULL,
   `referral_target_id` bigint UNSIGNED NOT NULL,
-  `type` enum('investment','deposit') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('task','deposit') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bounty` double NOT NULL,
   `target_amount` double DEFAULT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -1112,9 +1096,9 @@ CREATE TABLE `referrals` (
 --
 
 INSERT INTO `referrals` (`id`, `referral_target_id`, `type`, `bounty`, `target_amount`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 'investment', 5, 50, 'First Target of the investment bonus', 1, '2022-11-17 03:07:54', '2022-11-17 03:07:54'),
+(1, 1, 'task', 5, 5, 'Refer 5 workers who complete a task', 1, '2022-11-17 03:07:54', '2022-11-17 03:07:54'),
 (2, 1, 'deposit', 5, 50, 'First Target of the Deposit Bonus', 1, '2022-11-17 03:08:25', '2022-11-17 03:08:25'),
-(3, 2, 'investment', 10, 500, 'Second Target of the investment bonus', 1, '2022-11-17 03:09:12', '2022-11-17 03:09:12'),
+(3, 2, 'task', 10, 25, 'Refer 25 workers who complete a task', 1, '2022-11-17 03:09:12', '2022-11-17 03:09:12'),
 (4, 2, 'deposit', 10, 500, 'Second Target of the deposit bonus', 1, '2022-11-17 03:09:22', '2022-11-17 03:09:37');
 
 -- --------------------------------------------------------
@@ -1256,70 +1240,6 @@ CREATE TABLE `scheduled_task` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schedules`
---
-
-CREATE TABLE `schedules` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `schedules`
---
-
-INSERT INTO `schedules` (`id`, `name`, `time`, `created_at`, `updated_at`) VALUES
-(1, 'Hour', 1, '2022-08-28 11:40:42', '2022-11-16 21:46:51'),
-(2, 'Daily', 24, '2022-08-28 11:40:54', '2022-08-28 11:48:38'),
-(3, 'Weekly', 168, '2022-08-28 11:41:18', '2022-11-12 04:59:06');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `schemas`
---
-
-CREATE TABLE `schemas` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` enum('fixed','range') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fixed_amount` double NOT NULL DEFAULT '0',
-  `min_amount` double NOT NULL DEFAULT '0',
-  `max_amount` double NOT NULL DEFAULT '0',
-  `capital_back` tinyint(1) NOT NULL DEFAULT '0',
-  `badge` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `featured` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `interest_type` enum('percentage','fixed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `return_interest` double NOT NULL,
-  `return_period` int NOT NULL,
-  `return_type` enum('period','lifetime') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `number_of_period` int NOT NULL,
-  `off_days` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `expiry_minute` int DEFAULT '50',
-  `is_trending` tinyint(1) DEFAULT '0',
-  `schema_cancel` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `schemas`
---
-
-INSERT INTO `schemas` (`id`, `icon`, `name`, `type`, `fixed_amount`, `min_amount`, `max_amount`, `capital_back`, `badge`, `featured`, `status`, `interest_type`, `return_interest`, `return_period`, `return_type`, `number_of_period`, `off_days`, `expiry_minute`, `is_trending`, `schema_cancel`, `created_at`, `updated_at`) VALUES
-(1, 'global/images/qHO0xXvfRTXFj3ZiLTq5.png', 'Starter Plan', 'fixed', 400, 0, 0, 1, NULL, 0, 1, 'percentage', 1.5, 2, 'period', 10, NULL, 59, 1, 1, '2022-08-28 11:50:48', '2023-08-04 20:26:46'),
-(2, 'global/images/cm3jYayWlxFLLEdYhso5.png', 'Standard Plan', 'range', 0, 500, 2000, 0, 'BEST SCHEMA', 1, 1, 'percentage', 1.2, 3, 'period', 20, '[\"Monday\"]', 40, 0, 1, '2022-08-28 11:54:58', '2023-08-04 20:26:54'),
-(3, 'global/images/Y6cMYY9vkrJj4z0gP7jX.png', 'Advanced Plan', 'fixed', 500, 0, 0, 0, NULL, 0, 1, 'fixed', 11, 1, 'lifetime', 0, NULL, 59, 0, 1, '2022-08-28 12:18:03', '2023-08-04 20:27:06'),
-(4, 'global/images/NjSS6z1y7aEdJrgPDie7.png', 'Pro Plan', 'fixed', 1000, 0, 0, 1, NULL, 0, 1, 'fixed', 10, 2, 'period', 80, NULL, 50, 0, 1, '2022-10-26 08:45:21', '2023-08-04 20:27:13');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `settings`
 --
 
@@ -1363,7 +1283,7 @@ INSERT INTO `settings` (`id`, `name`, `val`, `type`, `created_at`, `updated_at`)
 (24, 'user_withdraw', '1', 'boolean', '2022-10-12 05:14:39', '2022-11-17 20:46:38'),
 (25, 'sign_up_referral', '1', 'boolean', '2022-10-12 05:14:39', '2022-10-12 05:14:39'),
 (26, 'referral_signup_bonus', '1', 'boolean', '2022-10-12 05:14:39', '2022-10-12 05:15:15'),
-(27, 'investment_referral_bounty', '1', 'boolean', '2022-10-12 05:14:39', '2022-10-12 05:14:39'),
+(27, 'task_referral_bounty', '1', 'boolean', '2022-10-12 05:14:39', '2022-10-12 05:14:39'),
 (28, 'deposit_referral_bounty', '1', 'boolean', '2022-10-12 05:14:39', '2022-10-12 05:14:39'),
 (29, 'email_from_name', 'Hyiprio', 'string', '2022-10-29 14:11:51', '2022-11-21 15:41:28'),
 (30, 'email_from_address', 'tdevs.official@gmail.com', 'string', '2022-10-29 14:11:51', '2023-04-09 16:39:44'),
@@ -1393,7 +1313,7 @@ INSERT INTO `settings` (`id`, `name`, `val`, `type`, `created_at`, `updated_at`)
 (54, 'wallet_exchange_day_limit', '1', 'int', '2023-05-24 11:07:21', '2023-07-19 17:58:06'),
 (55, 'send_money_day_limit', '14', 'int', '2023-05-24 11:07:21', '2023-05-24 11:07:21'),
 (56, 'withdraw_day_limit', '500', 'int', '2023-05-24 11:07:21', '2023-07-20 16:42:42'),
-(57, 'investment_cancellation_daily_limit', '7', 'int', '2023-05-24 11:15:41', '2023-05-24 11:15:41'),
+(57, 'task_submission_daily_limit', '20', 'int', '2023-05-24 11:15:41', '2023-05-24 11:15:41'),
 (58, 'referral_code_limit', '10', 'integer', '2023-06-11 20:56:07', '2023-06-11 20:56:07'),
 (59, 'site_currency_type', 'fiat', 'string', '2023-07-20 12:18:23', '2023-08-13 15:38:25');
 
@@ -1459,7 +1379,9 @@ INSERT INTO `sms_templates` (`id`, `name`, `code`, `for`, `message_body`, `short
 (8, 'Invest ROI', 'invest_roi', 'User', 'Hello!<br />\r\n[[txn]]. \'Successfully Investment<br />\r\n[[plan_name]]<br />\r\n[[invest_amount]]<br />\r\n[[roi]]', '[\"[[full_name]]\",\"[[txn]]\",\"[[plan_name]]\",\"[[invest_amount]]\",\"[[roi]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, NULL, NULL),
 (9, 'Investment End', 'investment_end', 'User', 'Hello!<br />\r\n[[txn]]. \'Successfully Investment End<br />\r\n[[plan_name]]<br />\r\n[[invest_amount]]', '[\"[[full_name]]\",\"[[plan_name]]\",\"[[invest_amount]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, NULL, NULL),
 (10, 'Withdraw Request Action', 'withdraw_request_user', 'User', 'Withdraw Request details:<br />\r\n[[message]]<br />\r\n[[txn]]<br />\r\n[[method_name]]<br />\r\n[[withdraw_amount]]<br />\r\n[[status]]', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[method_name]]\",\"[[withdraw_amount]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, NULL),
-(11, 'Manual Deposit request Action', 'user_manual_deposit_request', 'User', 'The manual deposit request details:<br />\r\n[[message]]\r\n[[txn]]<br />\r\n[[gateway_name]]<br />\r\n[[deposit_amount]]\r\n[[status]]\r\n', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[gateway_name]]\",\"[[deposit_amount]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, NULL);
+(11, 'Manual Deposit request Action', 'user_manual_deposit_request', 'User', 'The manual deposit request details:<br />\r\n[[message]]\r\n[[txn]]<br />\r\n[[gateway_name]]<br />\r\n[[deposit_amount]]\r\n[[status]]\r\n', '[\"[[full_name]]\",\"[[message]]\",\"[[txn]]\",\"[[gateway_name]]\",\"[[deposit_amount]]\",\"[[site_title]]\",\"[[site_url]]\",\"[[status]]\"]', 1, NULL, NULL),
+(12, 'Task Approved', 'task_approved', 'User', 'Hi [[full_name]], your submission for [[task_name]] was approved. [[pay_amount]] has been credited to your [[site_title]] wallet.', '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00'),
+(13, 'Task Rejected', 'task_rejected', 'User', 'Hi [[full_name]], your submission for [[task_name]] was not accepted. Reason: [[message]]. You may correct it and submit again.', '[\"[[full_name]]\",\"[[task_name]]\",\"[[pay_amount]]\",\"[[status]]\",\"[[message]]\",\"[[site_title]]\",\"[[site_url]]\"]', 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00');
 
 -- --------------------------------------------------------
 
@@ -1499,6 +1421,87 @@ CREATE TABLE `subscriptions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+--
+-- Table structure for table `tasks`
+--
+
+DROP TABLE IF EXISTS `tasks`;
+CREATE TABLE `tasks` (
+  `id` bigint UNSIGNED NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `instructions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `pay_amount` double(16,8) NOT NULL DEFAULT '0.00000000',
+  `proof_type` enum('text','link','screenshot','file') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
+  `proof_required` tinyint(1) NOT NULL DEFAULT '1',
+  `total_slots` int UNSIGNED NOT NULL DEFAULT '0',
+  `filled_slots` int UNSIGNED NOT NULL DEFAULT '0',
+  `per_user_limit` int UNSIGNED NOT NULL DEFAULT '1',
+  `min_level` int UNSIGNED NOT NULL DEFAULT '1',
+  `require_kyc` tinyint(1) NOT NULL DEFAULT '0',
+  `min_balance` double(16,8) NOT NULL DEFAULT '0.00000000',
+  `payout_method_ids` json DEFAULT NULL,
+  `status` enum('draft','active','paused','closed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `title`, `category`, `description`, `instructions`, `pay_amount`, `proof_type`, `proof_required`, `total_slots`, `filled_slots`, `per_user_limit`, `min_level`, `require_kyc`, `min_balance`, `payout_method_ids`, `status`, `expires_at`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Follow our X account and share the pinned post', 'Social', '<p>We want to grow our social presence. Follow our official X (Twitter) account, then share the pinned post on your own timeline so more people discover the platform.</p><p>This is one of the quickest tasks on the board and is a good first task for new members.</p>', '<ol><li>Open the X account linked in the task page.</li><li>Press <strong>Follow</strong>.</li><li>Open the pinned post at the top of the profile.</li><li>Press <strong>Repost</strong> (a quote repost also counts).</li><li>Copy the URL of your repost and paste it into the proof box below.</li></ol>', 0.50000000, 'link', 1, 500, 0, 1, 1, 0, 0.00000000, NULL, 'active', NULL, 1, '2026-09-11 09:00:00', '2026-09-11 09:00:00', NULL),
+(2, 'Write a 300 word review of the platform', 'Writing', '<p>Write an honest review of your experience using the platform. We want real feedback, both positive and negative, that we can publish on the blog and share with new members.</p><p>Reviews must be your own original writing. Copied or spun content will be rejected without payment.</p>', '<ol><li>Write at least 300 words about your experience.</li><li>Mention what you liked, what confused you, and what you would change.</li><li>Paste the full text into the proof box below.</li></ol><p>Reviews that are clearly generated or duplicated from elsewhere will be rejected.</p>', 3.00000000, 'text', 1, 100, 0, 1, 2, 0, 0.00000000, NULL, 'active', NULL, 1, '2026-09-11 09:05:00', '2026-09-11 09:05:00', NULL),
+(3, 'Upload a screenshot of your dashboard', 'Verification', '<p>We are checking that new members can reach their dashboard. Take a screenshot showing your dashboard with your balance visible and upload it.</p>', '<ol><li>Log in and open your dashboard.</li><li>Take a screenshot that shows the balance card.</li><li>Upload it below as a PNG or JPG.</li></ol>', 0.25000000, 'screenshot', 1, 0, 0, 1, 1, 0, 0.00000000, NULL, 'active', NULL, 1, '2026-09-11 09:10:00', '2026-09-11 09:10:00', NULL),
+(4, 'Join our Telegram group and stay for 7 days', 'Community', '<p>Join our official Telegram community group. This one pays more and is limited to the first 200 members who complete it.</p>', '<ol><li>Join the Telegram group using the invite link on the task page.</li><li>Stay in the group.</li><li>After 7 days, come back and submit your Telegram username as proof.</li></ol>', 2.00000000, 'text', 1, 200, 0, 1, 1, 0, 0.00000000, NULL, 'active', '2026-12-31 23:59:00', 1, '2026-09-11 09:15:00', '2026-09-11 09:15:00', NULL),
+(5, 'Translate our landing page into your language', 'Translation', '<p>Help us reach more people by translating the landing page copy into your own language. This task is only open to members who have verified their identity, because it pays out a larger amount.</p>', '<ol><li>Copy the landing page text from the link on the task page.</li><li>Translate it into your native language.</li><li>Upload the translation as a .txt or .pdf file below.</li></ol>', 15.00000000, 'file', 1, 20, 0, 1, 3, 1, 0.00000000, NULL, 'active', NULL, 1, '2026-09-11 09:20:00', '2026-09-11 09:20:00', NULL),
+(6, 'Watch the intro video and answer three questions', 'Research', '<p>Watch our two minute intro video and answer three short questions about it. This task is currently paused while we update the video, so it is not claimable yet.</p>', '<ol><li>Watch the intro video.</li><li>Answer the three questions shown on the task page.</li></ol>', 1.00000000, 'text', 1, 0, 0, 1, 1, 0, 0.00000000, NULL, 'paused', NULL, 1, '2026-09-11 09:25:00', '2026-09-11 09:25:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+--
+-- Table structure for table `task_submissions`
+--
+
+DROP TABLE IF EXISTS `task_submissions`;
+CREATE TABLE `task_submissions` (
+  `id` bigint UNSIGNED NOT NULL,
+  `task_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `attempt` int UNSIGNED NOT NULL DEFAULT '1',
+  `proof_text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `proof_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `proof_file` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payout_method_id` bigint UNSIGNED DEFAULT NULL,
+  `withdraw_account_id` bigint UNSIGNED DEFAULT NULL,
+  `pay_amount` double(16,8) NOT NULL DEFAULT '0.00000000',
+  `status` enum('pending','approved','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `admin_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `task_submissions`
+--
+
+INSERT INTO `task_submissions` (`id`, `task_id`, `user_id`, `attempt`, `proof_text`, `proof_link`, `proof_file`, `payout_method_id`, `withdraw_account_id`, `pay_amount`, `status`, `admin_note`, `reviewed_by`, `reviewed_at`, `paid_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, NULL, 'https://x.com/demo_worker/status/1700000000000000000', NULL, NULL, NULL, 0.50000000, 'approved', 'Thanks, verified.', 1, '2026-09-11 10:00:00', '2026-09-11 10:00:00', '2026-09-11 09:40:00', '2026-09-11 10:00:00'),
+(2, 3, 1, 1, NULL, NULL, 'assets/images/demo-proof.png', NULL, NULL, 0.25000000, 'pending', NULL, NULL, NULL, NULL, '2026-09-11 09:45:00', '2026-09-11 09:45:00'),
+(3, 2, 2, 1, 'The platform was easy to sign up for and the task board made sense straight away...', NULL, NULL, NULL, NULL, 3.00000000, 'rejected', 'Too short, please expand to 300 words.', 1, '2026-09-11 11:00:00', NULL, '2026-09-11 09:50:00', '2026-09-11 11:00:00');
 
 -- --------------------------------------------------------
 
@@ -1615,6 +1618,14 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `ranking_id`, `rankings`, `avatar`, `first_name`, `last_name`, `country`, `phone`, `username`, `email`, `gender`, `date_of_birth`, `city`, `zip_code`, `address`, `balance`, `profit_balance`, `status`, `ref_id`, `kyc`, `kyc_credential`, `google2fa_secret`, `two_fa`, `deposit_status`, `withdraw_status`, `transfer_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 1, '[1]', NULL, 'Demo', 'Worker', 'Nigeria', '08000000001', 'demo_worker', 'demo1@example.com', 'male', NULL, 'Lagos', '100001', NULL, 5.50000000, 0.00000000, 1, NULL, 1, NULL, NULL, 0, 1, 1, 1, '2026-09-11 09:00:00', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2026-09-11 09:00:00', '2026-09-11 09:00:00'),
+(2, 2, '[1,2]', NULL, 'Second', 'Taker', 'Nigeria', '08000000002', 'second_taker', 'demo2@example.com', 'female', NULL, 'Abuja', '900001', NULL, 0.00000000, 0.00000000, 1, 1, 0, NULL, NULL, 0, 1, 1, 1, '2026-09-11 09:00:00', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2026-09-11 09:00:00', '2026-09-11 09:00:00');
 
 -- --------------------------------------------------------
 
