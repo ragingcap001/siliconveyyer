@@ -52,7 +52,10 @@ class UserController extends Controller
 
     public function rankingBadge()
     {
-        $alreadyRank = json_decode(auth()->user()->rankings, true);
+        // users.rankings is a nullable longtext, so json_decode() returns null
+        // for any user who has not unlocked a badge yet. Cast to array so the
+        // in_array() checks in the ranking views cannot hit a null haystack.
+        $alreadyRank = json_decode(auth()->user()->rankings, true) ?? [];
 
         $rankings = Ranking::where('status', true)->get();
 

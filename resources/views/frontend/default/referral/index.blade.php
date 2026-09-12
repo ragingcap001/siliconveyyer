@@ -1,341 +1,200 @@
 @extends('frontend::layouts.user')
-@section('title')
-    {{ __('Dashboard') }}
-@endsection
+
+@section('title'){{ __('Referral') }}@endsection
+@section('subtitle'){{ __('Invite people, and earn a share of what they earn on tasks.') }}@endsection
+
 @section('content')
-    <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="site-card">
-                <div class="site-card-header">
-                    <h3 class="title">{{ __('Referral URL') }} @if(setting('site_referral','global') == 'level')
-                            {{ __('and Tree') }}
-                        @endif</h3>
-                </div>
-                <div class="site-card-body">
-                    <div class="referral-link">
-                        <div class="referral-link-form">
-                            <input type="text" value="{{ $getReferral->link }}" id="refLink"/>
-                            <button type="submit" onclick="copyRef()">
-                                <i class="anticon anticon-copy"></i>
-                                <span id="copy">{{ __('Copy Url') }}</span>
-                                <input id="copied" hidden value="{{ __('Copied') }}">
-                            </button>
-                        </div>
-                        <p class="referral-joined">
-                            {{ $getReferral->relationships()->count() }} {{ __('peoples are joined by using this URL') }}
-                        </p>
-                    </div>
+    {{-- getReferrals() maps over the referral_program rows, so it is empty on a
+         fresh install with no program seeded. Fail soft instead of calling
+         ->link on null. --}}
+    @php $referralLink = $getReferral?->link ?? ''; @endphp
 
-                    {{-- level referral tree --}}
-                    @if(setting('site_referral','global') == 'level' && auth()->user()->referrals->count() > 0)
-                        <section class="management-hierarchy">
-                            <div class="hv-container">
-                                <div class="hv-wrapper">
-                                    <!-- tree component -->
-                                    @include('frontend::referral.include.__tree',['levelUser' => auth()->user(),'level' => $level,'depth' => 1, 'me' => true])
-                                </div>
-                            </div>
-                        </section>
-                    @endif
+    <div x-data="{ tab: 'generalTarget' }" class="space-y-6">
 
+        {{-- referral link card --}}
+        <div data-reveal class="relative overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] p-6 shadow-soft sm:p-8"
+             style="background-image: linear-gradient(135deg, rgb(var(--brand-500)/0.05), transparent 60%);">
+            <div class="dot-field pointer-events-none absolute -right-8 -top-8 h-40 w-40"></div>
+
+            <div class="relative">
+                <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Referral URL') }}</h3>
+                <p class="mt-1 text-sm text-[rgb(var(--text-muted))]">
+                    {{ __('Share this link. Everyone who signs up through it becomes part of your network.') }}
+                </p>
+
+                <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+                    <input id="refLink" type="text" readonly value="{{ $referralLink }}"
+                           class="field flex-1 font-mono text-xs"/>
+                    <button type="button" onclick="copyRef()" class="btn-primary shrink-0">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/>
+                        </svg>
+                        <span id="copy">{{ __('Copy Url') }}</span>
+                    </button>
                 </div>
+                <input id="copied" hidden value="{{ __('Copied') }}">
+
+                <p class="mt-3 text-sm text-[rgb(var(--text-muted))]">
+                    <b class="text-[rgb(var(--text-strong))]">{{ $getReferral?->relationships()->count() ?? 0 }}</b>
+                    {{ __('peoples are joined by using this URL') }}
+                </p>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="site-card">
-                <div class="site-card-header">
-                    <h3 class="title">{{ __('All Referral Logs') }}</h3>
-                    <div class="card-header-links">
-                        <span
-                            class="card-header-link rounded-pill"> {{ __('Referral Profit:').' '. $totalReferralProfit .' '.$currency }}</span>
-                    </div>
-                </div>
-                <div class="site-card-body table-responsive">
 
-
-                    <div class="site-tab-bars">
-                        <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a
-                                    href=""
-                                    class="nav-link active"
-                                    id="generalTarget-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#generalTarget"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="generalTarget"
-                                    aria-selected="true"
-                                ><i icon-name="network"></i>{{ __('General') }}</a>
-                            </li>
-
-                            @foreach($referrals->keys() as $raw)
-
-                                @php
-                                    $target = json_decode($raw,true);
-                                @endphp
-
-                                <li class="nav-item" role="presentation">
-                                    <a
-                                        href=""
-                                        class="nav-link"
-                                        id="t{{ $target['id'] }}-tab"
-                                        data-bs-toggle="pill"
-                                        data-bs-target="#t{{ $target['id'] }}"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="t{{ $target['id'] }}"
-                                        aria-selected="true"
-                                    ><i icon-name="boxes"></i>
-                                        @if(setting('site_referral','global') == 'level')
-                                            Level {{ $target['the_order'] }}
-                                        @else
-                                            {{ $target['name'] }}
-                                        @endif
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-
-                    <div class="tab-content" id="pills-tabContent">
-
-                        <div
-                            class="tab-pane fade show active"
-                            id="generalTarget"
-                            role="tabpanel"
-                            aria-labelledby="generalTarget-tab"
-                        >
-
-                            <div class="row">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 desktop-screen-show">
-                                    <div class="site-datatable">
-                                        <div class="row table-responsive">
-                                            <div class="col-xl-12">
-                                                <table class="display data-table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>{{ __('Description') }}</th>
-                                                        <th>{{ __('Transactions ID') }}</th>
-                                                        <th>{{ __('Amount') }}</th>
-                                                        <th>{{ __('Status') }}</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-
-
-                                                    @foreach($generalReferrals as $raw)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="table-description">
-                                                                    <div class="icon">
-                                                                        <i icon-name="arrow-down-left"></i>
-                                                                    </div>
-                                                                    <div class="description">
-                                                                        <strong>{{ $raw->description }}</strong>
-                                                                        <div
-                                                                            class="date">{{ $raw->created_at }}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td><strong>{{$raw->tnx}}</strong></td>
-                                                            <td><strong
-                                                                    class="green-color">+{{ $raw->amount.' '. $currency }} </strong>
-                                                            </td>
-                                                            <td>
-                                                                <div
-                                                                    class="site-badge success">{{ $raw->status }}</div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-
-                                                    </tbody>
-                                                </table>
-
-                                                @if($generalReferrals->isEmpty())
-                                                    <p class="centered">{{ __('No Data Found') }}</p>
-                                                @endif
-
-                                                {{ $generalReferrals->links() }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-12 mobile-screen-show">
-                                    <!-- Transactions -->
-                                    <div class="all-feature-mobile mobile-transactions mb-3">
-                                        <div class="contents">
-                                            @foreach($generalReferrals as $raw )
-                                                <div class="single-transaction">
-                                                    <div class="transaction-left">
-                                                        <div class="transaction-des">
-                                                            <div
-                                                                class="transaction-title">{{ $raw->description }}</div>
-                                                            <div class="transaction-id">{{ $raw->tnx }}</div>
-                                                            <div
-                                                                class="transaction-date">{{ $raw->created_at }}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="transaction-right">
-                                                        <div
-                                                            class="transaction-amount add">
-                                                            + {{$raw->amount .' '.$currency}}</div>
-                                                        <div class="transaction-gateway">{{ $raw->method }}</div>
-
-                                                        @if($raw->status->value == App\Enums\TxnStatus::Pending->value)
-                                                            <div
-                                                                class="transaction-status pending">{{ __('Pending') }}</div>
-                                                        @elseif($raw->status->value ==  App\Enums\TxnStatus::Success->value)
-                                                            <div
-                                                                class="transaction-status success">{{ __('Success') }}</div>
-                                                        @elseif($raw->status->value ==  App\Enums\TxnStatus::Failed->value)
-                                                            <div
-                                                                class="transaction-status canceled">{{ __('canceled') }}</div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        {{  $generalReferrals->onEachSide(1)->links() }}
-                                    </div>
-
-                                </div>
-                            </div>
-
-
+        {{-- referral tree --}}
+        @if(setting('site_referral','global') == 'level' && auth()->user()->referrals->count() > 0)
+            <div class="rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] p-6 shadow-soft">
+                <h3 class="mb-6 text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Your Network') }}</h3>
+                <section class="management-hierarchy">
+                    <div class="hv-container">
+                        <div class="hv-wrapper">
+                            @include('frontend::referral.include.__tree', ['levelUser' => auth()->user(), 'level' => $level, 'depth' => 1, 'me' => true])
                         </div>
+                    </div>
+                </section>
+            </div>
+        @endif
 
-                        @foreach($referrals as $target => $referral)
+        {{-- referral logs --}}
+        <div class="overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] shadow-soft">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[rgb(var(--line)/0.07)] p-6">
+                <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('All Referral Logs') }}</h3>
+                <span class="badge-earn">{{ __('Referral Profit:') }} {{ $totalReferralProfit }} {{ $currency }}</span>
+            </div>
 
-                            @php
-                                $target = json_decode($target,true);
-                            @endphp
+            {{-- tabs --}}
+            <div class="flex gap-2 overflow-x-auto border-b border-[rgb(var(--line)/0.07)] px-6 pt-5">
+                <button type="button" @click="tab = 'generalTarget'"
+                        :class="tab === 'generalTarget' ? 'border-brand-500 text-brand-600 dark:text-brand-300' : 'border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--text-strong))]'"
+                        class="flex items-center gap-2 whitespace-nowrap border-b-2 px-4 pb-3 text-sm font-semibold transition-colors">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                    </svg>
+                    {{ __('General') }}
+                </button>
 
-                            <div
-                                class="tab-pane fade"
-                                id="t{{ $target['id'] }}"
-                                role="tabpanel"
-                                aria-labelledby="t{{ $target['id'] }}-tab"
-                            >
-                                <div class="row">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 desktop-screen-show">
-                                        <div class="site-datatable">
-                                            <div class="row table-responsive">
-                                                <div class="col-xl-12">
-                                                    <table class="display data-table">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>{{ __('Description') }}</th>
-                                                            <th>{{ __('Transactions ID') }}</th>
-                                                            <th>{{ __('Type') }}</th>
-                                                            <th>{{ __('Amount') }}</th>
-                                                            <th>{{ __('Status') }}</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
+                @foreach($referrals->keys() as $raw)
+                    @php $target = json_decode($raw, true); @endphp
+                    <button type="button" @click="tab = 't{{ $target['id'] }}'"
+                            :class="tab === 't{{ $target['id'] }}' ? 'border-brand-500 text-brand-600 dark:text-brand-300' : 'border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--text-strong))]'"
+                            class="flex items-center gap-2 whitespace-nowrap border-b-2 px-4 pb-3 text-sm font-semibold transition-colors">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25"/>
+                        </svg>
+                        @if(setting('site_referral','global') == 'level')
+                            {{ __('Level') }} {{ $target['the_order'] }}
+                        @else
+                            {{ $target['name'] }}
+                        @endif
+                    </button>
+                @endforeach
+            </div>
 
-                                                        @foreach($referral->sortDesc() as $raw )
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="table-description">
-                                                                        <div class="icon">
-                                                                            <i icon-name="arrow-down-left"></i>
-                                                                        </div>
-                                                                        <div class="description">
-                                                                            <strong>{{ $raw->description }}</strong>
-                                                                            <div
-                                                                                class="date">{{ $raw->created_at }}</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td><strong>{{$raw->tnx}}</strong></td>
-                                                                <td>
-                                                                    <div
-                                                                        class="site-badge primary-bg">{{ $raw->target_type }}</div>
-                                                                </td>
-                                                                <td><strong
-                                                                        class="green-color">+{{ $raw->amount.' '. $currency }} </strong>
-                                                                </td>
-                                                                <td>
-                                                                    <div
-                                                                        class="site-badge success">{{ $raw->status }}</div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-
-                                                        </tbody>
-                                                    </table>
+            <div class="p-6">
+                {{-- general pane --}}
+                <div x-show="tab === 'generalTarget'" x-cloak>
+                    @if($generalReferrals->isEmpty())
+                        <div class="py-12 text-center">
+                            <p class="text-sm text-[rgb(var(--text-muted))]">{{ __('No Data Found') }}</p>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="table-modern">
+                                <thead>
+                                <tr>
+                                    <th>{{ __('Description') }}</th>
+                                    <th>{{ __('Transactions ID') }}</th>
+                                    <th>{{ __('Amount') }}</th>
+                                    <th>{{ __('Status') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($generalReferrals as $raw)
+                                    <tr>
+                                        <td>
+                                            <div class="flex items-center gap-3">
+                                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-earn-500/10">
+                                                    <svg class="h-4 w-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                                                    </svg>
+                                                </span>
+                                                <div>
+                                                    <p class="font-semibold text-[rgb(var(--text-strong))]">{{ $raw->description }}</p>
+                                                    <p class="text-xs text-[rgb(var(--text-muted))]">{{ $raw->created_at }}</p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 mobile-screen-show">
-                                        <!-- Transactions -->
-                                        <div class="all-feature-mobile mobile-transactions mb-3">
-                                            <div class="contents">
-                                                @foreach($referral->sortDesc() as $raw )
-                                                    <div class="single-transaction">
-                                                        <div class="transaction-left">
-                                                            <div class="transaction-des">
-                                                                <div
-                                                                    class="transaction-title">{{ $raw->description }}
-                                                                </div>
-                                                                <div class="transaction-id">{{ $raw->tnx }}</div>
-                                                                <div
-                                                                    class="transaction-date">{{ $raw->created_at }}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="transaction-right">
-                                                            <div
-                                                                class="transaction-amount add">
-                                                                +{{$raw->amount .' '.$currency}}</div>
-                                                            <div
-                                                                class="transaction-gateway"> {{  $raw->target_type }}</div>
-
-                                                            @if($raw->status->value == App\Enums\TxnStatus::Pending->value)
-                                                                <div
-                                                                    class="transaction-status pending">{{ __('Pending') }}</div>
-                                                            @elseif($raw->status->value ==  App\Enums\TxnStatus::Success->value)
-                                                                <div
-                                                                    class="transaction-status success">{{ __('Success') }}</div>
-                                                            @elseif($raw->status->value ==  App\Enums\TxnStatus::Failed->value)
-                                                                <div
-                                                                    class="transaction-status canceled">{{ __('canceled') }}</div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        @endforeach
-
-                    </div>
-
+                                        </td>
+                                        <td class="font-mono text-xs font-semibold">{{ $raw->tnx }}</td>
+                                        <td class="font-semibold text-earn-600 dark:text-earn-400">+{{ $raw->amount }} {{ $currency }}</td>
+                                        <td><span class="badge-earn">{{ $raw->status }}</span></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-5">{{ $generalReferrals->links() }}</div>
+                    @endif
                 </div>
+
+                {{-- per-target panes --}}
+                @foreach($referrals as $target => $referral)
+                    @php $target = json_decode($target, true); @endphp
+                    <div x-show="tab === 't{{ $target['id'] }}'" x-cloak>
+                        @if($referral->isEmpty())
+                            <div class="py-12 text-center">
+                                <p class="text-sm text-[rgb(var(--text-muted))]">{{ __('No Data Found') }}</p>
+                            </div>
+                        @else
+                            <div class="overflow-x-auto">
+                                <table class="table-modern">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('Description') }}</th>
+                                        <th>{{ __('Transactions ID') }}</th>
+                                        <th>{{ __('Type') }}</th>
+                                        <th>{{ __('Amount') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($referral->sortDesc() as $raw)
+                                        <tr>
+                                            <td>
+                                                <div class="flex items-center gap-3">
+                                                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-earn-500/10">
+                                                        <svg class="h-4 w-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                                                        </svg>
+                                                    </span>
+                                                    <div>
+                                                        <p class="font-semibold text-[rgb(var(--text-strong))]">{{ $raw->description }}</p>
+                                                        <p class="text-xs text-[rgb(var(--text-muted))]">{{ $raw->created_at }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="font-mono text-xs font-semibold">{{ $raw->tnx }}</td>
+                                            <td><span class="badge-brand">{{ $raw->target_type }}</span></td>
+                                            <td class="font-semibold text-earn-600 dark:text-earn-400">+{{ $raw->amount }} {{ $currency }}</td>
+                                            <td><span class="badge-earn">{{ $raw->status }}</span></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
 @endsection
+
 @section('script')
     <script>
         function copyRef() {
-            /* Get the text field */
             var copyApi = document.getElementById("refLink");
-            /* Select the text field */
             copyApi.select();
-            copyApi.setSelectionRange(0, 999999999); /* For mobile devices */
-            /* Copy the text inside the text field */
+            copyApi.setSelectionRange(0, 999999999);
             document.execCommand('copy');
             $('#copy').text($('#copied').val())
         }
