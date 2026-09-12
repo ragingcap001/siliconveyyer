@@ -1,6 +1,7 @@
 @php
     $earnings = \App\Models\Transaction::where('type', \App\Enums\TxnType::TaskReward)->with('user')->take(6)->latest()->get();
-    $withdraws = \App\Models\Transaction::where('type', \App\Enums\TxnType::Withdraw)->with('user')->take(6)->latest()->get();
+    $completed = \App\Models\TaskSubmission::where('status', \App\Enums\TaskSubmissionStatus::Approved)
+        ->with(['user', 'task'])->take(6)->latest()->get();
 @endphp
 
 @php
@@ -59,39 +60,41 @@
                 </div>
             </div>
 
-            {{-- withdrawals feed ------------------------------------------- --}}
+            {{-- completed tasks feed --------------------------------------- --}}
             <div class="overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] shadow-soft"
                  data-reveal data-reveal-delay="100">
                 <div class="flex items-center justify-between border-b border-[rgb(var(--line)/0.07)] px-6 py-5">
                     <div class="flex items-center gap-3">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500/12 text-brand-600 dark:text-brand-300">
                             <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke-width="1.9" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
                         </span>
-                        <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Recent Withdraws') }}</h3>
+                        <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Tasks Completed') }}</h3>
                     </div>
-                    <span class="badge-brand">{{ __('Paid out') }}</span>
+                    <span class="badge-brand">{{ __('Accepted') }}</span>
                 </div>
 
                 <div class="divide-y divide-[rgb(var(--line)/0.06)]">
-                    @forelse($withdraws as $txn)
+                    @forelse($completed as $submission)
                         <div class="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[rgb(var(--line)/0.025)]">
                             <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgb(var(--line)/0.07)] font-display text-sm font-bold text-[rgb(var(--text-muted))]">
-                                {{ $initial($txn->user->full_name ?? 'U') }}
+                                {{ $initial($submission->user->full_name ?? 'U') }}
                             </span>
                             <div class="min-w-0 flex-1">
                                 <p class="truncate text-sm font-semibold text-[rgb(var(--text-strong))]">
-                                    {{ $txn->user->full_name ?? __('Member') }}
+                                    {{ $submission->task->title ?? __('Task') }}
                                 </p>
-                                <p class="text-xs text-[rgb(var(--text-muted))]">{{ $txn->created_at }}</p>
+                                <p class="text-xs text-[rgb(var(--text-muted))]">
+                                    {{ $submission->user->full_name ?? __('Member') }} · {{ $submission->created_at }}
+                                </p>
                             </div>
                             <span class="shrink-0 font-display text-sm font-bold text-[rgb(var(--text-strong))]">
-                                -{{ $currencySymbol }}{{ $txn->amount }}
+                                {{ $currencySymbol }}{{ $submission->pay_amount }}
                             </span>
                         </div>
                     @empty
-                        <p class="px-6 py-10 text-center text-sm text-[rgb(var(--text-muted))]">{{ __('No withdrawals yet.') }}</p>
+                        <p class="px-6 py-10 text-center text-sm text-[rgb(var(--text-muted))]">{{ __('No completed tasks yet.') }}</p>
                     @endforelse
                 </div>
             </div>

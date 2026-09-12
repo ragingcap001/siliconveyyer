@@ -1,77 +1,43 @@
 @extends('frontend::layouts.auth')
-@section('title')
-    {{ __('Forgot password') }}
-@endsection
+
+@section('title'){{ __('Forgot Password') }}@endsection
+
 @section('content')
-    <!-- Login Section -->
-    <section class="section-style site-auth">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-5 col-lg-8 col-md-12">
-                    <div class="auth-content">
-                        <div class="logo">
-                            <a href="{{ route('home')}}"><img src="{{ asset(setting('site_logo','global')) }}" alt=""/></a>
-                        </div>
-                        <div class="title">
-                            <h2> {{ $data['title'] }}</h2>
-                            <p>{{ $data['bottom_text'] }}</p>
-                        </div>
-                        @if ($errors->any())
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                @foreach($errors->all() as $error)
-                                    <strong>{{$error}}</strong>
-                                @endforeach
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        @endif
+    <h1 class="text-2xl font-bold tracking-tight text-[rgb(var(--text-strong))] sm:text-3xl">
+        {{ $data['title'] ?? __('Forgot your password?') }}
+    </h1>
+    <p class="mt-2 text-sm leading-relaxed text-[rgb(var(--text-muted))]">
+        {{ $data['bottom_text'] ?? __('No problem. Enter your email and we will send you a reset link.') }}
+    </p>
 
-                        @if(session('status'))
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <strong>{{ session('status') }}</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        @endif
-
-
-                        <div class="site-auth-form">
-
-
-                            <form method="POST" action="{{ route('password.email') }}">
-                                @csrf
-
-                                <!-- Email Address -->
-
-                                <div class="single-field">
-                                    <label class="box-label" for="email">{{ __('Email') }}</label>
-                                    <input
-                                        class="box-input"
-                                        type="text"
-                                        name="email"
-                                        placeholder="Enter your email address"
-                                        required
-                                        value="{{ old('email') }}"
-                                    />
-                                </div>
-
-
-                                <button type="submit" class="site-btn grad-btn w-100">
-                                    {{ __('Email Password Reset Link') }}
-                                </button>
-                            </form>
-
-                            <div class="singnup-text">
-                                <p>{{ __('Already have an account?') }} <a
-                                        href="{{ route('login') }}">{{ __('Login') }}</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @if($errors->any())
+        <div class="mt-6 rounded-2xl border border-rose-500/25 bg-rose-500/[0.07] p-4">
+            @foreach($errors->all() as $error)
+                <p class="text-sm text-rose-700 dark:text-rose-300">{{ $error }}</p>
+            @endforeach
         </div>
-    </section>
-    <!-- Login Section End -->
+    @endif
+
+    @if(session('status'))
+        <div class="mt-6 rounded-2xl border border-earn-500/25 bg-earn-500/[0.07] p-4">
+            <p class="text-sm text-earn-700 dark:text-earn-300">{{ session('status') }}</p>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('password.email') }}" class="mt-8 space-y-5">
+        @csrf
+        <div>
+            <label class="field-label" for="email">{{ __('Email Address') }}</label>
+            <input id="email" type="email" name="email" required autofocus class="field"
+                   placeholder="{{ __('you@example.com') }}" value="{{ old('email') }}"/>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block btn-lg">{{ __('Send Reset Link') }}</button>
+    </form>
+
+    <p class="mt-8 text-center text-sm text-[rgb(var(--text-muted))]">
+        <a href="{{ route('login') }}" class="font-semibold text-brand-600 hover:underline dark:text-brand-300">
+            {{ __('Back to login') }}
+        </a>
+    </p>
 @endsection
-
-

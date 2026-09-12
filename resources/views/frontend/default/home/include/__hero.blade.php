@@ -62,12 +62,12 @@
                         <dd class="stat-value">{{ $taskCount }}</dd>
                     </div>
                     <div>
-                        <dt class="stat-label">{{ __('Proof review') }}</dt>
-                        <dd class="stat-value">{{ __('Admin') }}</dd>
+                        <dt class="stat-label">{{ __('Proof types') }}</dt>
+                        <dd class="stat-value">{{ __('Link') }} · {{ __('Text') }} · {{ __('Photo') }}</dd>
                     </div>
                     <div>
-                        <dt class="stat-label">{{ __('Payout') }}</dt>
-                        <dd class="stat-value">{{ __('On approval') }}</dd>
+                        <dt class="stat-label">{{ __('Reward') }}</dt>
+                        <dd class="stat-value">{{ __('Per task') }}</dd>
                     </div>
                 </dl>
             </div>
@@ -139,8 +139,8 @@
                                         </svg>
                                     </span>
                                     <div>
-                                        <p class="text-xs font-semibold text-[rgb(var(--text-strong))]">{{ __('Approved') }}</p>
-                                        <p class="text-[0.7rem] text-[rgb(var(--text-muted))]">{{ __('Paid to your wallet') }}</p>
+                                        <p class="text-xs font-semibold text-[rgb(var(--text-strong))]">{{ __('Accepted') }}</p>
+                                        <p class="text-[0.7rem] text-[rgb(var(--text-muted))]">{{ __('Reward added to your balance') }}</p>
                                     </div>
                                 </div>
                                 <span class="badge-earn">+ $3.75</span>

@@ -1,100 +1,51 @@
 @extends('frontend::layouts.auth')
-@section('title')
-    {{ __('Reset Password') }}
-@endsection
+
+@section('title'){{ __('Reset password') }}@endsection
+
 @section('content')
-    <!-- Login Section -->
-    <section class="section-style site-auth">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-5 col-lg-8 col-md-12">
-                    <div class="auth-content">
-                        <div class="logo">
-                            <a href="{{ route('home')}}"><img src="{{ asset(setting('site_logo','global')) }}" alt=""/></a>
-                        </div>
-                        <div class="title">
-                            <h2>👋 {{ __('Reset password') }}</h2>
-                            <p>{{  __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}</p>
-                        </div>
-                        @if ($errors->any())
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                @foreach($errors->all() as $error)
-                                    <strong>{{$error}}</strong>
-                                @endforeach
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        @endif
+    <h1 class="text-2xl font-bold tracking-tight text-[rgb(var(--text-strong))] sm:text-3xl">
+        {{ __('Choose a new password') }}
+    </h1>
+    <p class="mt-2 text-sm leading-relaxed text-[rgb(var(--text-muted))]">
+        {{ __('Almost there. Pick something you have not used before.') }}
+    </p>
 
-                        @if(session('status'))
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <strong>{{ session('status') }}</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        @endif
-
-
-                        <div class="site-auth-form">
-
-
-                            <form method="POST" action="{{ route('password.update') }}">
-                                @csrf
-
-                                <!-- Password Reset Token -->
-                                <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-                                <!-- Email Address -->
-
-                                <div class="single-field">
-                                    <label class="box-label" for="email">{{ __('Email') }}</label>
-                                    <input
-                                        class="box-input"
-                                        type="text"
-                                        name="email"
-                                        placeholder="Enter your email address"
-                                        required
-                                        value="{{ old('email',$request->email) }}"
-                                    />
-                                </div>
-
-                                <div class="single-field">
-                                    <label class="box-label" for="email">{{ __('New Password') }}</label>
-                                    <input
-                                        class="box-input"
-                                        type="password"
-                                        name="password"
-                                        required
-                                    />
-                                </div>
-
-                                <div class="single-field">
-                                    <label class="box-label" for="email">{{ __('Confirm Password') }}</label>
-                                    <input
-                                        class="box-input"
-                                        type="password"
-                                        name="password_confirmation"
-                                        required
-                                    />
-                                </div>
-
-                                <button type="submit" class="site-btn grad-btn w-100">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </form>
-
-                            <div class="singnup-text">
-                                <p>
-                                    {{ __("Don't have an account?") }}
-                                    <a href="{{route('register')}}">{{ __('Signup for free') }}</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @if($errors->any())
+        <div class="mt-6 rounded-2xl border border-rose-500/25 bg-rose-500/[0.07] p-4">
+            @foreach($errors->all() as $error)
+                <p class="text-sm text-rose-700 dark:text-rose-300">{{ $error }}</p>
+            @endforeach
         </div>
-    </section>
-    <!-- Login Section End -->
-@endsection
+    @endif
 
+    <form method="POST" action="{{ route('password.update') }}" class="mt-8 space-y-5">
+        @csrf
+        <input type="hidden" name="token" value="{{ $request->route('token') }}"/>
+
+        <div>
+            <label class="field-label" for="email">{{ __('Email Address') }}</label>
+            <input id="email" type="email" name="email" required readonly class="field"
+                   value="{{ $request->email ?? old('email') }}"/>
+        </div>
+
+        <div>
+            <label class="field-label" for="password">{{ __('New Password') }}</label>
+            <input id="password" type="password" name="password" required autofocus class="field"
+                   placeholder="{{ __('Enter your new password') }}"/>
+        </div>
+
+        <div>
+            <label class="field-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required class="field"
+                   placeholder="{{ __('Repeat your new password') }}"/>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block btn-lg">{{ __('Reset Password') }}</button>
+    </form>
+
+    <p class="mt-8 text-center text-sm text-[rgb(var(--text-muted))]">
+        <a href="{{ route('login') }}" class="font-semibold text-brand-600 hover:underline dark:text-brand-300">
+            {{ __('Back to login') }}
+        </a>
+    </p>
+@endsection

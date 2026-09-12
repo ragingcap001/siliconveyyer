@@ -12,4 +12,15 @@
 @endsection
 
 
-
+@section('script')
+<script>
+// Odometer active
+  var odo = $('.odometer');
+  odo.each(function () {
+    $('.odometer').appear(function (e) {
+      var countNumber = $(this).attr('data-count');
+      $(this).html(countNumber);
+    });
+  });
+</script>
+@endsection

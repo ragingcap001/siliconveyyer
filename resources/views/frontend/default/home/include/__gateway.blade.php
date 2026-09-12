@@ -10,7 +10,7 @@
             @endif
             <h2 class="section-title">{{ $data['title_big'] ?? '' }}</h2>
             <p class="section-lede mx-auto">
-                {{ __('Cash out through any payout method the admin has switched on.') }}
+                {{ __('Get paid through any payment method the platform supports.') }}
             </p>
         </div>
 

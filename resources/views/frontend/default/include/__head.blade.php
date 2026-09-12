@@ -17,7 +17,17 @@
 
     {{-- Tailwind last so the new design wins where the two overlap --}}
     <link rel="stylesheet" href="{{ asset('frontend/css/vendor/bootstrap.min.css') }}"/>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Each theme ships its own entry (resources/css/themes/<theme>.css) so
+         restyling one theme cannot affect another. Themes without their own
+         file fall back to default. --}}
+    @php
+        $themeCss = 'resources/css/themes/' . site_theme() . '.css';
+        if (! file_exists(base_path($themeCss))) {
+            $themeCss = 'resources/css/themes/default.css';
+        }
+    @endphp
+    @vite([$themeCss, 'resources/js/app.js'])
 
     {{-- notify + lucide are still used by shared partials --}}
     <link rel="stylesheet" href="{{ asset('global/css/simple-notify.min.css') }}"/>

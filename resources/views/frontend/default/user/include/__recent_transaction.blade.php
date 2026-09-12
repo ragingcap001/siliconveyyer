@@ -10,7 +10,7 @@
 <div class="overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] shadow-soft">
 
     <div class="flex items-center justify-between border-b border-[rgb(var(--line)/0.07)] px-6 py-5">
-        <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Recent Transactions') }}</h3>
+        <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Recent Earnings') }}</h3>
         <a href="{{ route('user.transactions') }}" class="link-arrow">{{ __('View all') }}</a>
     </div>
 
@@ -28,7 +28,6 @@
                     <th>{{ __('Amount') }}</th>
                     <th>{{ __('Fee') }}</th>
                     <th>{{ __('Status') }}</th>
-                    <th>{{ __('Gateway') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,15 +59,14 @@
 
                         <td>
                             @if($transaction->status->value === \App\Enums\TxnStatus::Pending->value)
-                                <span class="badge-warn">{{ __('Pending') }}</span>
+                                <span class="badge-warn">{{ __('Processing') }}</span>
                             @elseif($transaction->status->value === \App\Enums\TxnStatus::Success->value)
-                                <span class="badge-earn">{{ __('Success') }}</span>
+                                <span class="badge-earn">{{ __('Paid') }}</span>
                             @elseif($transaction->status->value === \App\Enums\TxnStatus::Failed->value)
-                                <span class="badge-danger">{{ __('canceled') }}</span>
+                                <span class="badge-danger">{{ __('Declined') }}</span>
                             @endif
                         </td>
 
-                        <td class="text-sm text-[rgb(var(--text-body))]">{{ $transaction->method }}</td>
                     </tr>
                 @endforeach
                 </tbody>

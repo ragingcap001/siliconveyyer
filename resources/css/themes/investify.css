@@ -1,0 +1,59 @@
+/* ==========================================================================
+   investify theme
+   Owns this theme's design tokens ONLY. Everything structural is inherited
+   from ../base.css, so changes here cannot affect any other theme.
+   ========================================================================== */
+
+@import '../base.css';
+
+@layer base {
+    :root {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --font-display: 'Sora', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+        /* surfaces */
+        --surface: 255 255 255;
+        --surface-muted: 246 247 249;
+        --surface-raised: 255 255 255;
+        --surface-inverse: 26 26 44;
+
+        /* text */
+        --text-strong: 21 24 33;
+        --text-body: 65 77 100;
+        --text-muted: 101 117 145;
+
+        /* lines */
+        --line: 15 23 42;
+        --line-alpha: 0.08;
+
+        /* brand */
+        --brand: 91 97 248;
+        --brand-strong: 70 64 224;
+        --earn: 13 148 136;
+
+        --radius: 1rem;
+        --ring: 91 97 248;
+    }
+
+    .dark {
+        --surface: 15 17 26;
+        --surface-muted: 21 24 34;
+        --surface-raised: 25 28 40;
+        --surface-inverse: 255 255 255;
+
+        --text-strong: 244 246 250;
+        --text-body: 197 205 220;
+        --text-muted: 141 154 178;
+
+        --line: 255 255 255;
+        --line-alpha: 0.1;
+
+        --brand: 127 139 255;
+        --brand-strong: 143 154 255;
+        --earn: 45 212 191;
+    }
+}
+
+/* Investify overrides.
+   Add theme-specific adjustments below the token block; they are scoped to
+   this file and will never leak into the default theme. */

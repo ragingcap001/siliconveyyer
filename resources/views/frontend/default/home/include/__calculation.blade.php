@@ -60,14 +60,14 @@
                 <h2 class="section-title">{{ $data['calculation_title_big'] ?? '' }}</h2>
 
                 <p class="section-lede">
-                    {{ __('Claim a task, do the work exactly as the instructions describe, then send your proof. An admin reviews it and the reward lands in your wallet the moment it is approved.') }}
+                    {{ __('Claim a task, do the work exactly as the instructions describe, then send your proof. Once your proof checks out, the reward lands in your balance.') }}
                 </p>
 
                 <ul class="mt-8 space-y-4">
                     @foreach([
                         __('Browse the board and claim a task that fits you'),
                         __('Follow the instructions and collect your proof'),
-                        __('Submit, get approved, and withdraw your earnings'),
+                        __('Submit your proof and get paid for the work'),
                     ] as $i => $point)
                         <li class="flex items-start gap-3.5" data-reveal data-reveal-delay="{{ 120 + $i * 80 }}">
                             <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-earn-500/12 text-earn-600 dark:text-earn-300">
