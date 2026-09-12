@@ -32,7 +32,7 @@
             'label' => __('Account'),
             'items' => [
                 ['route' => 'user.dashboard',      'label' => __('Overview'),        'icon' => 'grid'],
-                ['route' => 'user.profile',        'label' => __('Profile'),         'icon' => 'user'],
+                ['route' => 'user.setting.show',  'label' => __('Profile'),         'icon' => 'user'],
                 ['route' => 'user.kyc',            'label' => __('KYC Verification'),'icon' => 'shield'],
                 ['route' => 'user.change.password', 'label' => __('Password'),       'icon' => 'lock'],
                 ['route' => 'user.ticket.index',   'label' => __('Support Tickets'), 'icon' => 'help'],
