@@ -6,7 +6,7 @@
 @section('content')
     <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         @foreach($rankings as $ranking)
-            @php $locked = !in_array($ranking->id, (array) $alreadyRank); @endphp
+            @php $locked = !in_array($ranking->id, $alreadyRank); @endphp
 
             <div data-reveal data-reveal-delay="{{ min($loop->index * 80, 320) }}"
                  class="group relative overflow-hidden rounded-3xl border p-7 text-center shadow-soft transition-all duration-500 ease-spring
@@ -19,7 +19,7 @@
                 @endunless
 
                 <span class="relative mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-[rgb(var(--surface-muted))] p-4">
-                    <img src="{{ asset($ranking->icon) }}" alt="" class="h-full w-full object-contain"/>
+                    <img src="{{ asset($ranking->icon) }}" alt="" class="object-contain w-full h-full"/>
                     @if($locked)
                         <span class="absolute inset-0 flex items-center justify-center rounded-2xl bg-[rgb(var(--surface)/0.6)]">
                             <svg class="h-6 w-6 text-[rgb(var(--text-muted))]" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -30,7 +30,7 @@
                 </span>
 
                 <h3 class="mt-5 text-lg font-semibold text-[rgb(var(--text-strong))]">{{ $ranking->ranking_name }}</h3>
-                <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-300">{{ $ranking->ranking }}</p>
+                <p class="mt-1 text-xs font-semibold tracking-wider uppercase text-brand-600 dark:text-brand-300">{{ $ranking->ranking }}</p>
                 <p class="mt-3 text-sm leading-relaxed text-[rgb(var(--text-muted))]">{{ $ranking->description }}</p>
 
                 <div class="mt-5 flex items-center justify-center gap-4 border-t border-[rgb(var(--line)/0.07)] pt-4 text-xs">

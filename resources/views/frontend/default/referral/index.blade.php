@@ -4,17 +4,12 @@
 @section('subtitle'){{ __('Invite people, and earn a share of what they earn on tasks.') }}@endsection
 
 @section('content')
-    {{-- getReferrals() maps over the referral_program rows, so it is empty on a
-         fresh install with no program seeded. Fail soft instead of calling
-         ->link on null. --}}
-    @php $referralLink = $getReferral?->link ?? ''; @endphp
-
     <div x-data="{ tab: 'generalTarget' }" class="space-y-6">
 
         {{-- referral link card --}}
         <div data-reveal class="relative overflow-hidden rounded-3xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] p-6 shadow-soft sm:p-8"
              style="background-image: linear-gradient(135deg, rgb(var(--brand-500)/0.05), transparent 60%);">
-            <div class="dot-field pointer-events-none absolute -right-8 -top-8 h-40 w-40"></div>
+            <div class="absolute w-40 h-40 pointer-events-none dot-field -right-8 -top-8"></div>
 
             <div class="relative">
                 <h3 class="text-base font-semibold text-[rgb(var(--text-strong))]">{{ __('Referral URL') }}</h3>
@@ -22,11 +17,11 @@
                     {{ __('Share this link. Everyone who signs up through it becomes part of your network.') }}
                 </p>
 
-                <div class="mt-5 flex flex-col gap-2 sm:flex-row">
-                    <input id="refLink" type="text" readonly value="{{ $referralLink }}"
-                           class="field flex-1 font-mono text-xs"/>
+                <div class="flex flex-col gap-2 mt-5 sm:flex-row">
+                    <input id="refLink" type="text" readonly value="{{ $getReferral->link }}"
+                           class="flex-1 font-mono text-xs field"/>
                     <button type="button" onclick="copyRef()" class="btn-primary shrink-0">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/>
                         </svg>
                         <span id="copy">{{ __('Copy Url') }}</span>
@@ -35,7 +30,7 @@
                 <input id="copied" hidden value="{{ __('Copied') }}">
 
                 <p class="mt-3 text-sm text-[rgb(var(--text-muted))]">
-                    <b class="text-[rgb(var(--text-strong))]">{{ $getReferral?->relationships()->count() ?? 0 }}</b>
+                    <b class="text-[rgb(var(--text-strong))]">{{ $getReferral->relationships()->count() }}</b>
                     {{ __('peoples are joined by using this URL') }}
                 </p>
             </div>
@@ -66,8 +61,8 @@
             <div class="flex gap-2 overflow-x-auto border-b border-[rgb(var(--line)/0.07)] px-6 pt-5">
                 <button type="button" @click="tab = 'generalTarget'"
                         :class="tab === 'generalTarget' ? 'border-brand-500 text-brand-600 dark:text-brand-300' : 'border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--text-strong))]'"
-                        class="flex items-center gap-2 whitespace-nowrap border-b-2 px-4 pb-3 text-sm font-semibold transition-colors">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        class="flex items-center gap-2 px-4 pb-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
                     </svg>
                     {{ __('General') }}
@@ -77,8 +72,8 @@
                     @php $target = json_decode($raw, true); @endphp
                     <button type="button" @click="tab = 't{{ $target['id'] }}'"
                             :class="tab === 't{{ $target['id'] }}' ? 'border-brand-500 text-brand-600 dark:text-brand-300' : 'border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--text-strong))]'"
-                            class="flex items-center gap-2 whitespace-nowrap border-b-2 px-4 pb-3 text-sm font-semibold transition-colors">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            class="flex items-center gap-2 px-4 pb-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25"/>
                         </svg>
                         @if(setting('site_referral','global') == 'level')
@@ -113,8 +108,8 @@
                                     <tr>
                                         <td>
                                             <div class="flex items-center gap-3">
-                                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-earn-500/10">
-                                                    <svg class="h-4 w-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                <span class="flex items-center justify-center h-9 w-9 shrink-0 rounded-xl bg-earn-500/10">
+                                                    <svg class="w-4 h-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
                                                     </svg>
                                                 </span>
@@ -161,8 +156,8 @@
                                         <tr>
                                             <td>
                                                 <div class="flex items-center gap-3">
-                                                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-earn-500/10">
-                                                        <svg class="h-4 w-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                    <span class="flex items-center justify-center h-9 w-9 shrink-0 rounded-xl bg-earn-500/10">
+                                                        <svg class="w-4 h-4 text-earn-600 dark:text-earn-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
                                                         </svg>
                                                     </span>
