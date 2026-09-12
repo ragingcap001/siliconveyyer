@@ -22,6 +22,7 @@ function calPercentage(num, percentage) {
 
 function imagePreview() {
     "use strict";
+    if (typeof $ === 'undefined') return;
     $('input[type="file"]').each(function () {
         // Refs
         var $file = $(this),
@@ -51,6 +52,7 @@ function imagePreview() {
 
 function imagePreviewAdd(title) {
     "use strict";
+    if (typeof $ === 'undefined') return;
     var base_url = window.location.origin;
 
     var previewImage = $("#image-old");
@@ -86,6 +88,7 @@ function tNotify(type, message) {
 }
 
 function imageRemoveWithRoute(targetCode=null,route = null,token) {
+    if (typeof $ === 'undefined') return;
     $('.remove-img').on('click', function () {
 
         var target = $(this).data('des');
@@ -114,7 +117,7 @@ function imageRemoveWithRoute(targetCode=null,route = null,token) {
 
 
 function imagePreviewRemove(target,title) {
-
+    if (typeof $ === 'undefined') return;
     var image = $("#"+target)
     image.removeAttr("style");
     image.removeClass("file-ok");
@@ -159,5 +162,7 @@ function copyRef(idName) {
     copyApi.setSelectionRange(0, 999999999); /* For mobile devices */
     /* Copy the text inside the text field */
     document.execCommand('copy');
-    $('#copy').text($('#copied').val())
+    if (typeof $ !== 'undefined') {
+        $('#copy').text($('#copied').val());
+    }
 }
