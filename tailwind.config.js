@@ -10,13 +10,12 @@ module.exports = {
         './resources/views/**/*.blade.php',
     ],
 
-    theme: {
-        container: {
-            center: true,
-            padding: { DEFAULT: '1.25rem', lg: '2rem', xl: '2.5rem' },
-            screens: { '2xl': '1360px' },
-        },
+    // The legacy Bootstrap stylesheet is still loaded for pages that have not
+    // been converted yet, so Tailwind's .container is switched off to stop the
+    // two from fighting over the same class name. Layout uses .shell instead.
+    corePlugins: { container: false },
 
+    theme: {
         extend: {
             fontFamily: {
                 sans: ['Inter', 'ui-sans-serif', 'system-ui', ...defaultTheme.fontFamily.sans],

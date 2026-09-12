@@ -1,54 +1,49 @@
 <script src="{{ asset('global/js/jquery.min.js') }}"></script>
-<script src="{{ asset('global/js/jquery-migrate.js') }}"></script>
-
+{{-- still needed by pages not yet converted off the Bootstrap markup --}}
 <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('frontend/js/scrollUp.min.js') }}"></script>
 
-<script src="{{ asset('frontend/js/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('global/js/waypoints.min.js') }}"></script>
-<script src="{{ asset('frontend/js/jquery.counterup.min.js') }}"></script>
-<script src="{{ asset('global/js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ asset('global/js/lucide.min.js') }}"></script>
-<script src="{{ asset('frontend/js/magnific-popup.min.js') }}"></script>
-<script src="{{ asset('frontend/js/aos.js') }}"></script>
-<script src="{{ asset('global/js/datatables.min.js') }}" type="text/javascript" charset="utf8"></script>
+{{-- notify + shared global helpers --}}
 <script src="{{ asset('global/js/simple-notify.min.js') }}"></script>
-<script src="{{ asset('frontend/js/main.js?var=5') }}"></script>
-<script src="{{ asset('frontend/js/cookie.js') }}"></script>
-<script src="{{ asset('global/js/custom.js?var=5') }}"></script>
+<script src="{{ asset('global/js/custom.js?var=6') }}"></script>
+
+<script>
+    // lucide icons (partials render <i icon-name="..."> placeholders)
+    window.addEventListener('DOMContentLoaded', function () {
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    });
+
+    // Reveal-on-scroll for anything tagged [data-reveal]
+    window.addEventListener('DOMContentLoaded', function () {
+        var items = document.querySelectorAll('[data-reveal]');
+        if (!items.length) return;
+
+        if (!('IntersectionObserver' in window)) {
+            items.forEach(function (el) { el.classList.add('is-visible'); });
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    var delay = entry.target.getAttribute('data-reveal-delay') || 0;
+                    setTimeout(function () { entry.target.classList.add('is-visible'); }, delay);
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        items.forEach(function (el) { io.observe(el); });
+    });
+</script>
+
 @include('global.__t_notify')
+
 @if(auth()->check())
     <script src="{{ asset('global/js/pusher.min.js') }}"></script>
     @include('global.__notification_script',['for'=>'user','userId' => auth()->user()->id])
 @endif
-@if(setting('site_animation','permission'))
-    <script>
-        (function ($) {
-            'use strict';
-            // AOS initialization
-            AOS.init();
-        })(jQuery);
-    </script>
-@endif
-@if(setting('back_to_top','permission'))
-    <script>
-        (function ($) {
-            'use strict';
-            // To top
-            $.scrollUp({
-                scrollText: '<i class="fas fa-caret-up"></i>',
-                easingType: 'linear',
-                scrollSpeed: 500,
-                animation: 'fade'
-            });
-        })(jQuery);
-    </script>
-@endif
-
-@notifyJs
-
-@yield('script')
-@stack('script')
 
 @php
     $googleAnalytics = plugin_active('Google Analytics');
@@ -66,5 +61,6 @@
     @include('frontend::plugin.fb',['data' => json_decode($fb->data, true)])
 @endif
 
-
-
+@notifyJs
+@yield('script')
+@stack('script')

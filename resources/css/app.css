@@ -251,6 +251,19 @@
                transition-all duration-300 hover:gap-2.5 dark:text-brand-300;
     }
 
+    /* ---------- Dashboard sidebar ---------- */
+    .dash-link {
+        @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium
+               text-[rgb(var(--text-body))] transition-all duration-300
+               hover:bg-[rgb(var(--line)/0.06)] hover:text-[rgb(var(--text-strong))];
+    }
+
+    .dash-link.is-active {
+        @apply bg-brand-500/10 font-semibold text-brand-700 dark:text-brand-300;
+    }
+
+    .dash-link.is-active svg { @apply text-brand-600 dark:text-brand-300; }
+
     /* ---------- Avatar ---------- */
     .avatar-ring {
         @apply rounded-full ring-2 ring-[rgb(var(--surface-raised))] ring-offset-0;
