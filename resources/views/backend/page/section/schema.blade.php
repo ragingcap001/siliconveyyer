@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 @section('title')
-    {{ __('Intro Section') }}
+    {{ __('Featured Tasks Section') }}
 @endsection
 @section('content')
     <div class="main-content">
@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-12">
                         <div class="title-content">
-                            <h2 class="title">{{ __('Intro Section') }}</h2>
+                            <h2 class="title">{{ __('Featured Tasks Section') }}</h2>
                         </div>
                     </div>
                 </div>
@@ -33,8 +33,6 @@
                         >
                     </li>
                 @endforeach
-
-
             </ul>
         </div>
 
@@ -64,7 +62,7 @@
                                     <form action="{{ route('admin.page.section.section.update') }}" method="post"
                                           enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="section_code" value="calculation">
+                                        <input type="hidden" name="section_code" value="schema">
                                         <input type="hidden" name="section_locale" value="{{ $key }}">
 
                                         @if($key == 'en')
@@ -94,46 +92,38 @@
                                             <label for=""
                                                    class="col-sm-3 col-label">{{ __('Title Small') }}</label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="calculation_title_small" class="box-input"
-                                                       value="{{ $data['calculation_title_small'] }}">
+                                                <input type="text" name="title_small" class="box-input"
+                                                       value="{{ $data['title_small'] }}">
                                             </div>
                                         </div>
                                         <div class="site-input-groups row">
                                             <label for=""
                                                    class="col-sm-3 col-label">{{ __('Title Big') }}</label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="calculation_title_big" class="box-input"
-                                                       value="{{$data['calculation_title_big']}}">
+                                                <input type="text" name="title_big" class="box-input"
+                                                       value="{{ $data['title_big'] }}">
                                             </div>
                                         </div>
+
                                         @if($key == 'en')
                                             <div class="site-input-groups row">
                                                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-label">
-                                                    {{ __('Left Image') }}
+                                                    {{ __('Background Image') }}
                                                 </div>
                                                 <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
                                                     <div class="wrap-custom-file">
-                                                        <input type="file" name="calculation_left_img" id="heroRightImg"
+                                                        <input type="file" name="left_top_img" id="leftTopImg"
                                                                accept=".gif, .jpg, .png"/>
-                                                        <label for="heroRightImg" id="calculation_left_img"
-                                                               @if($data->calculation_left_img)  class="file-ok"
-                                                               style="background-image: url({{ asset($data['calculation_left_img']) }})" @endif>
+                                                        <label for="leftTopImg" id="left_top_img"
+                                                               @if($data->left_top_img)  class="file-ok"
+                                                               style="background-image: url({{ asset($data['left_top_img']) }})" @endif>
                                                             <img class="upload-icon"
                                                                  src="{{ asset('global/materials/upload.svg') }}"
                                                                  alt=""/>
                                                             <span>{{ __('Update Image') }}</span>
                                                         </label>
-                                                        @removeimg($data->calculation_left_img,calculation_left_img)
+                                                        @removeimg($data->left_top_img,left_top_img)
                                                     </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="site-input-groups row">
-                                                <label for="" class="col-sm-3 col-label">{{ __('Video URL') }}</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" name="intro_video" class="box-input"
-                                                           value="{{ $data->intro_video }}">
                                                 </div>
                                             </div>
                                         @endif
@@ -153,6 +143,20 @@
 
             @endforeach
 
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="site-card">
+                        <div class="site-card-header">
+                            <h3 class="title">{{ __('Note') }}</h3>
+                        </div>
+                        <div class="site-card-body">
+                            <p class="paragraph">
+                                {{ __('The task cards below the headings are filled in automatically from the newest open tasks. Only the headings and the background image are edited here.') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

@@ -440,9 +440,16 @@ top-5 country breakdowns from login activity.
   `landing_contents` records, one per block: `hero`, `about`, `howitworks`,
   `gateway`, `counter`, `recent`, `whychooseus`, `faq`, `cta`,
   `blog`, `newsletter`, and a separately-managed `footer`. Each is orderable via `short`
-  and has per-locale content CRUD. (The old `schema` and `calculation` sections were
-  investment-only and are removed by migration
-  `2026_09_11_000005_remove_investment_landing_sections`.)
+  and has per-locale content CRUD.
+
+  Two sections kept their `code` but were repurposed during the conversion, so the
+  admin still edits them from the same screens: `schema` is now the **Featured Tasks**
+  section (editable headings + background image, with the task cards filled in
+  automatically from the newest open tasks), and `calculation` is now the **Intro**
+  section (editable heading, optional image and an optional YouTube/Vimeo embed,
+  replacing the old profit calculator). `landingSectionUpdate()` is field-agnostic —
+  it stores whatever is posted as JSON and handles uploads generically — so section
+  editors need no controller changes.
 - **Page settings** — JSON-driven toggles (e.g. whether registration asks for
   username / country / phone).
 - **Blog** — full CRUD (categories + posts), public blog index and detail pages.
