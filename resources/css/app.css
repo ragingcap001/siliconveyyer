@@ -279,6 +279,48 @@
     .prose-task table { @apply w-full text-sm; }
     .prose-task th, .prose-task td { @apply border border-[rgb(var(--line)/0.1)] px-3 py-2 text-left; }
 
+    /* Same treatment for admin-authored page bodies (.frontend-editor-data) */
+    .frontend-editor-data {
+        @apply text-[0.95rem] leading-relaxed text-[rgb(var(--text-body))];
+    }
+
+    .frontend-editor-data > * + * { @apply mt-4; }
+
+    .frontend-editor-data h1, .frontend-editor-data h2, .frontend-editor-data h3,
+    .frontend-editor-data h4, .frontend-editor-data h5, .frontend-editor-data h6 {
+        @apply font-display font-semibold text-[rgb(var(--text-strong))];
+    }
+
+    .frontend-editor-data h1 { @apply text-3xl; }
+    .frontend-editor-data h2 { @apply text-2xl; }
+    .frontend-editor-data h3 { @apply text-xl; }
+    .frontend-editor-data h4 { @apply text-lg; }
+
+    .frontend-editor-data a {
+        @apply font-medium text-brand-600 underline underline-offset-2 transition-colors hover:text-brand-700 dark:text-brand-300;
+    }
+
+    .frontend-editor-data strong, .frontend-editor-data b { @apply font-semibold text-[rgb(var(--text-strong))]; }
+
+    .frontend-editor-data ul { @apply list-disc space-y-1.5 pl-5; }
+    .frontend-editor-data ol { @apply list-decimal space-y-1.5 pl-5; }
+    .frontend-editor-data li { @apply leading-relaxed; }
+
+    .frontend-editor-data img { @apply max-w-full rounded-xl border border-[rgb(var(--line)/0.08)]; }
+
+    .frontend-editor-data blockquote {
+        @apply border-l-2 border-brand-500/40 pl-4 italic text-[rgb(var(--text-muted))];
+    }
+
+    .frontend-editor-data hr { @apply border-[rgb(var(--line)/0.1)]; }
+
+    .frontend-editor-data table { @apply w-full text-sm; }
+    .frontend-editor-data th, .frontend-editor-data td { @apply border border-[rgb(var(--line)/0.1)] px-3 py-2 text-left; }
+
+    .frontend-editor-data pre {
+        @apply overflow-x-auto rounded-xl bg-[rgb(var(--surface-muted))] p-4 text-sm;
+    }
+
     /* ---------- Links ---------- */
     .link-arrow {
         @apply inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600
