@@ -47,7 +47,7 @@
                                 <p class="truncate text-sm font-semibold text-[rgb(var(--text-strong))]">
                                     {{ $txn->user->full_name ?? __('Member') }}
                                 </p>
-                                <p class="text-xs text-[rgb(var(--text-muted))]">{{ $txn->created_at->diffForHumans() }}</p>
+                                <p class="text-xs text-[rgb(var(--text-muted))]">{{ $txn->created_at }}</p>
                             </div>
                             <span class="shrink-0 font-display text-sm font-bold text-earn-600 dark:text-earn-400">
                                 +{{ $currencySymbol }}{{ $txn->amount }}
@@ -84,7 +84,7 @@
                                 <p class="truncate text-sm font-semibold text-[rgb(var(--text-strong))]">
                                     {{ $txn->user->full_name ?? __('Member') }}
                                 </p>
-                                <p class="text-xs text-[rgb(var(--text-muted))]">{{ $txn->created_at->diffForHumans() }}</p>
+                                <p class="text-xs text-[rgb(var(--text-muted))]">{{ $txn->created_at }}</p>
                             </div>
                             <span class="shrink-0 font-display text-sm font-bold text-[rgb(var(--text-strong))]">
                                 -{{ $currencySymbol }}{{ $txn->amount }}

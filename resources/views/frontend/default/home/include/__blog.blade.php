@@ -30,7 +30,9 @@
                         <img src="{{ asset($blog->cover) }}" alt="{{ $blog->title }}"
                              class="h-full w-full object-cover transition-transform duration-700 ease-spring group-hover:scale-105"/>
                         <span class="absolute left-4 top-4 rounded-lg bg-[rgb(var(--surface-raised)/0.9)] px-2.5 py-1.5 text-[0.68rem] font-semibold text-[rgb(var(--text-muted))] backdrop-blur">
-                            {{ $blog->created_at->format('M d, Y') }}
+                            {{-- Blog::getCreatedAtAttribute() already returns a
+                                 formatted string, not a Carbon instance. --}}
+                            {{ $blog->created_at }}
                         </span>
                     </div>
 
