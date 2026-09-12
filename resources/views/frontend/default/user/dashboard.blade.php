@@ -1,67 +1,43 @@
 @extends('frontend::layouts.user')
-@section('title')
-    {{ __('Dashboard') }}
-@endsection
+
+@section('title'){{ __('Dashboard') }}@endsection
+@section('subtitle'){{ __('Your earnings, tasks and activity at a glance.') }}@endsection
+
 @section('content')
+    <div class="space-y-6">
 
-    <div class="desktop-screen-show">
-        {{--Referral and Ranking --}}
-        @include('frontend::user.include.__referral_ranking')
-
-        {{-- User Card--}}
+        {{-- stat cards --}}
         @include('frontend::user.include.__user_card')
 
-        {{--Recent Transactions--}}
+        {{-- referral + ranking --}}
+        @include('frontend::user.include.__referral_ranking')
+
+        {{-- recent transactions --}}
         @include('frontend::user.include.__recent_transaction')
     </div>
-
-    {{--for mobile--}}
-    <div class="mobile-screen-show">
-        @include('frontend::user.mobile_screen_include.dashboard.__index')
-    </div>
-
 @endsection
+
 @section('script')
     <script>
         function copyRef() {
-            /* Get the text field */
-            var textToCopy = $('#refLink').val();
-            // Create a temporary input element
-            var tempInput = $('<input>');
-            $('body').append(tempInput);
-            tempInput.val(textToCopy).select();
-            // Copy the text from the temporary input
-            document.execCommand('copy');
-            // Remove the temporary input element
-            tempInput.remove();
-            $('#copy').text('Copied');
-            var copyApi = document.getElementById("refLink");
-            /* Select the text field */
+            var copyApi = document.getElementById('refLink');
+            if (!copyApi) return;
+
             copyApi.select();
-            copyApi.setSelectionRange(0, 999999999); /* For mobile devices */
-            /* Copy the text inside the text field */
-            document.execCommand('copy');
-            $('#copy').text('Copied')
+            copyApi.setSelectionRange(0, 999999999);
 
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(copyApi.value);
+            } else {
+                document.execCommand('copy');
+            }
+
+            var btn = document.getElementById('copy');
+            if (btn) {
+                var previous = btn.textContent;
+                btn.textContent = '{{ __('Copied') }}';
+                setTimeout(function () { btn.textContent = previous; }, 1800);
+            }
         }
-
-        // Load More
-        $('.moreless-button').click(function () {
-            $('.moretext').slideToggle();
-            if ($('.moreless-button').text() == "Load more") {
-                $(this).text("Load less")
-            } else {
-                $(this).text("Load more")
-            }
-        });
-
-        $('.moreless-button-2').click(function () {
-            $('.moretext-2').slideToggle();
-            if ($('.moreless-button-2').text() == "Load more") {
-                $(this).text("Load less")
-            } else {
-                $(this).text("Load more")
-            }
-        });
     </script>
 @endsection

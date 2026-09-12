@@ -245,6 +245,40 @@
         @apply transition-colors hover:bg-[rgb(var(--line)/0.025)];
     }
 
+    /* ---------- Rich text from the admin editor (task descriptions) ---------- */
+    .prose-task {
+        @apply text-[0.95rem] leading-relaxed text-[rgb(var(--text-body))];
+    }
+
+    .prose-task > * + * { @apply mt-4; }
+
+    .prose-task h1, .prose-task h2, .prose-task h3, .prose-task h4 {
+        @apply font-display text-lg font-semibold text-[rgb(var(--text-strong))];
+    }
+
+    .prose-task p { @apply text-[0.95rem] leading-relaxed; }
+
+    .prose-task a {
+        @apply font-medium text-brand-600 underline underline-offset-2 dark:text-brand-300;
+    }
+
+    .prose-task strong { @apply font-semibold text-[rgb(var(--text-strong))]; }
+
+    .prose-task ul { @apply list-disc space-y-1.5 pl-5; }
+    .prose-task ol { @apply list-decimal space-y-1.5 pl-5; }
+    .prose-task li { @apply leading-relaxed; }
+
+    .prose-task img { @apply rounded-xl border border-[rgb(var(--line)/0.08)]; }
+
+    .prose-task blockquote {
+        @apply border-l-2 border-brand-500/40 pl-4 italic text-[rgb(var(--text-muted))];
+    }
+
+    .prose-task hr { @apply border-[rgb(var(--line)/0.1)]; }
+
+    .prose-task table { @apply w-full text-sm; }
+    .prose-task th, .prose-task td { @apply border border-[rgb(var(--line)/0.1)] px-3 py-2 text-left; }
+
     /* ---------- Links ---------- */
     .link-arrow {
         @apply inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600
