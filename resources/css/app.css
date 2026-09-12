@@ -1,11 +1,9 @@
 /* ==========================================================================
-   SHARED FRONT-END BASE
-   Structural primitives used by EVERY theme. Nothing in this file should
-   encode a theme's identity - colours, radii and shadows live in the theme
-   files under resources/css/themes/.
+   Global stylesheet for the front end.
 
-   Edit this only for changes that genuinely apply to all themes. To restyle
-   one theme, edit that theme's own file.
+   Single entry point shared by every theme. Design tokens (colours, radii,
+   shadows) are declared once in the block below so the whole front end can be
+   re-skinned from here alone.
    ========================================================================== */
 
 @tailwind base;
@@ -13,6 +11,53 @@
 @tailwind utilities;
 
 @layer base {
+
+    :root {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --font-display: 'Sora', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+        /* surfaces */
+        --surface: 255 255 255;
+        --surface-muted: 246 247 249;
+        --surface-raised: 255 255 255;
+        --surface-inverse: 26 26 44;
+
+        /* text */
+        --text-strong: 21 24 33;
+        --text-body: 65 77 100;
+        --text-muted: 101 117 145;
+
+        /* lines */
+        --line: 15 23 42;
+        --line-alpha: 0.08;
+
+        /* brand */
+        --brand: 91 97 248;
+        --brand-strong: 70 64 224;
+        --earn: 13 148 136;
+
+        --radius: 1rem;
+        --ring: 91 97 248;
+    }
+
+    .dark {
+        --surface: 15 17 26;
+        --surface-muted: 21 24 34;
+        --surface-raised: 25 28 40;
+        --surface-inverse: 255 255 255;
+
+        --text-strong: 244 246 250;
+        --text-body: 197 205 220;
+        --text-muted: 141 154 178;
+
+        --line: 255 255 255;
+        --line-alpha: 0.1;
+
+        --brand: 127 139 255;
+        --brand-strong: 143 154 255;
+        --earn: 45 212 191;
+    }
+
 
     * {
         border-color: rgb(var(--line) / var(--line-alpha));

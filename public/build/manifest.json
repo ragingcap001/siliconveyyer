@@ -4,14 +4,9 @@
     "src": "resources/js/app.js",
     "isEntry": true
   },
-  "resources/css/themes/default.css": {
-    "file": "assets/default.303367d5.css",
-    "src": "resources/css/themes/default.css",
-    "isEntry": true
-  },
-  "resources/css/themes/investify.css": {
-    "file": "assets/investify.303367d5.css",
-    "src": "resources/css/themes/investify.css",
+  "resources/css/app.css": {
+    "file": "assets/app.66807422.css",
+    "src": "resources/css/app.css",
     "isEntry": true
   }
 }

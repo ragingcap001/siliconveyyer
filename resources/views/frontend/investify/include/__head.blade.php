@@ -15,9 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
           rel="stylesheet"/>
 
-    {{-- This head belongs to the investify theme, so it always loads the
-         investify entry - never the shared app.css. --}}
-    @vite(['resources/css/themes/investify.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('global/css/simple-notify.min.css') }}"/>
     <script src="{{ asset('global/js/lucide.min.js') }}" defer></script>
