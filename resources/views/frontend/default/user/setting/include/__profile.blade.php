@@ -1,4 +1,29 @@
 <div class="row">
+    {{-- rank badge --}}
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+        <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-brand-950 p-6">
+            <div class="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full blur-2xl"
+                 style="background: radial-gradient(circle, rgba(20,184,166,.45) 0%, transparent 70%)"></div>
+            <div class="pointer-events-none absolute inset-0 opacity-[0.12]"
+                 style="background-image: linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px); background-size: 34px 34px;"></div>
+
+            <div class="relative flex items-center gap-5">
+                @if($user->rank?->icon)
+                    <img src="{{ asset($user->rank->icon) }}" alt="" class="h-16 w-16 shrink-0 object-contain"
+                         title="{{ $user->rank->description }}"/>
+                @endif
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">{{ __('Current Rank') }}</p>
+                    <p class="mt-1 font-display text-2xl font-bold text-white">{{ $user->rank?->ranking }}</p>
+                    <p class="text-sm text-white/70">{{ $user->rank?->ranking_name }}</p>
+                    @if($user->rank?->description)
+                        <p class="mt-1 text-xs text-white/50">{{ $user->rank->description }}</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="site-card">
             <div class="site-card-header">

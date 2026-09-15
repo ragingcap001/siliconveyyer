@@ -1,73 +1,84 @@
 @php
     $stats = [
         [
-            'key'   => 'wallet_balance',
-            'label' => __('Wallet Balance'),
-            'value' => number_format((float) $user->balance, 2),
-            'money' => true,
-            'accent'=> 'brand',
-            'icon'  => 'M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z',
+            'label'  => __('Wallet Balance'),
+            'value'  => $currencySymbol . number_format((float) $user->balance, 2),
+            'sub'    => __('Available to withdraw'),
+            'accent' => 'gold',
+            'badge'  => __('Available'),
+            'icon'   => 'M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z',
         ],
         [
-            'key'   => 'total_task_earning',
-            'label' => __('Total Earnings'),
-            'value' => number_format((float) $dataCount['total_task_earning'], 2),
-            'money' => true,
-            'accent'=> 'earn',
-            'icon'  => 'M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941',
+            'label'  => __('Under Review'),
+            'value'  => (string) $dataCount['pending_task'],
+            'sub'    => __('Awaiting approval'),
+            'accent' => 'amber',
+            'badge'  => __('Review'),
+            'icon'   => 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
         ],
         [
-            'key'   => 'completed_task',
-            'label' => __('Tasks Completed'),
-            'value' => number_format((float) $dataCount['completed_task']),
-            'money' => false,
-            'accent'=> 'earn',
-            'icon'  => 'M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-        ],
-        [
-            'key'   => 'pending_task',
-            'label' => __('In Review'),
-            'value' => number_format((float) $dataCount['pending_task']),
-            'money' => false,
-            'accent'=> 'warn',
-            'icon'  => 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+            'label'  => __('Completed'),
+            'value'  => (string) $dataCount['completed_task'],
+            'sub'    => __('Tasks finished'),
+            'accent' => 'green',
+            'badge'  => __('Done'),
+            'icon'   => 'M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
         ],
     ];
 
-    $accentClass = [
-        'earn'  => 'bg-earn-500/12 text-earn-600 dark:text-earn-400',
-        'brand' => 'bg-brand-500/12 text-brand-600 dark:text-brand-300',
-        'warn'  => 'bg-amber-500/12 text-amber-600 dark:text-amber-400',
+    $accent = [
+        'gold' => [
+            'icon'    => 'border-[#c29448]/20 bg-[#c29448]/8 text-[#b08430]',
+            'badge'   => 'border-[#c29448]/20 bg-[#c29448]/8 text-[#9b6d2d]',
+            'border'  => 'border-t-[#c29448]',
+        ],
+        'amber' => [
+            'icon'    => 'border-amber-200 bg-amber-50 text-amber-600',
+            'badge'   => 'border-amber-200 bg-amber-50 text-amber-600',
+            'border'  => 'border-t-amber-500',
+        ],
+        'green' => [
+            'icon'    => 'border-emerald-200 bg-emerald-50 text-emerald-600',
+            'badge'   => 'border-emerald-200 bg-emerald-50 text-emerald-600',
+            'border'  => 'border-t-emerald-500',
+        ],
     ];
 @endphp
 
-<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+<div class="grid gap-4 sm:grid-cols-3">
+
     @foreach($stats as $stat)
-        <div class="group relative overflow-hidden rounded-2xl border border-[rgb(var(--line)/0.09)] bg-[rgb(var(--surface-raised))] p-5 shadow-soft transition-all duration-500 ease-spring hover:-translate-y-1 hover:border-brand-500/25 hover:shadow-card">
 
-            <span class="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-[0.06] transition-opacity duration-500 group-hover:opacity-[0.12]
-                         {{ $stat['accent'] === 'earn' ? 'bg-earn-500' : ($stat['accent'] === 'warn' ? 'bg-amber-500' : 'bg-brand-500') }}"></span>
+        <div class="rounded-2xl border border-slate-200/80 border-t-[3px] {{ $accent[$stat['accent']]['border'] }} bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md">
 
-            <div class="relative flex items-start justify-between gap-3">
-                <div class="min-w-0">
-                    <p class="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[rgb(var(--text-muted))]">
-                        {{ $stat['label'] }}
-                    </p>
-                    <p class="mt-2 font-display text-2xl font-bold tracking-tight text-[rgb(var(--text-strong))]">
-                        @if($stat['money'])
-                            <span class="text-base font-semibold text-[rgb(var(--text-muted))]">{{ $currencySymbol }}</span>{{ $stat['value'] }}
-                        @else
-                            {{ $stat['value'] }}
-                        @endif
-                    </p>
-                </div>
+            <div class="flex items-start justify-between gap-4">
 
-                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl {{ $accentClass[$stat['accent']] }}">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border {{ $accent[$stat['accent']]['icon'] }}">
+                    <svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $stat['icon'] }}"/>
                     </svg>
                 </span>
+
+                <span class="rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide {{ $accent[$stat['accent']]['badge'] }}">
+                    {{ $stat['badge'] }}
+                </span>
+
             </div>
+
+            <p class="mt-4 font-display text-[26px] font-bold leading-none tracking-tight text-[#142235]">
+                {{ $stat['value'] }}
+            </p>
+
+            <p class="mt-2 text-sm font-medium text-slate-600">
+                {{ $stat['label'] }}
+            </p>
+
+            <p class="mt-0.5 text-[11px] text-slate-400">
+                {{ $stat['sub'] }}
+            </p>
+
         </div>
+
     @endforeach
+
 </div>

@@ -12,8 +12,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
-          rel="stylesheet"/>
+    {{-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet"/> --}}
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet">
+
 
     {{-- Tailwind last so the new design wins where the two overlap --}}
     <link rel="stylesheet" href="{{ asset('frontend/css/vendor/bootstrap.min.css') }}"/>
@@ -34,12 +38,14 @@
     <script>
         (function () {
             try {
-                // No site-wide default setting ships with the app, so dark is the
-                // initial state and the visitor's own choice wins afterwards.
                 var stored = localStorage.getItem('site-color-mode');
-                document.documentElement.classList.toggle('dark', stored !== 'light');
+
+                document.documentElement.classList.toggle(
+                    'dark',
+                    stored === 'dark'
+                );
             } catch (e) {
-                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('dark');
             }
         })();
     </script>
